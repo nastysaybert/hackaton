@@ -1,0 +1,20 @@
+logging:
+    level:
+        ROOT: INFO
+        ru.tele2.testcase: DEBUG
+server:
+    port: 8080
+
+spring:
+    datasource:
+        username: ${db_username}
+        password: ${db_password}
+        url: ${db_url}
+        driver-class-name: com.mysql.jdbc.Driver
+    jpa:
+        show-sql: true
+        hibernate:
+            ddl-auto: update
+external:
+    filepath:
+        projects: /var/project_name/PI project.xlsx

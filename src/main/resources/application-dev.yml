@@ -1,0 +1,21 @@
+logging:
+    level:
+        ROOT: INFO
+        ru.tele2.testcase: DEBUG
+server:
+    port: 8082
+
+spring:
+    datasource:
+        username: root
+        password: toor
+        url: jdbc:mysql://192.168.0.17:3309/autoct?useUnicode=yes&characterEncoding=UTF-8
+        driver-class-name: com.mysql.cj.jdbc.Driver
+    jpa:
+        show-sql: true
+        hibernate:
+            ddl-auto: update
+
+external:
+    filepath:
+        projects: "C:\\Users\\nasty\\Desktop\\PI project.xlsx"

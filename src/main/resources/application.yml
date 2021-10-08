@@ -1,0 +1,16 @@
+spring:
+    servlet:
+        multipart:
+            enabled: true
+#            file-size-threshold:
+#            max-file-size:
+#            max-request-size:
+#            resolve-lazily:
+    profiles:
+        active: '@spring.profiles.active@'
+    main:
+        banner-mode: "OFF"
+        web-application-type: servlet
+server:
+    servlet:
+        context-path: /autoct
