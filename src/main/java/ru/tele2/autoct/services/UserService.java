@@ -10,7 +10,7 @@ import ru.tele2.autoct.dto.security.UserDto;
 import ru.tele2.autoct.jpa.entity.security.UserEntity;
 import ru.tele2.autoct.jpa.repository.RoleRepository;
 import ru.tele2.autoct.jpa.repository.UserRepository;
-import ru.tele2.autoct.mappers.UserMapper;
+import ru.tele2.autoct.mappers.security.UserMapper;
 
 import java.util.List;
 

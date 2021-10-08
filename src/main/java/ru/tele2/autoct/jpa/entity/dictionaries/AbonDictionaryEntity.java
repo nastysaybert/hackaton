@@ -29,7 +29,7 @@ public class AbonDictionaryEntity {
      * связка с Действием BTE
      */
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "BTE_ACTION_ID")
+    @JoinColumn(name = "BTE_ACTION_DICT_ID")
     private BTEDictionaryEntity bteDictionary;
 
     /**

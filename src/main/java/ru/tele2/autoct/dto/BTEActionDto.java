@@ -3,18 +3,21 @@ package ru.tele2.autoct.dto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import java.util.Set;
+import ru.tele2.autoct.enums.ParamType;
+
 
 @Setter
 @Getter
 @NoArgsConstructor
-public class AbonDictionaryDto {
+public class BTEActionDto {
 
     private Long id;
 
     private String name;
 
-    private BTEDictionaryDto bteAction;
+    private ParamType paramType;
 
-    private Set<CheckDictionaryDto> checkActions;
+    private Long paramId;
+
+    private String paramValue;
 }

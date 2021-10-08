@@ -21,7 +21,6 @@ public class TestCaseEntity {
     /**
      * Исходные данные
      */
-//    @OneToMany(mappedBy="TEST_CASE", fetch = FetchType.LAZY)
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "TEST_CASE_ID")
     private List<InitialDataEntity> initialDataList;

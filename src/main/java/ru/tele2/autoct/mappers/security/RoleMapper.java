@@ -1,4 +1,4 @@
-package ru.tele2.autoct.mappers;
+package ru.tele2.autoct.mappers.security;
 
 import org.mapstruct.Mapper;
 import ru.tele2.autoct.dto.security.RoleDto;

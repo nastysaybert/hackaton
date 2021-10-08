@@ -28,13 +28,13 @@ public class CheckDictionaryEntity {
      * связка с Действием BTE
      */
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "BTE_ACTION_ID")
+    @JoinColumn(name = "BTE_ACTION_DICT_ID")
     private BTEDictionaryEntity bteAction;
 
     /**
      * список Действий Абонента
      */
-    @ManyToMany(mappedBy = "checkActions", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "checkDicts", fetch = FetchType.LAZY)
     private Set<AbonDictionaryEntity> abonDicts;
 
 }

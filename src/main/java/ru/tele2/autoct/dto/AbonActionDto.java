@@ -3,16 +3,16 @@ package ru.tele2.autoct.dto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import ru.tele2.autoct.enums.ParamType;
+import ru.tele2.autoct.dto.dictionaries.AbonDictionaryDto;
 
 @Setter
 @Getter
 @NoArgsConstructor
-public class BTEDictionaryDto {
+public class AbonActionDto {
 
     private Long id;
 
-    private String name;
+    private AbonDictionaryDto abonDict;
 
-    private ParamType paramType;
+    private BTEActionDto bteAction;
 }

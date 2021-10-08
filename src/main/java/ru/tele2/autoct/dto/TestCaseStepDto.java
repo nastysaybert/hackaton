@@ -3,6 +3,7 @@ package ru.tele2.autoct.dto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 import java.util.List;
 
 @Setter
@@ -14,7 +15,7 @@ public class TestCaseStepDto {
 
     private Long stepNumber;
 
-    private AbonDictionaryDto abonAction;
+    private AbonActionDto abonAction;
 
-    private List<CheckDictionaryDto> checkActions;
+    private List<CheckActionDto> checkActions;
 }
