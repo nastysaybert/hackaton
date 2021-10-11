@@ -23,7 +23,7 @@ import ru.tele2.autoct.views.components.LogoutBlock;
  * Главное view(представление) когда открывается приложение отрабытывает вот этот код
  */
 @Route
-@PageTitle(value = "Proxima")
+@PageTitle(value = "AutoCT")
 @Slf4j
 @Theme(value = Lumo.class, variant = Lumo.LIGHT)
 //@CssImport(value = "./styles/grid-style.css")

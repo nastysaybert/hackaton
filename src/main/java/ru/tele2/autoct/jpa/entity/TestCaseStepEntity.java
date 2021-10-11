@@ -37,4 +37,11 @@ public class TestCaseStepEntity {
     @JoinColumn(name = "TEST_CASE_STEP_ID")
     private List<CheckActionEntity> checkActions;
 
+    /**
+     * Тест кейс
+     */
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "TEST_CASE_ID")
+    private TestCaseEntity testCase;
+
 }

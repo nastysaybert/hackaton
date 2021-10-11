@@ -29,4 +29,11 @@ public class AbonActionEntity {
      */
     @OneToOne (optional=false)
     private BTEActionEntity bteAction;
+
+    /**
+     * Тест кейс
+     */
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "TEST_CASE_ID")
+    private TestCaseStepEntity testCaseStep;
 }

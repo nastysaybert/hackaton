@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.tele2.autoct.dto.security.UserDto;
 import ru.tele2.autoct.jpa.entity.security.UserEntity;
-import ru.tele2.autoct.jpa.repository.RoleRepository;
-import ru.tele2.autoct.jpa.repository.UserRepository;
+import ru.tele2.autoct.jpa.repository.security.RoleRepository;
+import ru.tele2.autoct.jpa.repository.security.UserRepository;
 import ru.tele2.autoct.mappers.security.UserMapper;
 
 import java.util.List;
