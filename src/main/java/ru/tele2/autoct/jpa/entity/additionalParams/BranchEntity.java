@@ -18,18 +18,12 @@ public class BranchEntity {
      */
     @Id
     @Column(name = "BRANCH_ID", nullable = false)
-    private Long branchId;
+    private String branchId;
 
     /**
      * наименование региона из DWH
      */
     @Column(name = "BRANCH_NAME", nullable = false)
     private String branchName;
-
-    /**
-     * тип параметра
-     */
-    @Column(name = "BRANCH_PARAM_TYPE", nullable = false)
-    private ParamType paramType = ParamType.BRANCH;
 
 }

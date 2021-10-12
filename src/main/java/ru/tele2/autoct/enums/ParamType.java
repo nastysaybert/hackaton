@@ -7,7 +7,9 @@ public enum ParamType {
     USSD_REQUEST ("USSD-ответ"),
     DURATION ("Продолжительность"),
     BRANCH("Регион"),
+    AUTH_LEVEL("Уровень полномочий"),
     SUMM ("Сумма");
+
 
     private String title;
 

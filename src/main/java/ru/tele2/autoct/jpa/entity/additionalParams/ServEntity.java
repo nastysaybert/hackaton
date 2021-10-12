@@ -16,18 +16,12 @@ public class ServEntity{
      */
     @Id
     @Column(name = "SERV_ID", nullable = false)
-    private Long servId;
+    private String servId;
 
     /**
      * наименование услуги из DWH
      */
     @Column(name = "SERV_NAME", nullable = false)
     private String servName;
-
-    /**
-     * тип параметра
-     */
-    @Column(name = "SERV_PARAM_TYPE", nullable = false)
-    private ParamType paramType = ParamType.SERV;
 
 }

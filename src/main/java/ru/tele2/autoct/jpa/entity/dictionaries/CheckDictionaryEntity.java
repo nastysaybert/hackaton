@@ -14,22 +14,22 @@ public class CheckDictionaryEntity {
      * id Действия проверки (проверки результата)
      */
     @Id
-    @Column(name = "CHECK_ACTION_ID", nullable = false)
+    @Column(name = "CHECK_DICT_ID", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long checkDictId;
 
     /**
      * наименование Действия проверки (проверки результата)
      */
-    @Column(name = "CHECK_ACTION_NAME", nullable = false)
+    @Column(name = "CHECK_DICT_NAME", nullable = false)
     private String checkDictName;
 
     /**
      * связка с Действием BTE
      */
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "BTE_ACTION_DICT_ID")
-    private BTEDictionaryEntity bteAction;
+    @JoinColumn(name = "BTE_DICT_ID")
+    private BTEDictionaryEntity bteDictionary;
 
     /**
      * список Действий Абонента

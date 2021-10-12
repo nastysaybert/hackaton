@@ -5,10 +5,9 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class BranchDto {
+public class SummDto{
 
-    private String branchId;
+    private String amount;
 
-    private String branchName;
-
+    private String unit = "руб.";
 }

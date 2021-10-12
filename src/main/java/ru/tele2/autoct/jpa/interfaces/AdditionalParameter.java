@@ -4,7 +4,7 @@ import ru.tele2.autoct.enums.ParamType;
 
 public abstract class AdditionalParameter {
 
-    public abstract Long getParamId();
+    public abstract String getParamId();
 
     public abstract ParamType getParamType();
 
@@ -12,7 +12,7 @@ public abstract class AdditionalParameter {
 
     public abstract void setParamType(ParamType paramType);
 
-    public abstract void setParamId(Long paramId);
+    public abstract void setParamId(String paramId);
 
     public abstract void setParamValue(String paramValue);
 

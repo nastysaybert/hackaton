@@ -20,18 +20,12 @@ public class NotifEntity {
      */
     @Id
     @Column(name = "NOTIF_ID", nullable = false)
-    private Long notifId;
+    private String notifId;
 
     /**
      * наименование нотификации из DWH
      */
     @Column(name = "NOTIF_NAME", nullable = false)
     private String notifName;
-
-    /**
-     * тип параметра
-     */
-    @Column(name = "NOTIF_PARAM_TYPE", nullable = false)
-    private ParamType paramType = ParamType.NOTIF;
 
 }

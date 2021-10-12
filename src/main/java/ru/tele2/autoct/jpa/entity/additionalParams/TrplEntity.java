@@ -16,18 +16,12 @@ public class TrplEntity{
      */
     @Id
     @Column(name = "TRPL_ID", nullable = false)
-    private Long trplId;
+    private String trplId;
 
     /**
      * наименование тарифа из DWH
      */
     @Column(name = "TRPL_NAME", nullable = false)
     private String trplName;
-
-    /**
-     * тип параметра
-     */
-    @Column(name = "TRPL_PARAM_TYPE", nullable = false)
-    private ParamType paramType = ParamType.TRPL;
 
 }

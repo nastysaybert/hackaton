@@ -18,4 +18,4 @@ spring:
 
 external:
     filepath:
-        projects: "C:\\Users\\nasty\\Desktop\\PI project.xlsx"
+        projects: "C:\\Users\\nasty\\Desktop\\dicts.xlsx"
