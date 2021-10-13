@@ -2,10 +2,15 @@ package ru.tele2.autoct.services;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.tele2.autoct.dto.additionalParams.ServDto;
 import ru.tele2.autoct.dto.additionalParams.TrplDto;
+import ru.tele2.autoct.jpa.entity.additionalParams.ServEntity;
 import ru.tele2.autoct.jpa.entity.additionalParams.TrplEntity;
 import ru.tele2.autoct.jpa.repository.additionalParams.TrplRepository;
 import ru.tele2.autoct.mappers.additionalParams.TrplMapper;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -27,6 +32,15 @@ public class TrplServiceImpl implements TrplService {
 
     public void deleteAll (){
         trplRepository.deleteAll();
+    }
+
+    public List<TrplDto> getAll(){
+        List<TrplDto> trplDtoList = new ArrayList<>();
+        List<TrplEntity> servEntityList = trplRepository.findAll();
+        for (TrplEntity trplEntity: servEntityList) {
+            trplDtoList.add(trplMapper.convert(trplEntity));
+        }
+        return trplDtoList;
     }
 
 }

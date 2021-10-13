@@ -9,13 +9,13 @@ import com.vaadin.flow.component.textfield.PasswordField;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import ru.tele2.autoct.dto.security.UserDto;
-import ru.tele2.autoct.services.UserService;
+import ru.tele2.autoct.services.security.UserService;
 
 
 public class ChangePasswordDialog extends Dialog {
 
-    UserService userService;
-    BCryptPasswordEncoder bCryptPasswordEncoder;
+//    UserService userService;
+//    BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public ChangePasswordDialog(UserService userService,BCryptPasswordEncoder bCryptPasswordEncoder){
         VerticalLayout layout =  new VerticalLayout();

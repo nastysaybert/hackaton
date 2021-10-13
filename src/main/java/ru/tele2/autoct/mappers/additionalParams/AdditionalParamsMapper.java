@@ -39,10 +39,6 @@ public interface AdditionalParamsMapper {
     })
     AdditionalParamDto convert(AuthLevelDto param);
 
-    /**
-     * DURATION
-     */
-
     @Mappings({
             @Mapping(target="paramId", source="param.duration"),
             @Mapping(target="paramValue", source="param.unit")
@@ -54,6 +50,12 @@ public interface AdditionalParamsMapper {
             @Mapping(target="paramValue", source="param.unit")
     })
     AdditionalParamDto convert(SummDto param);
+
+    @Mappings({
+            @Mapping(target="paramId", source="param.ussd"),
+            @Mapping(target="paramValue", source="param.description")
+    })
+    AdditionalParamDto convert(USSDRequestDto param);
 
 
 }

@@ -10,4 +10,11 @@ public class AuthLevelDto {
     private String authLevelId;
 
     private String authLevelName;
+
+    public String toString(){
+        return authLevelId +
+                " (" +
+                authLevelName +
+                ")";
+    }
 }

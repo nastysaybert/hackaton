@@ -11,4 +11,11 @@ public class BranchDto {
 
     private String branchName;
 
+    public String toString(){
+        return branchName +
+                " (branch_id = " +
+                branchId +
+                ")";
+    }
+
 }

@@ -11,7 +11,7 @@ import com.vaadin.flow.component.menubar.MenuBarVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import ru.tele2.autoct.services.UserService;
+import ru.tele2.autoct.services.security.UserService;
 
 
 public class LogoutBlock extends HorizontalLayout {

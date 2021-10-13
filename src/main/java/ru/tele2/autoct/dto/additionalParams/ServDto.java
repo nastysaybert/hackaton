@@ -11,4 +11,11 @@ public class ServDto {
 
     private String servName;
 
+    public String toString(){
+        return servName +
+                " (serv_id = " +
+                servId +
+                ")";
+    }
+
 }

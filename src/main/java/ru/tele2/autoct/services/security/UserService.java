@@ -1,4 +1,4 @@
-package ru.tele2.autoct.services;
+package ru.tele2.autoct.services.security;
 
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetailsService;

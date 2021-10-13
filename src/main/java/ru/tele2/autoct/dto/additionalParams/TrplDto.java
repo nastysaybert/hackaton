@@ -11,4 +11,11 @@ public class TrplDto {
 
     private String trplName;
 
+    public String toString(){
+        return trplName +
+                " (trpl_id = " +
+                trplId +
+                ")";
+    }
+
 }

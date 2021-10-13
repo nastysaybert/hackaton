@@ -12,4 +12,9 @@ public class NotifDto extends AdditionalParamDto {
 
     private String notifName;
 
+    public String toString(){
+        return "[" + notifId + "] "
+                + notifName;
+    }
+
 }

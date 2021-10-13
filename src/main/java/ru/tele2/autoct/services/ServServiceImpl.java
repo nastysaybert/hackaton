@@ -7,6 +7,9 @@ import ru.tele2.autoct.jpa.entity.additionalParams.ServEntity;
 import ru.tele2.autoct.jpa.repository.additionalParams.ServRepository;
 import ru.tele2.autoct.mappers.additionalParams.ServMapper;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @AllArgsConstructor
 public class ServServiceImpl implements ServService{
@@ -27,5 +30,14 @@ public class ServServiceImpl implements ServService{
 
     public void deleteAll(){
         servRepository.deleteAll();
+    }
+
+    public List<ServDto> getAll(){
+        List<ServDto> servDtoList = new ArrayList<>();
+        List<ServEntity> servEntityList = servRepository.findAll();
+        for (ServEntity servEntity: servEntityList) {
+            servDtoList.add(servMapper.convert(servEntity));
+        }
+        return servDtoList;
     }
 }
