@@ -3,8 +3,9 @@ package ru.tele2.autoct.dto.dictionaries;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import ru.tele2.autoct.jpa.entity.dictionaries.AbonDictionaryEntity;
-import ru.tele2.autoct.jpa.entity.dictionaries.BTEDictionaryEntity;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 import java.util.Set;
 
 @Setter
@@ -16,8 +17,8 @@ public class CheckDictionaryDto {
 
     private String checkDictName;
 
-    private BTEDictionaryEntity bteAction;
+    private BTEDictionaryDto bteDictionary;
 
-    private Set<AbonDictionaryEntity> abonDicts;
+    private List<AbonDictionaryDto> abonDicts;
 
 }

@@ -1,11 +1,11 @@
 package ru.tele2.autoct.jpa.entity;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import javax.persistence.*;
 
-@Getter
-@Setter
+@Data
 @Entity
 @Table(name = "INITIAL_DATA")
 public class InitialDataEntity {

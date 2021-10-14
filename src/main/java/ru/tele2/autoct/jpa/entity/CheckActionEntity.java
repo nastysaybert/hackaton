@@ -1,12 +1,12 @@
 package ru.tele2.autoct.jpa.entity;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import ru.tele2.autoct.jpa.entity.dictionaries.CheckDictionaryEntity;
 import javax.persistence.*;
 
-@Getter
-@Setter
+@Data
 @Entity
 @Table(name = "CHECK_ACTION")
 public class CheckActionEntity {

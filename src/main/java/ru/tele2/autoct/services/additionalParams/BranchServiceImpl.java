@@ -1,11 +1,9 @@
-package ru.tele2.autoct.services;
+package ru.tele2.autoct.services.additionalParams;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.tele2.autoct.dto.additionalParams.BranchDto;
-import ru.tele2.autoct.dto.additionalParams.ServDto;
 import ru.tele2.autoct.jpa.entity.additionalParams.BranchEntity;
-import ru.tele2.autoct.jpa.entity.additionalParams.ServEntity;
 import ru.tele2.autoct.jpa.repository.additionalParams.BranchRepository;
 import ru.tele2.autoct.mappers.additionalParams.BranchMapper;
 

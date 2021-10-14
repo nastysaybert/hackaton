@@ -1,12 +1,13 @@
 package ru.tele2.autoct.views.components.additionalParams;
 
-import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.textfield.IntegerField;
 
-public class SummForm extends FormLayout {
-    public void SummForm(){
-        IntegerField amount = new IntegerField();
-        amount.setWidthFull();
-        this.addFormItem(amount, "Введите сумму");
+public class SummForm extends IntegerField {
+    public SummForm(){
+//        this.setWidthFull();
+//        this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT);
+//        this.setPrefixComponent(new Icon(VaadinIcon.MONEY));
+        this.setLabel("Введите сумму");
+        this.setClearButtonVisible(true);
     }
 }

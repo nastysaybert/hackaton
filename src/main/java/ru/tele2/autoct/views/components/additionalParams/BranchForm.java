@@ -1,19 +1,18 @@
 package ru.tele2.autoct.views.components.additionalParams;
 
 import com.vaadin.flow.component.combobox.ComboBox;
-import com.vaadin.flow.component.formlayout.FormLayout;
 import ru.tele2.autoct.dto.additionalParams.BranchDto;
-import ru.tele2.autoct.services.BranchService;
+import ru.tele2.autoct.services.additionalParams.BranchService;
 import java.util.Collections;
 import java.util.List;
 
-public class BranchForm extends FormLayout {
+public class BranchForm extends ComboBox<BranchDto> {
 
     public BranchForm(BranchService branchService){
-        ComboBox<BranchDto> branchSelection = new ComboBox<>();
-        branchSelection.setWidthFull();
-        branchSelection.setClearButtonVisible(true);
-        branchSelection.setItemLabelGenerator(BranchDto::toString);
+//        this.setWidthFull();
+        this.setClearButtonVisible(true);
+        this.setItemLabelGenerator(BranchDto::toString);
+        this.setLabel("Выберите регион");
         List<BranchDto> sortedBranches = branchService.getAll();
         Collections.sort(sortedBranches, (o1, o2) -> {
             if (Integer.parseInt(o1.getBranchId()) > Integer.parseInt(o2.getBranchId())) {
@@ -24,7 +23,6 @@ public class BranchForm extends FormLayout {
                 } else return 0;
             }
         });
-        branchSelection.setItems(sortedBranches);
-        this.addFormItem(branchSelection, "Выберите регион");
+        this.setItems(sortedBranches);
     }
 }

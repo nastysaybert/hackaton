@@ -1,10 +1,8 @@
-package ru.tele2.autoct.services;
+package ru.tele2.autoct.services.additionalParams;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.tele2.autoct.dto.additionalParams.ServDto;
 import ru.tele2.autoct.dto.additionalParams.TrplDto;
-import ru.tele2.autoct.jpa.entity.additionalParams.ServEntity;
 import ru.tele2.autoct.jpa.entity.additionalParams.TrplEntity;
 import ru.tele2.autoct.jpa.repository.additionalParams.TrplRepository;
 import ru.tele2.autoct.mappers.additionalParams.TrplMapper;

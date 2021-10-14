@@ -9,13 +9,12 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.security.web.server.context.ServerSecurityContextRepository;
 import ru.tele2.autoct.dto.additionalParams.BranchDto;
 import ru.tele2.autoct.dto.additionalParams.ServDto;
 import ru.tele2.autoct.dto.additionalParams.TrplDto;
-import ru.tele2.autoct.services.BranchService;
-import ru.tele2.autoct.services.ServService;
-import ru.tele2.autoct.services.TrplService;
+import ru.tele2.autoct.services.additionalParams.BranchService;
+import ru.tele2.autoct.services.additionalParams.ServService;
+import ru.tele2.autoct.services.additionalParams.TrplService;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -25,7 +24,7 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.Iterator;
 
-@EnableScheduling
+//@EnableScheduling
 @Configuration
 @EnableConfigurationProperties
 @RequiredArgsConstructor

@@ -1,13 +1,13 @@
 package ru.tele2.autoct.jpa.entity.additionalParams;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import ru.tele2.autoct.enums.ParamType;
 
 import javax.persistence.*;
 
-@Getter
-@Setter
+@Data
 @Entity
 @Table(name = "TRPL")
 public class TrplEntity{

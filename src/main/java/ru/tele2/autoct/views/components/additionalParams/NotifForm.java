@@ -1,20 +1,19 @@
 package ru.tele2.autoct.views.components.additionalParams;
 
 import com.vaadin.flow.component.combobox.ComboBox;
-import com.vaadin.flow.component.formlayout.FormLayout;
 import ru.tele2.autoct.dto.additionalParams.NotifDto;
-import ru.tele2.autoct.services.NotifService;
+import ru.tele2.autoct.services.additionalParams.NotifService;
 
 import java.util.Collections;
 import java.util.List;
 
-public class NotifForm extends FormLayout {
+public class NotifForm extends ComboBox<NotifDto> {
 
     public NotifForm(NotifService notifService){
-        ComboBox<NotifDto> notifSelection = new ComboBox<>();
-        notifSelection.setWidthFull();
-        notifSelection.setClearButtonVisible(true);
-        notifSelection.setItemLabelGenerator(NotifDto::toString);
+//        this.setWidthFull();
+        this.setClearButtonVisible(true);
+        this.setLabel("Выберите нотификацию");
+        this.setItemLabelGenerator(NotifDto::toString);
         List<NotifDto> sortedNotifs = notifService.getAll();
         Collections.sort(sortedNotifs, (o1, o2) -> {
             if (Integer.parseInt(o1.getNotifId()) > Integer.parseInt(o2.getNotifId())) {
@@ -25,7 +24,6 @@ public class NotifForm extends FormLayout {
                 } else return 0;
             }
         });
-        notifSelection.setItems(sortedNotifs);
-        this.addFormItem(notifSelection, "Выберите нотификацию");
+        this.setItems(sortedNotifs);
     }
 }

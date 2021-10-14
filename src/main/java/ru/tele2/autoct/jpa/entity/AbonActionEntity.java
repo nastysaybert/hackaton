@@ -1,12 +1,12 @@
 package ru.tele2.autoct.jpa.entity;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import ru.tele2.autoct.jpa.entity.dictionaries.AbonDictionaryEntity;
 import javax.persistence.*;
 
-@Getter
-@Setter
+@Data
 @Entity
 @Table(name = "ABON_ACTION")
 public class AbonActionEntity {

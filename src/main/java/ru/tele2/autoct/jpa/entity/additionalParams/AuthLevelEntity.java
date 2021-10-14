@@ -1,5 +1,6 @@
 package ru.tele2.autoct.jpa.entity.additionalParams;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import ru.tele2.autoct.enums.ParamType;
@@ -8,8 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-@Getter
-@Setter
+@Data
 @Entity
 @Table(name = "AUTH_LEVEL")
 public class AuthLevelEntity {

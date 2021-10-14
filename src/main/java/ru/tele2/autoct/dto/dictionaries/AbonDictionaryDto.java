@@ -3,9 +3,7 @@ package ru.tele2.autoct.dto.dictionaries;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import ru.tele2.autoct.jpa.entity.dictionaries.BTEDictionaryEntity;
-import ru.tele2.autoct.jpa.entity.dictionaries.CheckDictionaryEntity;
-import java.util.Set;
+import java.util.List;
 
 @Setter
 @Getter
@@ -16,8 +14,8 @@ public class AbonDictionaryDto {
 
     private String abonDictName;
 
-    private BTEDictionaryEntity bteDictionary;
+    private BTEDictionaryDto bteDictionary;
 
-    private Set<CheckDictionaryEntity> checkDicts;
+    private List<CheckDictionaryDto> checkDicts;
 
 }

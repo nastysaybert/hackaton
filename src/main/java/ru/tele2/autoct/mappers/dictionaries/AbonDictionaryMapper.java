@@ -1,6 +1,7 @@
 package ru.tele2.autoct.mappers.dictionaries;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import ru.tele2.autoct.dto.dictionaries.AbonDictionaryDto;
 import ru.tele2.autoct.jpa.entity.dictionaries.AbonDictionaryEntity;
 
@@ -13,6 +14,8 @@ import ru.tele2.autoct.jpa.entity.dictionaries.AbonDictionaryEntity;
         }
 )
 public interface AbonDictionaryMapper {
+    @Mapping(target = "checkDicts", ignore = true)
     AbonDictionaryDto convert (AbonDictionaryEntity abonDict);
+
     AbonDictionaryEntity convert (AbonDictionaryDto abonDict);
 }

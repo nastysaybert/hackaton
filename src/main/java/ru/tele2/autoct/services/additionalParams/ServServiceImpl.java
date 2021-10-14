@@ -1,4 +1,4 @@
-package ru.tele2.autoct.services;
+package ru.tele2.autoct.services.additionalParams;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;

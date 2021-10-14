@@ -1,12 +1,11 @@
 package ru.tele2.autoct.jpa.entity.dictionaries;
 
-import lombok.Getter;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
 import javax.persistence.*;
-import java.util.Set;
+import java.util.List;
 
-@Getter
-@Setter
+@Data
 @Entity
 @Table(name = "CHECK_ACTION_DICTIONARY")
 public class CheckDictionaryEntity {
@@ -27,14 +26,15 @@ public class CheckDictionaryEntity {
     /**
      * связка с Действием BTE
      */
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "BTE_DICT_ID")
     private BTEDictionaryEntity bteDictionary;
 
     /**
      * список Действий Абонента
      */
-    @ManyToMany(mappedBy = "checkDicts", fetch = FetchType.LAZY)
-    private Set<AbonDictionaryEntity> abonDicts;
+    @JsonIgnore
+    @ManyToMany(mappedBy = "checkDicts", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<AbonDictionaryEntity> abonDicts;
 
 }

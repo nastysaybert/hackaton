@@ -9,7 +9,11 @@ import com.vaadin.flow.theme.lumo.Lumo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import ru.tele2.autoct.services.additionalParams.*;
+import ru.tele2.autoct.services.dictionaries.AbonDictionaryService;
+import ru.tele2.autoct.services.dictionaries.CheckDictionaryService;
 import ru.tele2.autoct.services.security.UserService;
+import ru.tele2.autoct.views.components.AbonActionForm;
 import ru.tele2.autoct.views.components.LogoutBlock;
 
 
@@ -29,15 +33,14 @@ public class MainView extends VerticalLayout {
 
     @Autowired
     public MainView(BCryptPasswordEncoder bCryptPasswordEncoder,
-//                    ServiceProviderForView serviceProviderForView,
-//                    DownloadService downloadService,
-//                    TestCaseService testCaseService,
-//                    ProjectService projectService,
-                    UserService userService
-    ) {
-//        this.serviceProviderForView = serviceProviderForView;
-//        this.grid = new TestCaseGrid(serviceProviderForView.getTestCaseGridProvider());
-
+                    UserService userService,
+                    AbonDictionaryService abonDictionaryService,
+                    CheckDictionaryService checkDictionaryService,
+                    AuthLevelService authLevelService,
+                    BranchService branchService,
+                    NotifService notifService,
+                    ServService servService,
+                    TrplService trplService) {
         VerticalLayout wrapper = new VerticalLayout();
         wrapper.setWidthFull();
         wrapper.setPadding(false);
@@ -45,6 +48,14 @@ public class MainView extends VerticalLayout {
         wrapper.getStyle().set("padding-top", "0px");
 
         wrapper.add(new LogoutBlock(userService,bCryptPasswordEncoder));
+        wrapper.add(new AbonActionForm(abonDictionaryService,
+                checkDictionaryService,
+                authLevelService,
+                branchService,
+                notifService,
+                servService,
+                trplService));
+
         add(wrapper);
 
 //        HorizontalLayout line1 = new HorizontalLayout();

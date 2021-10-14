@@ -1,18 +1,16 @@
 package ru.tele2.autoct.views.components.additionalParams;
 
 import com.vaadin.flow.component.combobox.ComboBox;
-import com.vaadin.flow.component.formlayout.FormLayout;
 import ru.tele2.autoct.dto.additionalParams.AuthLevelDto;
-import ru.tele2.autoct.services.AuthLevelService;
+import ru.tele2.autoct.services.additionalParams.AuthLevelService;
 
-public class AuthLevelForm extends FormLayout {
+public class AuthLevelForm extends ComboBox<AuthLevelDto> {
 
     public AuthLevelForm(AuthLevelService authLevelService){
-        ComboBox<AuthLevelDto> authLevelSelection = new ComboBox<>();
-        authLevelSelection.setWidthFull();
-        authLevelSelection.setClearButtonVisible(true);
-        authLevelSelection.setItemLabelGenerator(AuthLevelDto::toString);
-        authLevelSelection.setItems(authLevelService.getAll());
-        this.addFormItem(authLevelSelection,"Выберите уровень полномочий");
+//        this.setWidthFull();
+        this.setClearButtonVisible(true);
+        this.setLabel("Выберите уровень полномочий");
+        this.setItemLabelGenerator(AuthLevelDto::toString);
+        this.setItems(authLevelService.getAll());
     }
 }

@@ -1,12 +1,12 @@
 package ru.tele2.autoct.jpa.entity;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import javax.persistence.*;
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 @Entity
 @Table(name = "TEST_CASE_STEPS")
 public class TestCaseStepEntity {

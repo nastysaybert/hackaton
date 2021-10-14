@@ -1,12 +1,11 @@
 package ru.tele2.autoct.jpa.entity.dictionaries;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import ru.tele2.autoct.enums.ParamType;
-
 import javax.persistence.*;
 import java.util.List;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -34,10 +33,10 @@ public class BTEDictionaryEntity {
     @Enumerated(EnumType.STRING)
     private ParamType paramType;
 
-    @OneToMany(mappedBy = "bteDictionary", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "bteDictionary", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<AbonDictionaryEntity> abonActionList;
 
-    @OneToMany(mappedBy = "bteDictionary", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "bteDictionary", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<CheckDictionaryEntity> checkActionList;
 
 }
