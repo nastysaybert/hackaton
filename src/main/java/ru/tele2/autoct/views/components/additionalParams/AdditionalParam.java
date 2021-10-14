@@ -1,19 +1,20 @@
 package ru.tele2.autoct.views.components.additionalParams;
 
+import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import ru.tele2.autoct.enums.ParamType;
 import ru.tele2.autoct.services.additionalParams.*;
 
-public class AdditionalParam extends VerticalLayout {
+public class AdditionalParam extends Div {
     public AdditionalParam(ParamType paramType,
                            AuthLevelService authLevelService,
                            BranchService branchService,
                            NotifService notifService,
                            ServService servService,
                            TrplService trplService){
-        this.setPadding(false);
-        this.setMargin(false);
+        this.setWidthFull();
         switch (paramType) {
             case AUTH_LEVEL:
                 this.add(new AuthLevelForm(authLevelService));

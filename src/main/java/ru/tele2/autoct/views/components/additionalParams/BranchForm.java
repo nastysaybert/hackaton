@@ -9,7 +9,8 @@ import java.util.List;
 public class BranchForm extends ComboBox<BranchDto> {
 
     public BranchForm(BranchService branchService){
-//        this.setWidthFull();
+        this.setWidthFull();
+//        this.setWidth("25%");
         this.setClearButtonVisible(true);
         this.setItemLabelGenerator(BranchDto::toString);
         this.setLabel("Выберите регион");

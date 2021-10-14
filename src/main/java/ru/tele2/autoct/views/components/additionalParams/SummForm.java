@@ -4,9 +4,8 @@ import com.vaadin.flow.component.textfield.IntegerField;
 
 public class SummForm extends IntegerField {
     public SummForm(){
-//        this.setWidthFull();
-//        this.addThemeVariants(TextFieldVariant.LUMO_ALIGN_RIGHT);
-//        this.setPrefixComponent(new Icon(VaadinIcon.MONEY));
+        this.setWidthFull();
+//        this.setWidth("25%");
         this.setLabel("Введите сумму");
         this.setClearButtonVisible(true);
     }

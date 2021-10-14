@@ -10,7 +10,8 @@ import java.util.List;
 public class NotifForm extends ComboBox<NotifDto> {
 
     public NotifForm(NotifService notifService){
-//        this.setWidthFull();
+        this.setWidthFull();
+//        this.setWidth("25%");
         this.setClearButtonVisible(true);
         this.setLabel("Выберите нотификацию");
         this.setItemLabelGenerator(NotifDto::toString);

@@ -13,7 +13,8 @@ import java.util.List;
 public class ServForm extends ComboBox<ServDto> {
 
     public ServForm(ServService servService){
-//        this.setWidthFull();
+        this.setWidthFull();
+//        this.setWidth("25%");
         this.setLabel("Выберите услугу");
         this.setClearButtonVisible(true);
         this.setItemLabelGenerator(ServDto::toString);

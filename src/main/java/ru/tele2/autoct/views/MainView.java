@@ -13,8 +13,8 @@ import ru.tele2.autoct.services.additionalParams.*;
 import ru.tele2.autoct.services.dictionaries.AbonDictionaryService;
 import ru.tele2.autoct.services.dictionaries.CheckDictionaryService;
 import ru.tele2.autoct.services.security.UserService;
-import ru.tele2.autoct.views.components.AbonActionForm;
 import ru.tele2.autoct.views.components.LogoutBlock;
+import ru.tele2.autoct.views.components.TestCaseForm;
 
 
 /**
@@ -48,7 +48,15 @@ public class MainView extends VerticalLayout {
         wrapper.getStyle().set("padding-top", "0px");
 
         wrapper.add(new LogoutBlock(userService,bCryptPasswordEncoder));
-        wrapper.add(new AbonActionForm(abonDictionaryService,
+//        wrapper.add(new AbonActionForm(abonDictionaryService,
+//                checkDictionaryService,
+//                authLevelService,
+//                branchService,
+//                notifService,
+//                servService,
+//                trplService));
+
+        wrapper.add(new TestCaseForm(abonDictionaryService,
                 checkDictionaryService,
                 authLevelService,
                 branchService,

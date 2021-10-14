@@ -11,7 +11,8 @@ import java.util.List;
 
 public class TrplForm extends ComboBox<TrplDto> {
     public TrplForm(TrplService trplService){
-//        this.setWidthFull();
+        this.setWidthFull();
+//        this.setWidth("25%");
         this.setLabel("Выберите тарифный план");
         this.setClearButtonVisible(true);
         this.setItemLabelGenerator(TrplDto::toString);
