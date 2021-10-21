@@ -86,8 +86,6 @@ public class DownloadServiceImpl implements DownloadService {
                 cell = row.createCell(colNum++);
                 cell.setCellValue(step.getAbonAction().getAbonDict().getAbonDictName());
                 if (step.getAbonAction().getBteAction() != null){
-                    //пропускаем столбец
-//                    colNum++;
                     //Название Ключевого параметра
                     cell = row.createCell(colNum++);
                     cell.setCellValue(step.getAbonAction().getBteAction().getName());
