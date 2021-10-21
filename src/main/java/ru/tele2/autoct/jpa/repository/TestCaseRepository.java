@@ -10,4 +10,5 @@ import java.util.List;
 @Repository
 public interface TestCaseRepository extends JpaRepository<TestCaseEntity, Long> {
     List<TestCaseEntity> findAll();
+    TestCaseEntity getByName(String name);
 }

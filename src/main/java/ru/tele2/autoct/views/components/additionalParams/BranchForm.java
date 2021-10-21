@@ -1,6 +1,7 @@
 package ru.tele2.autoct.views.components.additionalParams;
 
 import com.vaadin.flow.component.combobox.ComboBox;
+import ru.tele2.autoct.dto.AdditionalParamDto;
 import ru.tele2.autoct.dto.additionalParams.BranchDto;
 import ru.tele2.autoct.services.additionalParams.BranchService;
 import java.util.Collections;
@@ -10,7 +11,6 @@ public class BranchForm extends ComboBox<BranchDto> {
 
     public BranchForm(BranchService branchService){
         this.setWidthFull();
-//        this.setWidth("25%");
         this.setClearButtonVisible(true);
         this.setItemLabelGenerator(BranchDto::toString);
         this.setLabel("Выберите регион");
@@ -25,5 +25,12 @@ public class BranchForm extends ComboBox<BranchDto> {
             }
         });
         this.setItems(sortedBranches);
+    }
+
+    public AdditionalParamDto getParam(){
+        AdditionalParamDto result = new AdditionalParamDto();
+        result.setParamId(this.getValue().getBranchId());
+        result.setParamValue(this.getValue().getBranchName());
+        return result;
     }
 }

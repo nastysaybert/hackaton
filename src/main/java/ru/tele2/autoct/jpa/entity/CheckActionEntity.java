@@ -21,19 +21,21 @@ public class CheckActionEntity {
     /**
      * Действие Абонента
      */
-    @OneToOne (optional=false)
+    @OneToOne
+    @JoinColumn(name = "CHECK_DICT_ID", referencedColumnName = "CHECK_DICT_ID")
     private CheckDictionaryEntity checkDict;
 
     /**
      * Действие BTE
      */
-    @OneToOne (optional=false)
+    @OneToOne (cascade = CascadeType.ALL)
+    @JoinColumn(name = "BTE_ACTION_ID", referencedColumnName = "BTE_ACTION_ID")
     private BTEActionEntity bteAction;
 
     /**
      * Тест кейс
      */
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "TEST_CASE_ID")
+    @JoinColumn(name = "TEST_CASE_STEP_ID")
     private TestCaseStepEntity testCaseStep;
 }

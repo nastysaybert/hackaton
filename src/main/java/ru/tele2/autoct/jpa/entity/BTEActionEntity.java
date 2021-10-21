@@ -26,22 +26,22 @@ public class BTEActionEntity {
     private String name;
 
     /**
-     * Тип ключевого параметра для Действия BTE
-     */
-    @Column(name = "BTE_ACTION_PARAM", nullable = false)
-    @Enumerated(EnumType.STRING)
-    private ParamType paramType;
-
-    /**
      * Id  ключевого параметра
      */
     @Column(name = "ADD_PARAM_ID", nullable = false)
-    private Long paramId;
+    private String paramId;
 
     /**
      * Значение параметра
      */
     @Column(name = "ADD_PARAM_VALUE", nullable = false)
     private String paramValue;
+
+
+    @OneToOne (mappedBy = "bteAction", cascade = CascadeType.ALL)
+    private AbonActionEntity abonAction;
+
+    @OneToOne (mappedBy = "bteAction", cascade = CascadeType.ALL)
+    private CheckActionEntity checkAction;
 
 }

@@ -3,6 +3,7 @@ package ru.tele2.autoct.views.components.additionalParams;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import ru.tele2.autoct.dto.AdditionalParamDto;
 import ru.tele2.autoct.dto.additionalParams.TrplDto;
 import ru.tele2.autoct.services.additionalParams.TrplService;
 
@@ -12,7 +13,6 @@ import java.util.List;
 public class TrplForm extends ComboBox<TrplDto> {
     public TrplForm(TrplService trplService){
         this.setWidthFull();
-//        this.setWidth("25%");
         this.setLabel("Выберите тарифный план");
         this.setClearButtonVisible(true);
         this.setItemLabelGenerator(TrplDto::toString);
@@ -27,5 +27,12 @@ public class TrplForm extends ComboBox<TrplDto> {
             }
         });
         this.setItems(sortedTrpls);
+    }
+
+    public AdditionalParamDto getParam(){
+        AdditionalParamDto result = new AdditionalParamDto();
+        result.setParamId(this.getValue().getTrplId());
+        result.setParamValue(this.getValue().getTrplName());
+        return result;
     }
 }

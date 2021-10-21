@@ -12,7 +12,9 @@ public class TestCaseDto {
 
     private Long id;
 
-    private List<InitialDataDto> initialDataList;
+    private String name;
+
+    private InitialDataDto initialData;
 
     private List<TestCaseStepDto> testCaseStepList;
 

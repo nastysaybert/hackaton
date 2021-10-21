@@ -8,7 +8,6 @@ import java.util.List;
 
 @Repository
 public interface InitialDataRepository extends JpaRepository<InitialDataEntity, Long> {
-    List<InitialDataEntity> findAll();
 
-    List<InitialDataEntity> getAllByTestCaseId(Long testCaseId);
+    List<InitialDataEntity> findAll();
 }

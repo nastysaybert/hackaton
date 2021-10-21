@@ -1,20 +1,39 @@
 package ru.tele2.autoct.views;
 
 
+import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.NotificationVariant;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.server.StreamResource;
 import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FileUtils;
+import org.atmosphere.interceptor.AtmosphereResourceStateRecovery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.vaadin.olli.FileDownloadWrapper;
+import ru.tele2.autoct.dto.TestCaseDto;
+import ru.tele2.autoct.services.DownloadService;
+import ru.tele2.autoct.services.TestCaseService;
 import ru.tele2.autoct.services.additionalParams.*;
 import ru.tele2.autoct.services.dictionaries.AbonDictionaryService;
 import ru.tele2.autoct.services.dictionaries.CheckDictionaryService;
 import ru.tele2.autoct.services.security.UserService;
 import ru.tele2.autoct.views.components.LogoutBlock;
 import ru.tele2.autoct.views.components.TestCaseForm;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -27,10 +46,6 @@ import ru.tele2.autoct.views.components.TestCaseForm;
 //@CssImport(value = "./styles/grid-style.css")
 public class MainView extends VerticalLayout {
 
-//    private final ServiceProviderForView serviceProviderForView;
-//    private MemoryBuffer buffer = new MemoryBuffer();
-//    private TestCaseGrid grid;
-
     @Autowired
     public MainView(BCryptPasswordEncoder bCryptPasswordEncoder,
                     UserService userService,
@@ -40,7 +55,9 @@ public class MainView extends VerticalLayout {
                     BranchService branchService,
                     NotifService notifService,
                     ServService servService,
-                    TrplService trplService) {
+                    TrplService trplService,
+                    TestCaseService testCaseService,
+                    DownloadService downloadService) {
         VerticalLayout wrapper = new VerticalLayout();
         wrapper.setWidthFull();
         wrapper.setPadding(false);
@@ -48,66 +65,46 @@ public class MainView extends VerticalLayout {
         wrapper.getStyle().set("padding-top", "0px");
 
         wrapper.add(new LogoutBlock(userService,bCryptPasswordEncoder));
-//        wrapper.add(new AbonActionForm(abonDictionaryService,
-//                checkDictionaryService,
-//                authLevelService,
-//                branchService,
-//                notifService,
-//                servService,
-//                trplService));
 
-        wrapper.add(new TestCaseForm(abonDictionaryService,
+        TestCaseForm testCaseForm = new TestCaseForm(abonDictionaryService,
                 checkDictionaryService,
                 authLevelService,
                 branchService,
                 notifService,
                 servService,
-                trplService));
+                trplService);
+        wrapper.add(testCaseForm);
+        HorizontalLayout buttonsLine = new HorizontalLayout();
+        buttonsLine.setMargin(false);
+        buttonsLine.setPadding(false);
 
+        Button saveFromFormButton = new Button("Сохранить в БД", new Icon(VaadinIcon.ARROW_CIRCLE_DOWN_O));
+        saveFromFormButton.setIconAfterText(true);
+        saveFromFormButton.addThemeVariants(ButtonVariant.LUMO_SUCCESS);
+        saveFromFormButton.addClickListener(event ->{
+            boolean result = testCaseService.save(testCaseService.getTestCaseDtoFromForm(testCaseForm));
+            if (result){
+                Notification.show("ТК сохранен").addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+            } else Notification.show("ТК не сохранен").addThemeVariants(NotificationVariant.LUMO_ERROR);
+        });
+
+        Button downloadFileButton  = new Button("Выгрузить в *.xlsx", new Icon(VaadinIcon.ARROW_CIRCLE_DOWN_O));
+        downloadFileButton.setIconAfterText(true);
+        downloadFileButton.addThemeVariants(ButtonVariant.LUMO_SUCCESS);
+        FileDownloadWrapper buttonWrapper = new FileDownloadWrapper(
+                new StreamResource("TestCase.xlsx", () -> {
+                    try {
+                        List<TestCaseDto> downloadList = new ArrayList<>();
+                        downloadList.add(testCaseService.getTestCaseDtoFromForm(testCaseForm));
+                        return new ByteArrayInputStream(FileUtils.readFileToByteArray(downloadService.download(downloadList)));
+                    } catch (IOException e) {
+                        return null;
+                    }
+                }));
+        buttonWrapper.wrapComponent(downloadFileButton);
+
+        buttonsLine.add(saveFromFormButton, buttonWrapper);
+        wrapper.add(buttonsLine);
         add(wrapper);
-
-//        HorizontalLayout line1 = new HorizontalLayout();
-//        line1.setPadding(true);
-//        line1.setWidthFull();
-//        //по умолчанию margin и padding у компонентов vaadin стоит по 16px, убираем
-//        line1.getStyle().set("margin-top", "0px");
-//        line1.getStyle().set("padding-top", "0px");
-//        line1.getStyle().set("padding-bottom", "0px");
-//
-//        HorizontalLayout line2 = new HorizontalLayout();
-//        line2.setPadding(true);
-//        line2.setWidthFull();
-//        line2.getStyle().set("margin-top", "0px");
-//        line2.getStyle().set("padding-top", "0px");
-//        line2.getStyle().set("padding-bottom", "0px");
-//
-//        //кнопка и диалог для загрузки файла
-//        Button openUploadDialogButton = new Button("Добавить тест-кейсы", new Icon(VaadinIcon.CLOUD_UPLOAD_O));
-//        openUploadDialogButton.addClickListener(event -> new UploadDialog(serviceProviderForView, buffer, grid,projectService).open());
-//        //кнопку пошире
-//        openUploadDialogButton.setWidth("17em");
-//        //отступ снаружи - авто, добавить отступ сверху
-//        openUploadDialogButton.getStyle().set("margin-left", "auto");
-//        openUploadDialogButton.getStyle().set("margin-top", "37px");
-//
-//        //Блок для поиска
-//        line1.add(new SearchBlock(grid), openUploadDialogButton);
-//
-//
-//
-//        //Блок для выгрузки в файл
-//        line2.add(new DownloadBlock(grid,downloadService,testCaseService));
-//
-//        //Кнопка для удаления выбранных ТС
-//
-//        line2.add(new DeleteTestCaseButton(testCaseService,grid));
-//        //wrapper.add(new DeleteTestCaseButton(testCaseService,grid));
-//
-//        wrapper.add(line1);
-//        wrapper.add(line2);
-
-//
-//        //дерево для отображения ТК
-//        add(grid);
     }
 }

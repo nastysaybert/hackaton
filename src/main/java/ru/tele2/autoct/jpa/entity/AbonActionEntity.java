@@ -1,8 +1,6 @@
 package ru.tele2.autoct.jpa.entity;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 import ru.tele2.autoct.jpa.entity.dictionaries.AbonDictionaryEntity;
 import javax.persistence.*;
 
@@ -21,19 +19,20 @@ public class AbonActionEntity {
     /**
      * Действие Абонента
      */
-    @OneToOne (optional=false)
+    @OneToOne
+    @JoinColumn(name = "ABON_DICT_ID",referencedColumnName = "ABON_DICT_ID")
     private AbonDictionaryEntity abonDict;
 
     /**
      * Действие BTE
      */
-    @OneToOne (optional=false)
+    @OneToOne (cascade = CascadeType.ALL)
+    @JoinColumn(name = "BTE_ACTION_ID",referencedColumnName = "BTE_ACTION_ID")
     private BTEActionEntity bteAction;
 
     /**
      * Тест кейс
      */
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "TEST_CASE_ID")
+    @OneToOne(mappedBy = "abonAction", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private TestCaseStepEntity testCaseStep;
 }

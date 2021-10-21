@@ -29,10 +29,7 @@ public class InitialDataEntity {
     @Column(name = "INITIAL_CHECK_NAME", nullable = false)
     private String initialCheck;
 
-    /**
-     * Тест кейс
-     */
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne (fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "TEST_CASE_ID")
     private TestCaseEntity testCase;
 }

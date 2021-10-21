@@ -15,9 +15,7 @@ public class BTEActionDto {
 
     private String name;
 
-    private ParamType paramType;
-
-    private Long paramId;
+    private String paramId;
 
     private String paramValue;
 }

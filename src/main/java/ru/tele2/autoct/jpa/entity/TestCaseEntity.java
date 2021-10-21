@@ -19,18 +19,22 @@ public class TestCaseEntity {
     private Long id;
 
     /**
-     * Исходные данные
+     * является ли шаблоном
      */
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "TEST_CASE_ID")
-    private List<InitialDataEntity> initialDataList;
+    @Column(name = "TEST_CASE_NAME", nullable = false)
+    private String name;
 
     /**
      * Исходные данные
      */
-//    @OneToMany(mappedBy="TEST_CASE", fetch = FetchType.LAZY)
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "TEST_CASE_ID")
+    @OneToOne (mappedBy = "testCase",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "INITIAL_DATA_ID")
+    private InitialDataEntity initialData;
+
+    /**
+     * Исходные данные
+     */
+    @OneToMany(mappedBy = "testCase", cascade = CascadeType.ALL, fetch = FetchType.LAZY,orphanRemoval=true)
     private List<TestCaseStepEntity> testCaseStepList;
 
     /**

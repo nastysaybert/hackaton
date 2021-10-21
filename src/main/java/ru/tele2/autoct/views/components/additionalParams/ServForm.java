@@ -3,6 +3,7 @@ package ru.tele2.autoct.views.components.additionalParams;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import ru.tele2.autoct.dto.AdditionalParamDto;
 import ru.tele2.autoct.dto.additionalParams.ServDto;
 import ru.tele2.autoct.services.additionalParams.ServService;
 import ru.tele2.autoct.services.additionalParams.ServServiceImpl;
@@ -14,7 +15,6 @@ public class ServForm extends ComboBox<ServDto> {
 
     public ServForm(ServService servService){
         this.setWidthFull();
-//        this.setWidth("25%");
         this.setLabel("Выберите услугу");
         this.setClearButtonVisible(true);
         this.setItemLabelGenerator(ServDto::toString);
@@ -28,7 +28,13 @@ public class ServForm extends ComboBox<ServDto> {
                 } else return 0;
             }
         });
-//        servSelection.setItems(sortedServs);
         this.setItems(sortedServs);
+    }
+
+    public AdditionalParamDto getParam(){
+        AdditionalParamDto result = new AdditionalParamDto();
+        result.setParamId(this.getValue().getServId());
+        result.setParamValue(this.getValue().getServName());
+        return result;
     }
 }

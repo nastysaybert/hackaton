@@ -27,14 +27,14 @@ public class TestCaseStepEntity {
     /**
      * Действиe абонента
      */
-    @OneToOne (optional=false)
+    @OneToOne (optional=false, cascade = CascadeType.ALL)
+    @JoinColumn(name = "ABON_ACTION_ID", referencedColumnName = "ABON_ACTION_ID")
     private AbonActionEntity abonAction;
 
     /**
      * Действиe абонента
      */
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "TEST_CASE_STEP_ID")
+    @OneToMany(mappedBy = "testCaseStep", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval=true)
     private List<CheckActionEntity> checkActions;
 
     /**
