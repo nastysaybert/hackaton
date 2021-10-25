@@ -12,8 +12,10 @@ public class SummForm extends IntegerField {
 
     public AdditionalParamDto getParam(){
         AdditionalParamDto result = new AdditionalParamDto();
-        result.setParamId(this.getValue().toString());
-        result.setParamValue("руб.");
+        if (this.getValue() != null){
+            result.setParamId(this.getValue().toString());
+            result.setParamValue("руб.");
+        } else return null;
         return result;
     }
 }

@@ -33,8 +33,10 @@ public class ServForm extends ComboBox<ServDto> {
 
     public AdditionalParamDto getParam(){
         AdditionalParamDto result = new AdditionalParamDto();
-        result.setParamId(this.getValue().getServId());
-        result.setParamValue(this.getValue().getServName());
+        if (this.getValue()!=null){
+            result.setParamId(this.getValue().getServId());
+            result.setParamValue(this.getValue().getServName());
+        } else return null;
         return result;
     }
 }

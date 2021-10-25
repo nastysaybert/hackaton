@@ -1,6 +1,8 @@
 package ru.tele2.autoct.views.components.additionalParams;
 
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.NotificationVariant;
 import ru.tele2.autoct.dto.AdditionalParamDto;
 import ru.tele2.autoct.enums.ParamType;
 import ru.tele2.autoct.services.additionalParams.*;
@@ -88,7 +90,19 @@ public class AdditionalParam extends Div {
                 this.additionalParamDto = ussdRequestForm.getParam();
                 break;
             default:
+                this.additionalParamDto = null;
                 break;
         }
+    }
+
+    public boolean isValid(){
+        configureAddParam();
+        if (additionalParamDto!=null){
+            if (additionalParamDto.getParamId().isEmpty() || additionalParamDto.getParamValue().isEmpty()){
+                Notification.show("Заполните ключевой параметр!")
+                        .addThemeVariants(NotificationVariant.LUMO_ERROR);
+                return false;
+            } else return true;
+        } else return false;
     }
 }

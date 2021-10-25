@@ -21,6 +21,7 @@ public class TestCaseEntity {
     /**
      * является ли шаблоном
      */
+    @Lob
     @Column(name = "TEST_CASE_NAME", nullable = false)
     private String name;
 

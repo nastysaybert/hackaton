@@ -12,8 +12,10 @@ public class DurationForm extends IntegerField {
 
     public AdditionalParamDto getParam(){
         AdditionalParamDto result = new AdditionalParamDto();
-        result.setParamId(this.getValue().toString());
-        result.setParamValue("сек.");
+        if (this.getValue() != null){
+            result.setParamId(this.getValue().toString());
+            result.setParamValue("сек.");
+        } else return null;
         return result;
     }
 }

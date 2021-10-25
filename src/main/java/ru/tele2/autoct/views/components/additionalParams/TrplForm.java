@@ -31,8 +31,10 @@ public class TrplForm extends ComboBox<TrplDto> {
 
     public AdditionalParamDto getParam(){
         AdditionalParamDto result = new AdditionalParamDto();
-        result.setParamId(this.getValue().getTrplId());
-        result.setParamValue(this.getValue().getTrplName());
+        if (this.getValue() != null){
+            result.setParamId(this.getValue().getTrplId());
+            result.setParamValue(this.getValue().getTrplName());
+        } else return null;
         return result;
     }
 }

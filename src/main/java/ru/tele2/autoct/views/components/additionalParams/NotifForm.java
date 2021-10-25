@@ -31,8 +31,10 @@ public class NotifForm extends ComboBox<NotifDto> {
 
     public AdditionalParamDto getParam(){
         AdditionalParamDto result = new AdditionalParamDto();
-        result.setParamId(this.getValue().getNotifId());
-        result.setParamValue(this.getValue().getNotifName());
+        if (this.getValue() != null){
+            result.setParamId(this.getValue().getNotifId());
+            result.setParamValue(this.getValue().getNotifName());
+        } else return null;
         return result;
     }
 }

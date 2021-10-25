@@ -20,12 +20,14 @@ public class InitialDataEntity {
     /**
      * содержание исходного Действия
      */
+    @Lob
     @Column(name = "INITIAL_ACTION_NAME", nullable = false)
     private String initialAction;
 
     /**
      * содержание исходной Проверки
      */
+    @Lob
     @Column(name = "INITIAL_CHECK_NAME", nullable = false)
     private String initialCheck;
 

@@ -87,6 +87,7 @@ public class DownloadServiceImpl implements DownloadService {
                 cell.setCellValue(step.getAbonAction().getAbonDict().getAbonDictName());
                 if (step.getAbonAction().getBteAction() != null){
                     //Название Ключевого параметра
+                    colNum++;
                     cell = row.createCell(colNum++);
                     cell.setCellValue(step.getAbonAction().getBteAction().getName());
                     //Значение Ключевого параметра

@@ -1,5 +1,7 @@
 package ru.tele2.autoct.views.components;
 
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextArea;
 import ru.tele2.autoct.dto.InitialDataDto;
@@ -36,5 +38,11 @@ public class InitialDataForm extends HorizontalLayout {
         result.setInitialAction(action.getValue());
         result.setInitialCheck(check.getValue());
         return result;
+    }
+
+    public boolean isValid(){
+        if (this.action.isEmpty() || this.check.isEmpty()){
+            return false;
+        } else return true;
     }
 }

@@ -1,6 +1,8 @@
 package ru.tele2.autoct.views.components;
 
 import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.NotificationVariant;
 import ru.tele2.autoct.dto.dictionaries.AbonDictionaryDto;
 import ru.tele2.autoct.services.dictionaries.AbonDictionaryService;
 import java.util.List;
@@ -17,5 +19,13 @@ public class AbonActionForm extends ComboBox<AbonDictionaryDto> {
 
     public AbonDictionaryDto getAbonDictionaryDto(){
         return this.getValue();
+    }
+
+    public boolean isValid(){
+        if (this.isEmpty()){
+            Notification.show("Заполните Действие абонента")
+                    .addThemeVariants(NotificationVariant.LUMO_ERROR);
+            return false;
+        } else return true;
     }
 }

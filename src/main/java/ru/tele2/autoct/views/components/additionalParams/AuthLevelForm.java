@@ -19,8 +19,10 @@ public class AuthLevelForm extends ComboBox<AuthLevelDto> {
 
     public AdditionalParamDto getParam(){
         AdditionalParamDto result = new AdditionalParamDto();
-        result.setParamId(this.getValue().getAuthLevelId());
-        result.setParamValue(this.getValue().getAuthLevelName());
+        if (this.getValue() != null){
+            result.setParamId(this.getValue().getAuthLevelId());
+            result.setParamValue(this.getValue().getAuthLevelName());
+        } else return null;
         return result;
     }
 }

@@ -27,8 +27,7 @@ import ru.tele2.autoct.services.additionalParams.*;
 import ru.tele2.autoct.services.dictionaries.AbonDictionaryService;
 import ru.tele2.autoct.services.dictionaries.CheckDictionaryService;
 import ru.tele2.autoct.services.security.UserService;
-import ru.tele2.autoct.views.components.LogoutBlock;
-import ru.tele2.autoct.views.components.TestCaseForm;
+import ru.tele2.autoct.views.components.*;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -61,50 +60,14 @@ public class MainView extends VerticalLayout {
         VerticalLayout wrapper = new VerticalLayout();
         wrapper.setWidthFull();
         wrapper.setPadding(false);
-        wrapper.getStyle().set("margin-top", "0px");
-        wrapper.getStyle().set("padding-top", "0px");
+        wrapper.setMargin(false);
+        wrapper.setSpacing(false);
 
-        wrapper.add(new LogoutBlock(userService,bCryptPasswordEncoder));
+//        wrapper.add(new LogoutBlock(userService,bCryptPasswordEncoder));
+        wrapper.add(new MainLayout(bCryptPasswordEncoder, userService, abonDictionaryService, checkDictionaryService, authLevelService,
+                        branchService, notifService, servService, trplService, testCaseService, downloadService));
 
-        TestCaseForm testCaseForm = new TestCaseForm(abonDictionaryService,
-                checkDictionaryService,
-                authLevelService,
-                branchService,
-                notifService,
-                servService,
-                trplService);
-        wrapper.add(testCaseForm);
-        HorizontalLayout buttonsLine = new HorizontalLayout();
-        buttonsLine.setMargin(false);
-        buttonsLine.setPadding(false);
-
-        Button saveFromFormButton = new Button("Сохранить в БД", new Icon(VaadinIcon.ARROW_CIRCLE_DOWN_O));
-        saveFromFormButton.setIconAfterText(true);
-        saveFromFormButton.addThemeVariants(ButtonVariant.LUMO_SUCCESS);
-        saveFromFormButton.addClickListener(event ->{
-            boolean result = testCaseService.save(testCaseService.getTestCaseDtoFromForm(testCaseForm));
-            if (result){
-                Notification.show("ТК сохранен").addThemeVariants(NotificationVariant.LUMO_SUCCESS);
-            } else Notification.show("ТК не сохранен").addThemeVariants(NotificationVariant.LUMO_ERROR);
-        });
-
-        Button downloadFileButton  = new Button("Выгрузить в *.xlsx", new Icon(VaadinIcon.ARROW_CIRCLE_DOWN_O));
-        downloadFileButton.setIconAfterText(true);
-        downloadFileButton.addThemeVariants(ButtonVariant.LUMO_SUCCESS);
-        FileDownloadWrapper buttonWrapper = new FileDownloadWrapper(
-                new StreamResource("TestCase.xlsx", () -> {
-                    try {
-                        List<TestCaseDto> downloadList = new ArrayList<>();
-                        downloadList.add(testCaseService.getTestCaseDtoFromForm(testCaseForm));
-                        return new ByteArrayInputStream(FileUtils.readFileToByteArray(downloadService.download(downloadList)));
-                    } catch (IOException e) {
-                        return null;
-                    }
-                }));
-        buttonWrapper.wrapComponent(downloadFileButton);
-
-        buttonsLine.add(saveFromFormButton, buttonWrapper);
-        wrapper.add(buttonsLine);
+//        wrapper.add(new TestCasesAccordion(testCaseService));
         add(wrapper);
     }
 }

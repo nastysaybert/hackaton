@@ -2,7 +2,9 @@ package ru.tele2.autoct.services;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.tele2.autoct.dto.*;
+import ru.tele2.autoct.jpa.entity.AbonActionEntity;
 import ru.tele2.autoct.jpa.entity.TestCaseEntity;
 import ru.tele2.autoct.jpa.repository.*;
 import ru.tele2.autoct.mappers.TestCaseMapper;
@@ -94,5 +96,20 @@ public class TestCaseServiceImpl implements TestCaseService{
             });
             return true;
         } else return false;
+    }
+
+    @Transactional
+    public TestCaseDto getById(Long id){
+        return testCaseMapper.convert(testCaseRepository.getById(id));
+    }
+
+    @Transactional
+    public List<TestCaseDto> getAll(){
+        List<TestCaseDto> result = new ArrayList<>();
+        List<TestCaseEntity> testCaseEntityList = testCaseRepository.findAll();
+        for(TestCaseEntity testCaseEntity:testCaseEntityList){
+            result.add(testCaseMapper.convert(testCaseEntity));
+        }
+        return result;
     }
 }

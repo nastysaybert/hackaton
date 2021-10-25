@@ -1,6 +1,8 @@
 package ru.tele2.autoct.views.components;
 
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.IntegerField;
@@ -9,6 +11,7 @@ import ru.tele2.autoct.services.additionalParams.*;
 import ru.tele2.autoct.services.dictionaries.AbonDictionaryService;
 import ru.tele2.autoct.services.dictionaries.CheckDictionaryService;
 import java.util.TreeMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 
 public class TestCaseForm extends VerticalLayout {
@@ -52,6 +55,7 @@ public class TestCaseForm extends VerticalLayout {
             Button removeInitialDataButton = new Button("Удалить текстовые исходные данные");
             removeInitialDataButton.getStyle().set("margin-top", "20.6px");
             removeInitialDataButton.addClickListener(eventRemove -> {
+                initialDataForm = null;
                 addInitialDataButton.setVisible(true);
                 initialData.removeAll();
             });
@@ -114,6 +118,37 @@ public class TestCaseForm extends VerticalLayout {
 
     private void increment(){
         this.i++;
+    }
+
+    public boolean isValid(){
+        if (getHeader().isEmpty()){
+            Notification.show("Заполните наименование ТК!")
+                    .addThemeVariants(NotificationVariant.LUMO_ERROR);
+            return false;
+        }
+        if (getInitialDataForm() != null){
+            if (!getInitialDataForm().isValid()){
+                Notification.show("Заполните исходные данные или удалите данный блок!")
+                        .addThemeVariants(NotificationVariant.LUMO_ERROR);
+                return false;
+            }
+        }
+        if (stepForms.size()<1){
+            Notification.show("Введите хотя бы один шаг ТК")
+                    .addThemeVariants(NotificationVariant.LUMO_ERROR);
+            return false;
+        }
+        AtomicBoolean isValidForSteps = new AtomicBoolean(true);
+        getStepForms().forEach( (integer, testCaseStepForm) -> {
+            if (isValidForSteps.get() == true){
+                if(!testCaseStepForm.isValid()){
+                    isValidForSteps.set(false);
+                    Notification.show("Заполните все поля для шагов ТК")
+                            .addThemeVariants(NotificationVariant.LUMO_ERROR);
+                }
+            }
+        });
+        return isValidForSteps.get();
     }
 
 }

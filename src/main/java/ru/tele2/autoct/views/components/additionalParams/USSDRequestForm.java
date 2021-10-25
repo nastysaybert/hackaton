@@ -12,8 +12,10 @@ public class USSDRequestForm extends TextField {
 
     public AdditionalParamDto getParam(){
         AdditionalParamDto result = new AdditionalParamDto();
-        result.setParamId(this.getValue());
-        result.setParamValue("");
+        if (this.getValue() != null){
+            result.setParamId(this.getValue());
+            result.setParamValue("");
+        } else return null;
         return result;
     }
 }

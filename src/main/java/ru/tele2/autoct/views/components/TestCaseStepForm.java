@@ -2,6 +2,7 @@ package ru.tele2.autoct.views.components;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.dnd.EffectAllowed;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -13,6 +14,7 @@ import ru.tele2.autoct.services.dictionaries.AbonDictionaryService;
 import ru.tele2.autoct.services.dictionaries.CheckDictionaryService;
 import ru.tele2.autoct.views.components.additionalParams.AdditionalParam;
 import java.util.TreeMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class TestCaseStepForm extends VerticalLayout {
 
@@ -128,5 +130,30 @@ public class TestCaseStepForm extends VerticalLayout {
 
     public TreeMap <Integer, Pair<CheckActionForm, AdditionalParam>> getCheckActions(){
         return this.checkActions;
+    }
+
+    public boolean isValid(){
+        if (getAbonAction()!=null){
+            if (!getAbonAction().getFirst().isValid()){
+                return false;
+            }
+        } else return false;
+
+        if (getAbonAction().getSecond()!=null){
+            if (!getAbonAction().getSecond().isValid()){
+                return false;
+            }
+        }
+
+        AtomicBoolean isValidForCheckActions = new AtomicBoolean(true);
+        getCheckActions().forEach( (id, pair)->{
+            if (pair.getFirst() != null){
+                if (!pair.getFirst().isValid() || !pair.getSecond().isValid()){
+                    isValidForCheckActions.set(false);
+                    return;
+                }
+            } else return;
+        });
+        return isValidForCheckActions.get();
     }
 }

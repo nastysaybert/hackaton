@@ -29,8 +29,10 @@ public class BranchForm extends ComboBox<BranchDto> {
 
     public AdditionalParamDto getParam(){
         AdditionalParamDto result = new AdditionalParamDto();
-        result.setParamId(this.getValue().getBranchId());
-        result.setParamValue(this.getValue().getBranchName());
+        if (this.getValue() != null){
+            result.setParamId(this.getValue().getBranchId());
+            result.setParamValue(this.getValue().getBranchName());
+        } else return null;
         return result;
     }
 }
