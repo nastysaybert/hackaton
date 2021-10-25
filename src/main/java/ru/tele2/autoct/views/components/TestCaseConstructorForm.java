@@ -1,4 +1,4 @@
-package ru.tele2.autoct.views;
+package ru.tele2.autoct.views.components;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -22,6 +22,7 @@ import ru.tele2.autoct.views.components.TestCaseForm;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class TestCaseConstructorForm extends VerticalLayout {
@@ -62,22 +63,23 @@ public class TestCaseConstructorForm extends VerticalLayout {
             } else Notification.show("ТК не сохранен").addThemeVariants(NotificationVariant.LUMO_ERROR);
         });
 
-        Button downloadFileButton  = new Button("Выгрузить в *.xlsx", new Icon(VaadinIcon.ARROW_CIRCLE_DOWN_O));
-        downloadFileButton.setIconAfterText(true);
-        downloadFileButton.addThemeVariants(ButtonVariant.LUMO_SUCCESS);
-        FileDownloadWrapper buttonWrapper = new FileDownloadWrapper(
-                new StreamResource("TestCase.xlsx", () -> {
-                    try {
-                        List<TestCaseDto> downloadList = new ArrayList<>();
-                        downloadList.add(testCaseService.getTestCaseDtoFromForm(testCaseForm));
-                        return new ByteArrayInputStream(FileUtils.readFileToByteArray(downloadService.download(downloadList)));
-                    } catch (IOException e) {
-                        return null;
-                    }
-                }));
-        buttonWrapper.wrapComponent(downloadFileButton);
+//        Button downloadFileButton  = new Button("Выгрузить в *.xlsx", new Icon(VaadinIcon.ARROW_CIRCLE_DOWN_O));
+//        downloadFileButton.setIconAfterText(true);
+//        downloadFileButton.addThemeVariants(ButtonVariant.LUMO_SUCCESS);
+//        FileDownloadWrapper buttonWrapper = new FileDownloadWrapper(
+//                new StreamResource("TestCase.xlsx", () -> {
+//                    try {
+//
+//                        return new ByteArrayInputStream(FileUtils.readFileToByteArray(downloadService.download(downloadList)));
+//                    } catch (IOException e) {
+//                        return null;
+//                    }
+//                }));
+//        buttonWrapper.wrapComponent(downloadFileButton);
 
-        buttonsLine.add(saveFromFormButton,buttonWrapper);
+//        List<TestCaseDto> downloadList = new ArrayList<>();
+//        downloadList.add(testCaseService.getTestCaseDtoFromForm(testCaseForm));
+        buttonsLine.add(saveFromFormButton,new DownloadButton(downloadService, testCaseService, testCaseForm).getButtonWrapper());
         this.add(buttonsLine);
     }
 

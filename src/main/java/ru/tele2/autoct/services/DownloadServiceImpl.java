@@ -130,7 +130,7 @@ public class DownloadServiceImpl implements DownloadService {
                 }
 //                row = sheet.createRow(rowNum++);
             }
-            row = sheet.createRow(rowNum++);
+//            row = sheet.createRow(rowNum++);
         }
 
         File file = new File("TestCaseBTE.xlsx");

@@ -17,7 +17,6 @@ import ru.tele2.autoct.services.additionalParams.*;
 import ru.tele2.autoct.services.dictionaries.AbonDictionaryService;
 import ru.tele2.autoct.services.dictionaries.CheckDictionaryService;
 import ru.tele2.autoct.services.security.UserService;
-import ru.tele2.autoct.views.TestCaseConstructorForm;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -54,6 +53,7 @@ public class MainLayout extends VerticalLayout {
         tabs = configureTabs(abonDictionaryService, checkDictionaryService, authLevelService,
                 branchService, notifService, servService, trplService, testCaseService, downloadService);
         VerticalLayout content = new VerticalLayout();
+        frontFormat(content);
         tabs.addSelectedChangeListener(event ->{
             content.removeAll();
             content.add(tabsToPages.get(event.getSelectedTab()));
@@ -77,7 +77,7 @@ public class MainLayout extends VerticalLayout {
         Tabs tabs = new Tabs();
         //вкладка сохраненные
         Tab savedTC = createTab(VaadinIcon.DATABASE, "Сохраненные ТК");
-        tabsToPages.put(savedTC, new TestCasesAccordion(testCaseService));
+        tabsToPages.put(savedTC, new TestCasesRepresentation(testCaseService, downloadService, testCaseService.getAll()));
         tabs.add(savedTC);
         //вкладка конструктор
         Tab constructTC = createTab(VaadinIcon.CLUSTER, "Конструктор ТК");
