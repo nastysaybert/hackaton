@@ -35,4 +35,8 @@ public class AbonActionEntity {
      */
     @OneToOne(mappedBy = "abonAction", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private TestCaseStepEntity testCaseStep;
+
+    @Lob
+    @Column(name = "ABON_ACTION_COMMENT")
+    private String comment;
 }

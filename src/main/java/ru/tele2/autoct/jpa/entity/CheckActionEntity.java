@@ -38,4 +38,8 @@ public class CheckActionEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "TEST_CASE_STEP_ID")
     private TestCaseStepEntity testCaseStep;
+
+    @Lob
+    @Column(name = "CHECK_ACTION_COMMENT")
+    private String comment;
 }

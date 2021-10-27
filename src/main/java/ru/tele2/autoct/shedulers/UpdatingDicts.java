@@ -50,7 +50,7 @@ public class UpdatingDicts {
                 TrplDto trplDto = new TrplDto();
                 while (rowIterator.hasNext()){
                     row = rowIterator.next();
-                    trplDto.setTrplId(rounding(row.getCell(0).getNumericCellValue()));
+                    trplDto.setTrplId(row.getCell(0).getStringCellValue());
                     trplDto.setTrplName(row.getCell(1).getStringCellValue());
                     trplService.save(trplDto);
                 }

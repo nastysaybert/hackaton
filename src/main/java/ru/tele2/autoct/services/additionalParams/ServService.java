@@ -13,4 +13,6 @@ public interface ServService {
     void deleteAll();
 
     List<ServDto> getAll();
+
+    ServDto getById(String id);
 }

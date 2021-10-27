@@ -12,4 +12,5 @@ public class Row {
         private String column2;
         private String column3;
         private String column4;
+        private String column5;
 }

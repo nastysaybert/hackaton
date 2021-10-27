@@ -25,4 +25,8 @@ public class AuthLevelForm extends ComboBox<AuthLevelDto> {
         } else return null;
         return result;
     }
+
+    public void setParam(AdditionalParamDto additionalParamDto, AuthLevelService authLevelService){
+              this.setValue(authLevelService.getById(additionalParamDto.getParamId()));
+    }
 }

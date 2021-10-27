@@ -12,4 +12,6 @@ public interface BranchService {
     void deleteAll();
 
     List<BranchDto> getAll();
+
+    BranchDto getById(String id);
 }

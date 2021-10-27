@@ -8,4 +8,6 @@ import java.util.List;
 @Repository
 public interface NotifRepository extends JpaRepository<NotifEntity, String> {
     List<NotifEntity> findAll();
+
+    NotifEntity getByNotifId (String id);
 }

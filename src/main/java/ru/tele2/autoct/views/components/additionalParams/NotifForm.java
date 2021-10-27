@@ -3,6 +3,7 @@ package ru.tele2.autoct.views.components.additionalParams;
 import com.vaadin.flow.component.combobox.ComboBox;
 import ru.tele2.autoct.dto.AdditionalParamDto;
 import ru.tele2.autoct.dto.additionalParams.NotifDto;
+import ru.tele2.autoct.services.additionalParams.BranchService;
 import ru.tele2.autoct.services.additionalParams.NotifService;
 
 import java.util.Collections;
@@ -36,5 +37,9 @@ public class NotifForm extends ComboBox<NotifDto> {
             result.setParamValue(this.getValue().getNotifName());
         } else return null;
         return result;
+    }
+
+    public void setParam(AdditionalParamDto additionalParamDto, NotifService notifService){
+        this.setValue(notifService.getById(additionalParamDto.getParamId()));
     }
 }

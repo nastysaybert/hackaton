@@ -1,14 +1,11 @@
 package ru.tele2.autoct.views.components;
 
-import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import ru.tele2.autoct.dto.TestCaseDto;
 import ru.tele2.autoct.views.components.helper.Row;
-
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +20,7 @@ public class TestCaseGrid extends VerticalLayout {
             Row initialDataRow = new Row(testCase.getInitialData().getInitialAction(),
                     testCase.getInitialData().getInitialCheck(),
                     "",
+                    "",
                     "");
             rows.add(initialDataRow);
         }
@@ -31,25 +29,29 @@ public class TestCaseGrid extends VerticalLayout {
                     "",testCaseStep.getAbonAction().getBteAction() != null ?
                     testCaseStep.getAbonAction().getBteAction().getParamId():"",
                     testCaseStep.getAbonAction().getBteAction() != null ?
-                            testCaseStep.getAbonAction().getBteAction().getParamValue():"");
+                            testCaseStep.getAbonAction().getBteAction().getParamValue():"",
+                    testCaseStep.getAbonAction().getComment() != null ?
+                            testCaseStep.getAbonAction().getComment():"");
             rows.add(abonActionRow);
             testCaseStep.getCheckActions().forEach(checkAction -> {
                 Row checkActionRow = new Row("",
                         checkAction.getCheckDict().getCheckDictName(),
                         checkAction.getBteAction().getParamId(),
-                        checkAction.getBteAction().getParamValue());
+                        checkAction.getBteAction().getParamValue(),
+                        checkAction.getComment() != null ?
+                                checkAction.getComment():"");
                 rows.add(checkActionRow);
             });
         });
         grid.setItems(rows);
-        grid.getColumns().get(0).setHeader("Действие абонента");
-        grid.getColumns().get(1).setHeader("Проверка результата");
-        grid.getColumns().get(2).setHeader("Параметр").setTextAlign(ColumnTextAlign.CENTER).setAutoWidth(true);
-        grid.getColumns().get(3).setHeader("Значение параметра");
+        grid.getColumns().get(0).setHeader("Действие абонента").setWidth("25%");
+        grid.getColumns().get(1).setHeader("Проверка результата").setWidth("25%");
+        grid.getColumns().get(2).setHeader("Параметр").setTextAlign(ColumnTextAlign.CENTER).setWidth("10%");
+        grid.getColumns().get(3).setHeader("Значение параметра").setWidth("20%");
+        grid.getColumns().get(4).setHeader("Коммент").setWidth("20%");
         grid.setColumnReorderingAllowed(false);
         grid.setSortableColumns();
         grid.setHeightByRows(true);
-//        grid.getStyle().set("border-radius", "2px");
         grid.addThemeVariants(GridVariant.LUMO_COMPACT);
         grid.addThemeVariants(GridVariant.LUMO_COLUMN_BORDERS);
         this.add(grid);

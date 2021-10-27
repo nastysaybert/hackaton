@@ -12,9 +12,11 @@ public class TrplDto {
     private String trplName;
 
     public String toString(){
+        StringBuilder trplIdBuilder = new StringBuilder(trplId);
+        trplIdBuilder.delete(0,3);
         return trplName +
                 " (trpl_id = " +
-                trplId +
+                trplIdBuilder +
                 ")";
     }
 

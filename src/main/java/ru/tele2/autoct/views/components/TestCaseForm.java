@@ -1,6 +1,9 @@
 package ru.tele2.autoct.views.components;
 
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -19,6 +22,8 @@ public class TestCaseForm extends VerticalLayout {
     private TextField header;
     private InitialDataForm initialDataForm;
     private TreeMap<Integer, TestCaseStepForm> stepForms = new TreeMap<>();
+    private VerticalLayout steps = new VerticalLayout();
+    private HorizontalLayout buttonsLine = new HorizontalLayout();
     private int i = 0;
 
 
@@ -31,12 +36,13 @@ public class TestCaseForm extends VerticalLayout {
                         TrplService trplService){
         frontFormat(this);
         this.setSpacing(false);
+        this.getStyle().set("overflow-y","auto");
+        this.setHeight("700px");
         header = new TextField("Введите название ТК");
         header.setWidth("70%");
         //нумератор форм шагов
         HorizontalLayout initialData = new HorizontalLayout();
-        VerticalLayout steps = new VerticalLayout();
-        HorizontalLayout buttonsLine = new HorizontalLayout();
+
         frontFormat(initialData);
         frontFormat(steps);
         frontFormat(buttonsLine);
@@ -64,30 +70,12 @@ public class TestCaseForm extends VerticalLayout {
 
         Button newStepButton = new Button("Добавить шаг ТК");
         newStepButton.addClickListener(event -> {
-            HorizontalLayout step = new HorizontalLayout();
-            frontFormat(step);
-            String id = Integer.toString(i);
-            step.setId(id);
-            //создаем новый шаг и добавляем его в список, чтобы потом иметь доступ к данным внутри шагов
-            stepForms.put(Integer.parseInt(id), new TestCaseStepForm(abonDictionaryService, checkDictionaryService,
-                    authLevelService, branchService, notifService, servService, trplService));
-
-            //добавляем последний добавленный шаг на разметку
-//            step.add(stepForms.get(stepForms.size()-1));
-            step.add(stepForms.get(i));
-            Button removeStepButton = new Button("Удалить шаг");
-            removeStepButton.getStyle().set("margin-top", "36.6px");
-            removeStepButton.addClickListener(eventRemoveStep ->{
-                step.removeAll();
-                stepForms.remove(Integer.parseInt(id));
-            });
-            step.add(removeStepButton);
-            steps.add(step);
-            increment();
+            createStep(abonDictionaryService, checkDictionaryService,
+                    authLevelService, branchService, notifService, servService, trplService);
         });
 
 
-        buttonsLine.add(addInitialDataButton, newStepButton);
+        buttonsLine.add(newStepButton, addInitialDataButton);
 
         this.add(header, initialData, steps, buttonsLine);
     }
@@ -108,6 +96,49 @@ public class TestCaseForm extends VerticalLayout {
         component.setPadding(false);
         component.setMargin(false);
         component.setWidthFull();
+    }
+
+    private void createStep(AbonDictionaryService abonDictionaryService,
+                              CheckDictionaryService checkDictionaryService,
+                              AuthLevelService authLevelService,
+                              BranchService branchService,
+                              NotifService notifService,
+                              ServService servService,
+                              TrplService trplService){
+        HorizontalLayout step = new HorizontalLayout();
+        frontFormat(step);
+        String id = Integer.toString(i);
+        step.setId(id);
+        //создаем новый шаг и добавляем его в список, чтобы потом иметь доступ к данным внутри шагов
+        stepForms.put(Integer.parseInt(id), new TestCaseStepForm(abonDictionaryService, checkDictionaryService,
+                authLevelService, branchService, notifService, servService, trplService));
+
+        //добавляем последний добавленный шаг на разметку
+//            step.add(stepForms.get(stepForms.size()-1));
+        step.add(stepForms.get(i));
+        Button removeStepButton = new Button(new Icon(VaadinIcon.CLOSE_SMALL));
+        removeStepButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
+        removeStepButton.getStyle().set("margin-top", "36.6px");
+        removeStepButton.addClickListener(eventRemoveStep ->{
+            step.removeAll();
+            stepForms.remove(Integer.parseInt(id));
+        });
+
+        Button copyStepButton = new Button(new Icon(VaadinIcon.COPY_O));
+        copyStepButton.addThemeVariants(ButtonVariant.LUMO_CONTRAST);
+        copyStepButton.getStyle().set("margin-top", "36.6px");
+        copyStepButton.addClickListener(eventRemoveStep ->{
+//            int lastPosition = stepForms.lastKey()+1;
+//            VerticalLayout copiedStepForm = stepForms.get(lastPosition).;
+//            stepForms.put(lastPosition, copiedStepForm);
+//            HorizontalLayout copiedStep = new HorizontalLayout();
+//            copiedStep.add(stepForms.get(lastPosition));
+//            steps.add(copiedStep);
+        });
+
+        step.add(removeStepButton, copyStepButton);
+        steps.add(step);
+        increment();
     }
 
     private void frontFormat (VerticalLayout component){

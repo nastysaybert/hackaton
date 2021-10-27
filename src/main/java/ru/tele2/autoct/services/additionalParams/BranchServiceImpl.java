@@ -2,6 +2,7 @@ package ru.tele2.autoct.services.additionalParams;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.tele2.autoct.dto.additionalParams.AuthLevelDto;
 import ru.tele2.autoct.dto.additionalParams.BranchDto;
 import ru.tele2.autoct.jpa.entity.additionalParams.BranchEntity;
 import ru.tele2.autoct.jpa.repository.additionalParams.BranchRepository;
@@ -39,5 +40,9 @@ public class BranchServiceImpl implements BranchService{
             branchDtoList.add(branchMapper.convert(branchEntity));
         }
         return branchDtoList;
+    }
+
+    public BranchDto getById(String id){
+        return branchMapper.convert(branchRepository.getByBranchId(id));
     }
 }

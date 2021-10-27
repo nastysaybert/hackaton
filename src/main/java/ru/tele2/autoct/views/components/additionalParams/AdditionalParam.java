@@ -95,14 +95,49 @@ public class AdditionalParam extends Div {
         }
     }
 
+    public void setAdditionalParam(AdditionalParamDto additionalParam,
+                                   ParamType paramType,
+                                   AuthLevelService authLevelService,
+                                   BranchService branchService,
+                                   NotifService notifService,
+                                   ServService servService,
+                                   TrplService trplService){
+        switch (currentParamType = paramType) {
+            case AUTH_LEVEL:
+                authLevelForm.setParam(additionalParam, authLevelService);
+                break;
+            case BRANCH:
+                branchForm.setParam(additionalParam, branchService);
+                break;
+            case DURATION:
+                durationForm.setParam(additionalParam);
+                break;
+            case NOTIF:
+                notifForm.setParam(additionalParam, notifService);
+                break;
+            case SERV:
+                servForm.setParam(additionalParam, servService);
+                break;
+            case SUMM:
+                summForm.setParam(additionalParam);
+                break;
+            case TRPL:
+                trplForm.setParam(additionalParam,trplService);
+                break;
+            case USSD_REQUEST:
+                ussdRequestForm.setParam(additionalParam);
+                break;
+            default:
+                break;
+        }
+    }
+
     public boolean isValid(){
         configureAddParam();
-        if (additionalParamDto!=null){
-            if (additionalParamDto.getParamId().isEmpty() || additionalParamDto.getParamValue().isEmpty()){
-                Notification.show("Заполните ключевой параметр!")
-                        .addThemeVariants(NotificationVariant.LUMO_ERROR);
-                return false;
-            } else return true;
-        } else return false;
+        if (additionalParamDto == null){
+            Notification.show("Заполните ключевой параметр!")
+                    .addThemeVariants(NotificationVariant.LUMO_ERROR);
+            return false;
+        } else return true;
     }
 }

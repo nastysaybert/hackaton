@@ -8,4 +8,6 @@ public interface AuthLevelService {
 
     List<AuthLevelDto> getAll();
 
+    AuthLevelDto getById(String id);
+
 }

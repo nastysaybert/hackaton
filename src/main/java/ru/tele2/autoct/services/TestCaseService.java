@@ -11,6 +11,8 @@ public interface TestCaseService {
 
     boolean save(TestCaseDto testCaseDto);
 
+    void delete(TestCaseDto testCaseDto);
+
     TestCaseDto getById(Long id);
 
     List<TestCaseDto> getAll();

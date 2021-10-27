@@ -7,6 +7,7 @@ import ru.tele2.autoct.jpa.entity.additionalParams.AuthLevelEntity;
 import ru.tele2.autoct.jpa.repository.additionalParams.AuthLevelRepository;
 import ru.tele2.autoct.mappers.additionalParams.AuthLevelMapper;
 
+import javax.swing.plaf.PanelUI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,5 +26,9 @@ public class AuthLevelServiceImpl implements AuthLevelService {
             authLevelDtoList.add(authLevelMapper.convert(authLevelEntity));
         }
         return authLevelDtoList;
+    }
+
+    public AuthLevelDto getById(String id){
+        return authLevelMapper.convert(authLevelRepository.getByAuthLevelId(id));
     }
 }

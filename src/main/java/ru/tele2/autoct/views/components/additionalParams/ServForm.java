@@ -5,6 +5,7 @@ import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import ru.tele2.autoct.dto.AdditionalParamDto;
 import ru.tele2.autoct.dto.additionalParams.ServDto;
+import ru.tele2.autoct.services.additionalParams.NotifService;
 import ru.tele2.autoct.services.additionalParams.ServService;
 import ru.tele2.autoct.services.additionalParams.ServServiceImpl;
 
@@ -38,5 +39,9 @@ public class ServForm extends ComboBox<ServDto> {
             result.setParamValue(this.getValue().getServName());
         } else return null;
         return result;
+    }
+
+    public void setParam(AdditionalParamDto additionalParamDto, ServService servService){
+        this.setValue(servService.getById(additionalParamDto.getParamId()));
     }
 }

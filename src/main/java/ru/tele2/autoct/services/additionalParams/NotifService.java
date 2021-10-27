@@ -6,4 +6,6 @@ import java.util.List;
 public interface NotifService {
 
     List<NotifDto> getAll();
+
+    NotifDto getById(String id);
 }

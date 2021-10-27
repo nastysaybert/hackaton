@@ -2,7 +2,6 @@ package ru.tele2.autoct.views.components;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.dnd.EffectAllowed;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -13,6 +12,8 @@ import ru.tele2.autoct.services.additionalParams.*;
 import ru.tele2.autoct.services.dictionaries.AbonDictionaryService;
 import ru.tele2.autoct.services.dictionaries.CheckDictionaryService;
 import ru.tele2.autoct.views.components.additionalParams.AdditionalParam;
+
+import java.net.PortUnreachableException;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -53,7 +54,7 @@ public class TestCaseStepForm extends VerticalLayout {
 
         AbonActionForm abonActionForm = new AbonActionForm(abonDictionaryService);
         abonActionForm.setWidth("60%");
-        abonActionForm.addValueChangeListener(element ->{
+        abonActionForm.getAbonDictBox().addValueChangeListener(element ->{
             param.removeAll();
             checkActionsLayout.removeAll();
             if ((element.getValue() != null) ) {
@@ -73,14 +74,14 @@ public class TestCaseStepForm extends VerticalLayout {
         newCheckActionButton.addClickListener(event -> {
             HorizontalLayout checkActionLine = new HorizontalLayout();
             frontFormat(checkActionLine);
-            CheckActionForm checkActionForm = new CheckActionForm(abonActionForm.getValue(), checkDictionaryService);
+            CheckActionForm checkActionForm = new CheckActionForm(abonActionForm.getAbonDictBox().getValue(), checkDictionaryService);
             checkActionForm.setWidth("61%");
             String id = Integer.toString(i);
             Div checkActionParamWrapper = new Div();
             checkActionParamWrapper.setWidth("39%");
 
 
-            checkActionForm.addValueChangeListener(element ->{
+            checkActionForm.getCheckDictBox().addValueChangeListener(element ->{
                 checkActions.remove(Integer.parseInt(id));
                 checkActionParamWrapper.removeAll();
                 if (element.getValue() != null) {
@@ -105,7 +106,6 @@ public class TestCaseStepForm extends VerticalLayout {
         buttonsLine.add(newCheckActionButton);
 
         this.add(abonActionLine,checkActionsLayout,buttonsLine);
-
     }
 
     private void frontFormat (HorizontalLayout component){

@@ -8,4 +8,6 @@ import java.util.List;
 @Repository
 public interface BranchRepository extends JpaRepository<BranchEntity, String> {
     List<BranchEntity> findAll();
+
+    BranchEntity getByBranchId(String id);
 }

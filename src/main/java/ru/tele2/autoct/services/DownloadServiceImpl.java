@@ -101,6 +101,11 @@ public class DownloadServiceImpl implements DownloadService {
                     cell.setCellValue(step.getAbonAction().getAbonDict().getBteDictionary().getBteDictName());
                     //Связанные действия проверки
                 }
+                //коммент
+                if (step.getAbonAction().getComment() != null){
+                    cell = row.createCell(8);
+                    cell.setCellValue(step.getAbonAction().getComment());
+                }
                 for (CheckActionDto checkAction : step.getCheckActions()) {
                     //пишем с новой строки
                     colNum = 0;
@@ -127,6 +132,10 @@ public class DownloadServiceImpl implements DownloadService {
                     //Действие BTE
                     cell = row.createCell(colNum++);
                     cell.setCellValue(checkAction.getCheckDict().getBteDictionary().getBteDictName());
+                    if (checkAction.getComment() != null){
+                        cell = row.createCell(8);
+                        cell.setCellValue(checkAction.getComment());
+                    }
                 }
 //                row = sheet.createRow(rowNum++);
             }

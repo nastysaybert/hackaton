@@ -13,4 +13,6 @@ public interface TrplService {
     void deleteAll ();
 
     List<TrplDto> getAll();
+
+    TrplDto getById(String id);
 }

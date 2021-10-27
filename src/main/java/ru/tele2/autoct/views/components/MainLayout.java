@@ -3,10 +3,12 @@ package ru.tele2.autoct.views.components;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.html.Section;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.Scroller;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
@@ -26,7 +28,8 @@ public class MainLayout extends VerticalLayout {
     private Map<Tab, Component> tabsToPages = new HashMap<>();
     private Tabs tabs;
     private HorizontalLayout toggleAndLogout = new HorizontalLayout();
-    private HorizontalLayout tabContent = new HorizontalLayout();
+    private HorizontalLayout tabsAndContent = new HorizontalLayout();
+    private VerticalLayout content = new VerticalLayout();
 
     public MainLayout(BCryptPasswordEncoder bCryptPasswordEncoder,
                       UserService userService,
@@ -41,7 +44,7 @@ public class MainLayout extends VerticalLayout {
                       DownloadService downloadService){
         frontFormat(this);
         this.setSpacing(false);
-        frontFormat(tabContent);
+        frontFormat(tabsAndContent);
         frontFormat(toggleAndLogout);
 
         DrawerToggle toggle = new DrawerToggle();
@@ -52,7 +55,7 @@ public class MainLayout extends VerticalLayout {
 
         tabs = configureTabs(abonDictionaryService, checkDictionaryService, authLevelService,
                 branchService, notifService, servService, trplService, testCaseService, downloadService);
-        VerticalLayout content = new VerticalLayout();
+
         frontFormat(content);
         tabs.addSelectedChangeListener(event ->{
             content.removeAll();
@@ -61,8 +64,14 @@ public class MainLayout extends VerticalLayout {
         tabs.setSelectedIndex(0);
         content.add(tabsToPages.get(tabs.getSelectedTab()));
 
-        tabContent.add(tabs, content);
-        add(toggleAndLogout, tabContent);
+        Scroller scroller = new Scroller(content);
+        scroller.setScrollDirection(Scroller.ScrollDirection.VERTICAL);
+        scroller.setSizeFull();
+        scroller.getStyle().set("border-bottom", "1px solid var(--lumo-contrast-20pct)");
+
+//        tabsAndContent.add(tabs, content);
+        tabsAndContent.add(tabs,scroller);
+        add(toggleAndLogout, tabsAndContent);
     }
 
     private Tabs configureTabs(AbonDictionaryService abonDictionaryService,
@@ -81,7 +90,7 @@ public class MainLayout extends VerticalLayout {
         tabs.add(savedTC);
         //вкладка конструктор
         Tab constructTC = createTab(VaadinIcon.CLUSTER, "Конструктор ТК");
-        tabsToPages.put(constructTC, new TestCaseConstructorForm(abonDictionaryService, checkDictionaryService, authLevelService,
+        tabsToPages.put(constructTC, new TestCaseConstructorForm(tabs, savedTC, abonDictionaryService, checkDictionaryService, authLevelService,
                 branchService, notifService, servService, trplService, testCaseService, downloadService));
         tabs.add(constructTC);
         //вкладка шаблоны (пока пустая)
@@ -117,5 +126,16 @@ public class MainLayout extends VerticalLayout {
         component.setPadding(false);
         component.setMargin(false);
         component.setSizeFull();
+    }
+
+    public void changeSelectedTabTo(int index){
+        content.removeAll();
+        content.add(tabsToPages.get(index));
+    }
+
+    private void refreshTab(Tab tab){
+        if (tab.getLabel() == "Сохраненные ТК"){
+            getUI().get().getPage().reload();
+        }
     }
 }

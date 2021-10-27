@@ -25,4 +25,8 @@ public class NotifServiceImpl implements NotifService {
         }
         return notifDtoList;
     }
+
+    public NotifDto getById(String id){
+        return notifMapper.convert(notifRepository.getByNotifId(id));
+    }
 }

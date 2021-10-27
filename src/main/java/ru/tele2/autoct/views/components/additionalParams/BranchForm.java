@@ -3,6 +3,7 @@ package ru.tele2.autoct.views.components.additionalParams;
 import com.vaadin.flow.component.combobox.ComboBox;
 import ru.tele2.autoct.dto.AdditionalParamDto;
 import ru.tele2.autoct.dto.additionalParams.BranchDto;
+import ru.tele2.autoct.services.additionalParams.AuthLevelService;
 import ru.tele2.autoct.services.additionalParams.BranchService;
 import java.util.Collections;
 import java.util.List;
@@ -34,5 +35,9 @@ public class BranchForm extends ComboBox<BranchDto> {
             result.setParamValue(this.getValue().getBranchName());
         } else return null;
         return result;
+    }
+
+    public void setParam(AdditionalParamDto additionalParamDto, BranchService branchService){
+        this.setValue(branchService.getById(additionalParamDto.getParamId()));
     }
 }

@@ -16,4 +16,6 @@ public class CheckActionDto {
     private CheckDictionaryDto checkDict;
 
     private BTEActionDto bteAction;
+
+    private String comment;
 }

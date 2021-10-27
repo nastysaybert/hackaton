@@ -15,4 +15,6 @@ public class AbonActionDto {
     private AbonDictionaryDto abonDict;
 
     private BTEActionDto bteAction;
+
+    private String comment;
 }

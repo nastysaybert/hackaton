@@ -41,6 +41,9 @@ public class TestCaseServiceImpl implements TestCaseService{
             BTEActionDto bteActionDto = new BTEActionDto();
             AbonActionDto abonActionDto = new AbonActionDto();
             abonActionDto.setAbonDict(stepForm.getAbonAction().getFirst().getAbonDictionaryDto());
+            if (!stepForm.getAbonAction().getFirst().getComment().isEmpty()){
+                abonActionDto.setComment(stepForm.getAbonAction().getFirst().getComment());
+            }
             if (abonActionDto.getAbonDict().getBteDictionary() != null){
                 bteActionDto.setName(abonActionDto.getAbonDict().getBteDictionary().getParamType().toString());
                 bteActionDto.setParamId(stepForm.getAbonAction().getSecond().getAdditionalParamDto().getParamId());
@@ -52,6 +55,9 @@ public class TestCaseServiceImpl implements TestCaseService{
             stepForm.getCheckActions().forEach( (checkId, pairCheckAndParam) ->{
                 CheckActionDto checkActionDto = new CheckActionDto();
                 checkActionDto.setCheckDict(pairCheckAndParam.getFirst().getCheckDictionaryDto());
+                if (!pairCheckAndParam.getFirst().getComment().isEmpty()){
+                    checkActionDto.setComment(pairCheckAndParam.getFirst().getComment());
+                }
                 BTEActionDto bteActionDtoForCheck = new BTEActionDto();
                 bteActionDtoForCheck.setName(checkActionDto.getCheckDict().getBteDictionary().getParamType().toString());
                 bteActionDtoForCheck.setParamId(pairCheckAndParam.getSecond().getAdditionalParamDto().getParamId());
@@ -97,6 +103,12 @@ public class TestCaseServiceImpl implements TestCaseService{
             return true;
         } else return false;
     }
+
+    public void delete (TestCaseDto testCaseDto){
+        TestCaseEntity entity = testCaseMapper.convert(testCaseDto);
+        testCaseRepository.delete(entity);
+    }
+
 
     @Transactional
     public TestCaseDto getById(Long id){
