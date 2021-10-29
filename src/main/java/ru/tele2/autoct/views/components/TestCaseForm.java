@@ -114,7 +114,6 @@ public class TestCaseForm extends VerticalLayout {
                 authLevelService, branchService, notifService, servService, trplService));
 
         //добавляем последний добавленный шаг на разметку
-//            step.add(stepForms.get(stepForms.size()-1));
         step.add(stepForms.get(i));
         Button removeStepButton = new Button(new Icon(VaadinIcon.CLOSE_SMALL));
         removeStepButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
@@ -128,8 +127,12 @@ public class TestCaseForm extends VerticalLayout {
         copyStepButton.addThemeVariants(ButtonVariant.LUMO_CONTRAST);
         copyStepButton.getStyle().set("margin-top", "36.6px");
         copyStepButton.addClickListener(eventRemoveStep ->{
+
 //            int lastPosition = stepForms.lastKey()+1;
-//            VerticalLayout copiedStepForm = stepForms.get(lastPosition).;
+//            TestCaseStepForm copiedStepForm
+//                    = stepForms.get(Integer.parseInt(id)).copyStep(abonDictionaryService, checkDictionaryService,
+//                    authLevelService, branchService, notifService, servService, trplService);
+//            AbonActionForm
 //            stepForms.put(lastPosition, copiedStepForm);
 //            HorizontalLayout copiedStep = new HorizontalLayout();
 //            copiedStep.add(stepForms.get(lastPosition));

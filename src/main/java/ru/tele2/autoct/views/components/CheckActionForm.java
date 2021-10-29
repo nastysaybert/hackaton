@@ -3,15 +3,23 @@ package ru.tele2.autoct.views.components;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.internal.Pair;
+import ru.tele2.autoct.dto.AbonActionDto;
+import ru.tele2.autoct.dto.AdditionalParamDto;
+import ru.tele2.autoct.dto.BTEActionDto;
+import ru.tele2.autoct.dto.CheckActionDto;
 import ru.tele2.autoct.dto.dictionaries.AbonDictionaryDto;
 import ru.tele2.autoct.dto.dictionaries.CheckDictionaryDto;
+import ru.tele2.autoct.services.additionalParams.*;
 import ru.tele2.autoct.services.dictionaries.CheckDictionaryService;
+import ru.tele2.autoct.views.components.additionalParams.AdditionalParam;
 
 import java.util.List;
 
@@ -19,17 +27,31 @@ public class CheckActionForm extends VerticalLayout {
 
     private ComboBox<CheckDictionaryDto> checkDictionary = new ComboBox<>();
     private HorizontalLayout requiredLine = new HorizontalLayout();
+    private HorizontalLayout requiredLineWithParam = new HorizontalLayout();
     private HorizontalLayout optionalLine = new HorizontalLayout();
     private CommentField commentField = new CommentField();
-    Button addCommentButton = new Button(new Icon(VaadinIcon.COMMENT_ELLIPSIS_O));
+    private Div param = new Div();
+    private Button addCommentButton = new Button(new Icon(VaadinIcon.COMMENT_ELLIPSIS_O));
+    private AdditionalParam additionalParam;
 
-    public CheckActionForm(AbonDictionaryDto abonDictionaryDto,
-                           CheckDictionaryService checkDictionaryService){
+    public CheckActionForm(CheckActionDto checkActionDto,
+                           AbonDictionaryDto abonDictionaryDto,
+                           CheckDictionaryService checkDictionaryService,
+                           AuthLevelService authLevelService,
+                           BranchService branchService,
+                           NotifService notifService,
+                           ServService servService,
+                           TrplService trplService){
 
         frontFormat(this);
+//        this.getStyle().set("padding-left", "5%");
         frontFormat(requiredLine);
+        frontFormat(requiredLineWithParam);
         frontFormat(optionalLine);
+        optionalLine.setWidth("59%");
+        param.setWidth("38.55%");
         requiredLine.setSpacing(false);
+        requiredLine.setWidth("61.45%");
         List<CheckDictionaryDto> checkDictList = checkDictionaryService.getAllByAbonDict(abonDictionaryDto);
         checkDictionary.setLabel("Выберите действие проверки");
         checkDictionary.setWidthFull();
@@ -41,18 +63,65 @@ public class CheckActionForm extends VerticalLayout {
         addCommentButton.getStyle().set("margin-top", "36.6px");
         addCommentButton.addClickListener( event -> {
             if (optionalLine.getComponentCount() == 0){
-                commentField = new CommentField();
-                optionalLine.add(commentField);
-                addCommentButton.setIcon(new Icon(VaadinIcon.COMMENT_O));
-                addCommentButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
+                constructCommentField();
             } else {
                 addCommentButton.setIcon(new Icon(VaadinIcon.COMMENT_ELLIPSIS_O));
                 addCommentButton.removeThemeVariants(ButtonVariant.LUMO_ERROR);
                 optionalLine.removeAll();
             }
         });
+
+        checkDictionary.addValueChangeListener(element ->{
+            param.removeAll();
+            if (element.getValue() != null) {
+                additionalParam = new AdditionalParam(element.getValue().getBteDictionary().getParamType(),
+                                authLevelService, branchService, notifService, servService, trplService);
+                param.add(additionalParam);
+            }
+        });
+
+        if (checkActionDto!=null){
+            checkDictionary.setValue(checkActionDto.getCheckDict());
+            if (checkActionDto.getComment()!=null ){
+                constructCommentField();
+                commentField.setValue(checkActionDto.getComment());
+            }
+            if (checkActionDto.getBteAction()!=null){
+                AdditionalParamDto paramDto = new AdditionalParamDto();
+                paramDto.setParamId(checkActionDto.getBteAction().getParamId());
+                paramDto.setParamValue(checkActionDto.getBteAction().getParamValue());
+                additionalParam.setAdditionalParam(paramDto,
+                        checkActionDto.getCheckDict().getBteDictionary().getParamType(),
+                        authLevelService, branchService, notifService, servService, trplService);
+            }
+        }
+
         requiredLine.add(checkDictionary,addCommentButton);
-        this.add(requiredLine,optionalLine);
+        requiredLineWithParam.add(requiredLine, param);
+        this.add(requiredLineWithParam,optionalLine);
+    }
+
+    public CheckActionDto getCheckActionDto(){
+        CheckActionDto result = new CheckActionDto();
+        result.setCheckDict(getCheckDictBox().getValue());
+        if (result.getCheckDict().getBteDictionary() != null){
+            BTEActionDto bteActionDto = new BTEActionDto();
+            bteActionDto.setName(result.getCheckDict().getBteDictionary().getParamType().toString());
+            bteActionDto.setParamId(additionalParam.getAdditionalParamDto().getParamId());
+            bteActionDto.setParamValue(additionalParam.getAdditionalParamDto().getParamValue());
+            result.setBteAction(bteActionDto);
+        }
+        if (optionalLine.getComponentCount() != 0){
+            result.setComment(commentField.getValue());
+        }
+        return result;
+    }
+
+    public void constructCommentField(){
+        commentField = new CommentField();
+        optionalLine.add(commentField);
+        addCommentButton.setIcon(new Icon(VaadinIcon.COMMENT_O));
+        addCommentButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
     }
 
     public CheckDictionaryDto getCheckDictionaryDto(){
@@ -68,11 +137,8 @@ public class CheckActionForm extends VerticalLayout {
     }
 
     public void setComment(String comment){
-        this.commentField = new CommentField();
+        constructCommentField();
         commentField.setValue(comment);
-        optionalLine.add(commentField);
-        addCommentButton.setIcon(new Icon(VaadinIcon.COMMENT_O));
-        addCommentButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
     }
 
     public String getComment(){
@@ -84,7 +150,11 @@ public class CheckActionForm extends VerticalLayout {
             Notification.show("Заполните Действие проверки")
                     .addThemeVariants(NotificationVariant.LUMO_ERROR);
             return false;
-        } else return true;
+        } else
+            if ((this.param.getChildren().count() != 0) && (!additionalParam.isValid())){
+                return false;
+            }
+        return true;
     }
 
     private void frontFormat (HorizontalLayout component){
