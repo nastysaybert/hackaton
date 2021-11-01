@@ -59,16 +59,13 @@ public class TemplatesRepresentation extends VerticalLayout {
         downloadButton.getDownloadFileButton().setEnabled(false);
 
         //кнопка удаления ТК из БД
-        deleteButton = new Button("Удалить ТК", new Icon(VaadinIcon.CLOSE_CIRCLE));
+        deleteButton = new Button("Удалить ТК", new Icon(VaadinIcon.TRASH));
         deleteButton.setIconAfterText(true);
         deleteButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
         deleteButton.setEnabled(false);
         deleteButton.setWidth("15%");
         deleteButton.addClickListener(event -> {
-            checkedItems.forEach(testCaseDto -> {
-                testCaseService.delete(testCaseDto);
-                getUI().get().getPage().reload();
-            });
+            new ConfirmDeletingDialog(checkedItems,testCaseService).open();
         });
 
         //блок для поиска
@@ -125,9 +122,9 @@ public class TemplatesRepresentation extends VerticalLayout {
                                   TestCaseService testCaseService,
                                   DownloadService downloadService){
         List <TestCaseDto> filteredList = new ArrayList<>();
-        filteredList = testCaseDtoList.stream().filter(testCaseDto -> {
-            return testCaseDto.getName().toLowerCase().contains(filter.toLowerCase());
-        }).collect(Collectors.toList());
+        filteredList = testCaseDtoList.stream()
+                .filter(testCaseDto -> testCaseDto.getName().toLowerCase().contains(filter.toLowerCase()))
+                .collect(Collectors.toList());
         filteredList.forEach( testCaseDto -> {
             //для каждого ТК из списка своя линия разметки
             HorizontalLayout testCaseLine = new HorizontalLayout();
@@ -177,8 +174,6 @@ public class TemplatesRepresentation extends VerticalLayout {
             testCaseLine.add(checkbox, testCaseDetails);
             testCaseLine.expand(testCaseDetails);
             testCaseLine.getStyle().set("background-color", "var(--lumo-contrast-5pct)");
-//            testCaseLine.getStyle().set("border-radius", "var(--lumo-border-radius-m)");
-//            testCaseLine.getStyle().set("border","1px solid #b8b8b8");
             layout.addComponentAsFirst(testCaseLine);
         });
     }

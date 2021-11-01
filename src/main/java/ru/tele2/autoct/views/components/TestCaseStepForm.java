@@ -138,6 +138,7 @@ public class TestCaseStepForm extends VerticalLayout {
         Button deleteCheckActionButton = new Button(new Icon(VaadinIcon.CLOSE_SMALL));
         deleteCheckActionButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
         deleteCheckActionButton.getStyle().set("margin-top", "36.6px");
+        deleteCheckActionButton.getElement().setProperty("title", "Удалить действие проверки");
         deleteCheckActionButton.addClickListener(eventDeleteCheckAction ->{
             checkActionsLayout.remove(checkActionLine);
             checkActions.remove(pos);

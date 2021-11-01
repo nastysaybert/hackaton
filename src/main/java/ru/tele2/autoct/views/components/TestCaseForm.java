@@ -145,6 +145,7 @@ public class TestCaseForm extends VerticalLayout {
         Button removeStepButton = new Button(new Icon(VaadinIcon.CLOSE_SMALL));
         removeStepButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
         removeStepButton.getStyle().set("margin-top", "36.6px");
+        removeStepButton.getElement().setProperty("title", "Удалить шаг");
         removeStepButton.addClickListener(eventRemoveStep ->{
             step.removeAll();
             stepForms.remove(Integer.parseInt(id));

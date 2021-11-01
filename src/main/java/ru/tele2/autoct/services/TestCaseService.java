@@ -19,4 +19,6 @@ public interface TestCaseService {
     List<TestCaseDto> getAll();
 
     List<TestCaseDto> getAllTemplates();
+
+    List<TestCaseDto> getAllTestCases();
 }

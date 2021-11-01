@@ -13,4 +13,5 @@ public interface TestCaseRepository extends JpaRepository<TestCaseEntity, Long> 
     TestCaseEntity getByName(String name);
     TestCaseEntity getById(Long id);
     List<TestCaseEntity> getAllByTemplateIsTrue();
+    List<TestCaseEntity> getAllByTemplateIsFalse();
 }

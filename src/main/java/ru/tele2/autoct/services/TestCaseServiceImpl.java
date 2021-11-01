@@ -111,4 +111,14 @@ public class TestCaseServiceImpl implements TestCaseService{
         }
         return result;
     }
+
+    @Transactional
+    public List<TestCaseDto> getAllTestCases() {
+        List<TestCaseDto> result = new ArrayList<>();
+        List<TestCaseEntity> testCaseEntityList = testCaseRepository.getAllByTemplateIsFalse();
+        for(TestCaseEntity testCaseEntity:testCaseEntityList){
+            result.add(testCaseMapper.convert(testCaseEntity));
+        }
+        return result;
+    }
 }

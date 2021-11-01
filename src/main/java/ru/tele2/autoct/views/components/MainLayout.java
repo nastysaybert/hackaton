@@ -84,18 +84,24 @@ public class MainLayout extends VerticalLayout {
                                               TestCaseService testCaseService,
                                               DownloadService downloadService){
         Tabs tabs = new Tabs();
-        //вкладка сохраненные
-        Tab savedTC = createTab(VaadinIcon.DATABASE, "Сохраненные ТК");
-        tabsToPages.put(savedTC, new TestCasesRepresentation(testCaseService, downloadService, testCaseService.getAll()));
-        tabs.add(savedTC);
-        //вкладка конструктор
+
         Tab constructTC = createTab(VaadinIcon.CLUSTER, "Конструктор ТК");
+        Tab savedTC = createTab(VaadinIcon.DATABASE, "Сохраненные ТК");
+        Tab templatesTC = createTab(VaadinIcon.FILE_TABLE, "Шаблоны");
+
+        //вкладка сохраненные
+        tabsToPages.put(savedTC, new TestCasesRepresentation(tabsToPages, tabs, constructTC, testCaseService,
+                downloadService, abonDictionaryService, checkDictionaryService, authLevelService,
+                branchService, notifService, servService, trplService));
+        tabs.add(savedTC);
+
+        //вкладка конструктор
         tabsToPages.put(constructTC, new TestCaseConstructorForm(null,abonDictionaryService,
                 checkDictionaryService, authLevelService, branchService, notifService, servService, trplService,
                 testCaseService, downloadService));
         tabs.add(constructTC);
+
         //вкладка шаблоны
-        Tab templatesTC = createTab(VaadinIcon.FILE_TABLE, "Шаблоны");
         tabsToPages.put(templatesTC, new TemplatesRepresentation(tabsToPages, tabs, constructTC, testCaseService,
                 downloadService, abonDictionaryService, checkDictionaryService, authLevelService,
                 branchService, notifService, servService, trplService));
