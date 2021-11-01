@@ -54,6 +54,8 @@ public class TrplForm extends ComboBox<TrplDto> {
     }
 
     public void setParam(AdditionalParamDto additionalParamDto, TrplService trplService){
-        this.setValue(trplService.getById(additionalParamDto.getParamId()));
+        if (additionalParamDto.getParamId() != null){
+            this.setValue(trplService.getById(additionalParamDto.getParamId(), additionalParamDto.getParamValue()));
+        }
     }
 }

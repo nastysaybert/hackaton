@@ -29,6 +29,8 @@ public class SummForm extends NumberField {
     }
 
     public void setParam(AdditionalParamDto additionalParamDto){
-        this.setValue(Double.parseDouble(additionalParamDto.getParamId()));
+        if (additionalParamDto.getParamId()!=null){
+            this.setValue(Double.parseDouble(additionalParamDto.getParamId()));
+        }
     }
 }

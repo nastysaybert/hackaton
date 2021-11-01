@@ -24,13 +24,14 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class TestCaseStepForm extends VerticalLayout {
 
-    //    private TreeMap <Integer, Pair<CheckActionForm, AdditionalParam>> checkActions = new TreeMap<>();
-//    private Pair<AbonActionForm, AdditionalParam> abonAction;
+
     private AbonActionForm abonActionForm;
     private List<CheckActionForm> checkActions = new ArrayList<>();
     private AtomicInteger i = new AtomicInteger(0);
+    private VerticalLayout checkActionsLayout = new VerticalLayout();
+    private HorizontalLayout buttonsLine = new HorizontalLayout();
 
-    public TestCaseStepForm(
+    public TestCaseStepForm(TestCaseStepDto testCaseStepDto,
                             AbonDictionaryService abonDictionaryService,
                             CheckDictionaryService checkDictionaryService,
                             AuthLevelService authLevelService,
@@ -41,25 +42,39 @@ public class TestCaseStepForm extends VerticalLayout {
         frontFormat(this);
         this.setWidth("70%");
         this.setSpacing(false);
-//        HorizontalLayout abonActionLine = new HorizontalLayout();
-        VerticalLayout checkActionsLayout = new VerticalLayout();
-        HorizontalLayout buttonsLine = new HorizontalLayout();
-//        frontFormat(abonActionLine);
+//        this.getStyle().set("background-color", "var(--lumo-contrast-5pct)");
+//        this.getStyle().set("background-color", "white");
+        this.getStyle().set("border-radius", "10px 10px 10px 10px");
+        this.getStyle().set("border", "2px solid var(--lumo-primary-color-10pct)");
+        this.getStyle().set("padding-left", "10px");
+        this.getStyle().set("padding-right", "10px");
+        this.getStyle().set("padding-bottom", "10px");
+        this.getStyle().set("margin-bottom", "5px");
         frontFormat(checkActionsLayout);
         frontFormat(buttonsLine);
         checkActionsLayout.setSpacing(false);
         checkActionsLayout.getStyle().set("padding-left", "5%");
-        Div param = new Div();
-        param.setWidth("40%");
-
-//        checkActionsLayout.getStyle().set("border", "2px solid red");
 
         Button newCheckActionButton = new Button("Добавить действие проверки");
         newCheckActionButton.setVisible(false);
 
-        //создается пустая форма
-        abonActionForm = new AbonActionForm(null, checkActionsLayout, abonDictionaryService,
-                authLevelService, branchService, notifService, servService, trplService);
+        if (testCaseStepDto != null){
+            abonActionForm = new AbonActionForm(testCaseStepDto.getAbonAction(), checkActionsLayout, abonDictionaryService,
+                    authLevelService, branchService, notifService, servService, trplService);
+            testCaseStepDto.getCheckActions().forEach( checkActionDto -> {
+                createCheckAction(checkActionDto,
+                        checkDictionaryService, authLevelService, branchService, notifService, servService, trplService);
+            });
+            if ((abonActionForm.getAbonDictBox().getValue() != null) ) {
+                if (checkDictionaryService.getAllByAbonDict(abonActionForm.getAbonDictBox().getValue()).size() != 0){
+                    newCheckActionButton.setVisible(true);
+                }
+            }
+        } else {
+            //создается пустая форма
+            abonActionForm = new AbonActionForm(null, checkActionsLayout, abonDictionaryService,
+                    authLevelService, branchService, notifService, servService, trplService);
+        }
         abonActionForm.getAbonDictBox().addValueChangeListener( event ->{
             if ((abonActionForm.getAbonDictBox().getValue() != null) ) {
                 if (checkDictionaryService.getAllByAbonDict(abonActionForm.getAbonDictBox().getValue()).size() != 0){
@@ -69,105 +84,12 @@ public class TestCaseStepForm extends VerticalLayout {
         });
 
         newCheckActionButton.addClickListener(event -> {
-            HorizontalLayout checkActionLine = new HorizontalLayout();
-            frontFormat(checkActionLine);
-            int pos = i.get();
-            CheckActionForm checkActionForm = new CheckActionForm(null, abonActionForm.getAbonDictionaryDto(),
+            createCheckAction(null,
                     checkDictionaryService, authLevelService, branchService, notifService, servService, trplService);
-            checkActionsLayout.add(checkActionForm);
-            checkActions.add(checkActionForm);
-            Button deleteCheckActionButton = new Button(new Icon(VaadinIcon.CLOSE_SMALL));
-            deleteCheckActionButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
-            deleteCheckActionButton.getStyle().set("margin-top", "36.6px");
-            deleteCheckActionButton.addClickListener(eventDeleteCheckAction ->{
-                checkActionsLayout.remove(checkActionLine);
-                checkActions.remove(pos);
-            });
-            checkActionLine.add(checkActionForm,deleteCheckActionButton);
-            checkActionsLayout.add(checkActionLine);
-            i.incrementAndGet();
-//            HorizontalLayout checkActionLine = new HorizontalLayout();
-//            frontFormat(checkActionLine);
-//            CheckActionForm checkActionForm =
-//                    new CheckActionForm(abonActionForm.getAbonDictBox().getValue(), checkDictionaryService);
-//            checkActionForm.setWidth("61%");
-//            String id = Integer.toString(i);
-//            Div checkActionParamWrapper = new Div();
-//            checkActionParamWrapper.setWidth("39%");
-//
-//
-//            checkActionForm.getCheckDictBox().addValueChangeListener(element ->{
-//                checkActions.remove(Integer.parseInt(id));
-//                checkActionParamWrapper.removeAll();
-//                if (element.getValue() != null) {
-//                    Pair <CheckActionForm,AdditionalParam> pairCheckAndParam =
-//                            new Pair<>(checkActionForm, new AdditionalParam(element.getValue().getBteDictionary().getParamType(),
-//                                    authLevelService, branchService, notifService, servService, trplService));
-//                    checkActionParamWrapper.add(pairCheckAndParam.getSecond());
-//                    checkActions.put(Integer.parseInt(id), pairCheckAndParam);
-//                }
-//            });
-
-//            checkActionLine.add(checkActionForm, deleteCheckActionButton);
-//            checkActionsLayout.add(checkActionLine);
-//            increment();
         });
         buttonsLine.add(newCheckActionButton);
-
         this.add(abonActionForm,checkActionsLayout,buttonsLine);
     }
-
-//    public TestCaseStepForm copyStep(AbonDictionaryService abonDictionaryService,
-//                                     CheckDictionaryService checkDictionaryService,
-//                                     AuthLevelService authLevelService,
-//                                     BranchService branchService,
-//                                     NotifService notifService,
-//                                     ServService servService,
-//                                     TrplService trplService){
-//        TestCaseStepForm copiedStepForm = new TestCaseStepForm(abonDictionaryService, checkDictionaryService,
-//                authLevelService, branchService, notifService, servService, trplService);
-//        AbonActionForm copiedAbonAction = new AbonActionForm(abonDictionaryService);
-//        copiedStepForm.getAbonAction().getFirst().setAbonDictionaryDto(
-//                this.getAbonAction().getFirst().getAbonDictionaryDto());
-//        if (this.getAbonAction().getFirst().getComment()!=""){
-//            copiedStepForm.getAbonAction().getFirst().setComment(
-//                    this.getAbonAction().getFirst().getComment());
-//        }
-//        if(this.getAbonAction().getSecond()!=null){
-//            copiedStepForm.getAbonAction().getSecond().setAdditionalParam(this.getAbonAction().getSecond().getAdditionalParamDto(),
-//                    copiedStepForm.getAbonAction().getFirst().getAbonDictionaryDto().getBteDictionary()
-//                    .getParamType(),authLevelService, branchService, notifService, servService, trplService);
-//        }
-//            copiedStepForm.setAbonAction(new Pair<>());
-//
-//                    new AdditionalParam(copiedStepForm.getAbonAction().getFirst().getAbonDictionaryDto().getBteDictionary()
-//                            .getParamType(),authLevelService, branchService, notifService, servService, trplService);
-//            additionalParam.setAdditionalParam(source.getAbonAction().getSecond().getAdditionalParamDto(),
-//                    copiedStepForm.getAbonAction().getFirst().getAbonDictionaryDto().getBteDictionary()
-//                    .getParamType(),authLevelService, branchService, notifService, servService, trplService);
-//
-//        }
-//
-//        source.getCheckActions().forEach();
-//
-//
-//        copiedStepForm.abonAction = source.getAbonAction();
-//        source.checkActions.forEach( (integer, checkActionFormAdditionalParamPair) -
-//        });
-//        return copiedStepForm;
-//    }
-
-//    public void setAbonAction(Pair<AbonActionForm, AdditionalParam> pair){
-//        this.abonAction = pair;
-//    }
-
-//    public Pair<AbonActionForm, AdditionalParam> getAbonAction(){
-//        return this.abonAction;
-//    }
-
-//    public TreeMap <Integer, Pair<CheckActionForm, AdditionalParam>> getCheckActions(){
-//        return this.checkActions;
-//    }
 
     public TestCaseStepDto getTestCaseStepDto(){
         TestCaseStepDto result = new TestCaseStepDto();
@@ -199,6 +121,32 @@ public class TestCaseStepForm extends VerticalLayout {
         return isValidForCheckActions.get();
     }
 
+    public void createCheckAction (CheckActionDto checkActionDto,
+                                   CheckDictionaryService checkDictionaryService,
+                                   AuthLevelService authLevelService,
+                                   BranchService branchService,
+                                   NotifService notifService,
+                                   ServService servService,
+                                   TrplService trplService){
+        HorizontalLayout checkActionLine = new HorizontalLayout();
+        frontFormat(checkActionLine);
+        int pos = i.get();
+        CheckActionForm checkActionForm = new CheckActionForm(checkActionDto, abonActionForm.getAbonDictionaryDto(),
+                checkDictionaryService, authLevelService, branchService, notifService, servService, trplService);
+        checkActionsLayout.add(checkActionForm);
+        checkActions.add(checkActionForm);
+        Button deleteCheckActionButton = new Button(new Icon(VaadinIcon.CLOSE_SMALL));
+        deleteCheckActionButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
+        deleteCheckActionButton.getStyle().set("margin-top", "36.6px");
+        deleteCheckActionButton.addClickListener(eventDeleteCheckAction ->{
+            checkActionsLayout.remove(checkActionLine);
+            checkActions.remove(pos);
+        });
+        checkActionLine.add(checkActionForm,deleteCheckActionButton);
+        checkActionsLayout.add(checkActionLine);
+        i.incrementAndGet();
+    }
+
     public AbonActionForm getAbonActionForm(){
         return this.abonActionForm;
     }
@@ -206,31 +154,6 @@ public class TestCaseStepForm extends VerticalLayout {
     public List<CheckActionForm> getCheckActions(){
         return this.checkActions;
     }
-
-//    public boolean isValid(){
-//        if (getAbonAction()!=null){
-//            if (!getAbonAction().getFirst().isValid()){
-//                return false;
-//            }
-//        } else return false;
-//
-//        if (getAbonAction().getSecond()!=null){
-//            if (!getAbonAction().getSecond().isValid()){
-//                return false;
-//            }
-//        }
-//
-//        AtomicBoolean isValidForCheckActions = new AtomicBoolean(true);
-//        getCheckActions().forEach( (id, pair)->{
-//            if (pair.getFirst() != null){
-//                if (!pair.getFirst().isValid() || !pair.getSecond().isValid()){
-//                    isValidForCheckActions.set(false);
-//                    return;
-//                }
-//            } else return;
-//        });
-//        return isValidForCheckActions.get();
-//    }
 
     private void frontFormat (HorizontalLayout component){
         component.setPadding(false);

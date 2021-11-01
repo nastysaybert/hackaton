@@ -11,4 +11,6 @@ public interface TrplRepository extends JpaRepository<TrplEntity, String> {
     List<TrplEntity> findAll();
 
     TrplEntity getByTrplId(String trplId);
+
+    TrplEntity getByTrplIdContainingAndTrplName(String trplId, String trplName);
 }

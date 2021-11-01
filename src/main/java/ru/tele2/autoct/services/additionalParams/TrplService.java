@@ -14,5 +14,6 @@ public interface TrplService {
 
     List<TrplDto> getAll();
 
-    TrplDto getById(String id);
+    TrplDto getById(String id, String name);
+
 }

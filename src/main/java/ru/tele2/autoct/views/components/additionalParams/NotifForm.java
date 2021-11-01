@@ -40,6 +40,8 @@ public class NotifForm extends ComboBox<NotifDto> {
     }
 
     public void setParam(AdditionalParamDto additionalParamDto, NotifService notifService){
-        this.setValue(notifService.getById(additionalParamDto.getParamId()));
+        if (additionalParamDto.getParamId() != null){
+            this.setValue(notifService.getById(additionalParamDto.getParamId()));
+        }
     }
 }

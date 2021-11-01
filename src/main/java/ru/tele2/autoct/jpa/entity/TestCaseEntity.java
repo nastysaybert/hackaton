@@ -42,6 +42,6 @@ public class TestCaseEntity {
      * является ли шаблоном
      */
     @Column(name = "IS_TEMPLATE", nullable = false)
-    private boolean isTemplate;
+    private boolean template;
 
 }

@@ -28,6 +28,9 @@ public class TestCaseServiceImpl implements TestCaseService{
 
     public TestCaseDto getTestCaseDtoFromForm(TestCaseForm testCaseForm){
         TestCaseDto testCaseDto = new TestCaseDto();
+        if (testCaseForm.getTestCaseId() >= 0){
+            testCaseDto.setId(testCaseForm.getTestCaseId());
+        }
         testCaseDto.setName(testCaseForm.getHeader().getValue());
         testCaseDto.setTemplate(false);
         if (testCaseForm.getInitialDataForm() != null){
@@ -38,62 +41,18 @@ public class TestCaseServiceImpl implements TestCaseService{
         testCaseForm.getStepForms().forEach((id, stepForm) -> {
             TestCaseStepDto testCaseStepDto = stepForm.getTestCaseStepDto();
             testCaseStepDto.setStepNumber(Long.valueOf(i.get()));
-            steps.add(stepForm.getTestCaseStepDto());
+            steps.add(testCaseStepDto);
+            i.incrementAndGet();
         });
         testCaseDto.setTestCaseStepList(steps);
         return testCaseDto;
     }
 
-//    public TestCaseDto getTestCaseDtoFromForm(TestCaseForm testCaseForm){
-//        TestCaseDto testCaseDto = new TestCaseDto();
-//        testCaseDto.setName(testCaseForm.getHeader().getValue());
-//        testCaseDto.setTemplate(false);
-//        if (testCaseForm.getInitialDataForm() != null){
-//            testCaseDto.setInitialData(testCaseForm.getInitialDataForm().getInitialDataDto());
-//        }
-//        AtomicInteger i = new AtomicInteger(1);
-//        TreeMap<Integer, TestCaseStepForm> stepForms =  testCaseForm.getStepForms();
-//        List<TestCaseStepDto> testCaseStepDtoList = new ArrayList<>();
-//        stepForms.forEach((id, stepForm) -> {
-//            TestCaseStepDto testCaseStepDto = new TestCaseStepDto();
-//            BTEActionDto bteActionDto = new BTEActionDto();
-//            AbonActionDto abonActionDto = new AbonActionDto();
-//            abonActionDto.setAbonDict(stepForm.getAbonAction().getFirst().getAbonDictionaryDto());
-//            if (!stepForm.getAbonAction().getFirst().getComment().isEmpty()){
-//                abonActionDto.setComment(stepForm.getAbonAction().getFirst().getComment());
-//            }
-//            if (abonActionDto.getAbonDict().getBteDictionary() != null){
-//                bteActionDto.setName(abonActionDto.getAbonDict().getBteDictionary().getParamType().toString());
-//                bteActionDto.setParamId(stepForm.getAbonAction().getSecond().getAdditionalParamDto().getParamId());
-//                bteActionDto.setParamValue(stepForm.getAbonAction().getSecond().getAdditionalParamDto().getParamValue());
-//                abonActionDto.setBteAction(bteActionDto);
-//            }
-//            testCaseStepDto.setAbonAction(abonActionDto);
-//            List<CheckActionDto> checkActions = new ArrayList<>();
-//            stepForm.getCheckActions().forEach( (checkId, pairCheckAndParam) ->{
-//                CheckActionDto checkActionDto = new CheckActionDto();
-//                checkActionDto.setCheckDict(pairCheckAndParam.getFirst().getCheckDictionaryDto());
-//                if (!pairCheckAndParam.getFirst().getComment().isEmpty()){
-//                    checkActionDto.setComment(pairCheckAndParam.getFirst().getComment());
-//                }
-//                BTEActionDto bteActionDtoForCheck = new BTEActionDto();
-//                bteActionDtoForCheck.setName(checkActionDto.getCheckDict().getBteDictionary().getParamType().toString());
-//                bteActionDtoForCheck.setParamId(pairCheckAndParam.getSecond().getAdditionalParamDto().getParamId());
-//                bteActionDtoForCheck.setParamValue(pairCheckAndParam.getSecond().getAdditionalParamDto().getParamValue());
-//                checkActionDto.setBteAction(bteActionDtoForCheck);
-//                checkActions.add(checkActionDto);
-//            });
-//            testCaseStepDto.setCheckActions(checkActions);
-//            testCaseStepDto.setStepNumber(Long.valueOf(i.get()));
-//            testCaseStepDtoList.add(testCaseStepDto);
-//            i.incrementAndGet();
-//        });
-//        testCaseDto.setTestCaseStepList(testCaseStepDtoList);
-//        return testCaseDto;
-//    }
-
     public boolean save(TestCaseDto testCaseDto){
-        if (testCaseRepository.getByName(testCaseDto.getName()) == null) {
+
+        if ((testCaseRepository.getByName(testCaseDto.getName()) != null) && (testCaseDto.getId() == null)){
+            return false;
+        } else {
             TestCaseEntity entity = testCaseMapper.convert(testCaseDto);
             testCaseRepository.save(entity);
             if (entity.getInitialData() != null){
@@ -119,7 +78,7 @@ public class TestCaseServiceImpl implements TestCaseService{
                 });
             });
             return true;
-        } else return false;
+        }
     }
 
     public void delete (TestCaseDto testCaseDto){
@@ -137,6 +96,16 @@ public class TestCaseServiceImpl implements TestCaseService{
     public List<TestCaseDto> getAll(){
         List<TestCaseDto> result = new ArrayList<>();
         List<TestCaseEntity> testCaseEntityList = testCaseRepository.findAll();
+        for(TestCaseEntity testCaseEntity:testCaseEntityList){
+            result.add(testCaseMapper.convert(testCaseEntity));
+        }
+        return result;
+    }
+
+    @Transactional
+    public List<TestCaseDto> getAllTemplates() {
+        List<TestCaseDto> result = new ArrayList<>();
+        List<TestCaseEntity> testCaseEntityList = testCaseRepository.getAllByTemplateIsTrue();
         for(TestCaseEntity testCaseEntity:testCaseEntityList){
             result.add(testCaseMapper.convert(testCaseEntity));
         }

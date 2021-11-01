@@ -21,6 +21,8 @@ public class DurationForm extends IntegerField {
     }
 
     public void setParam(AdditionalParamDto additionalParamDto){
-        this.setValue(Integer.parseInt(additionalParamDto.getParamId()));
+        if (additionalParamDto.getParamId() != null){
+            this.setValue(Integer.parseInt(additionalParamDto.getParamId()));
+        }
     }
 }

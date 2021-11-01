@@ -16,6 +16,7 @@ public class InitialDataForm extends HorizontalLayout {
         this.setMargin(false);
         this.setPadding(false);
         this.setWidth("70%");
+        this.getStyle().set("margin-bottom", "5px");
         this.setId("InitialDataForm");
 
         action = new TextArea();
@@ -44,5 +45,10 @@ public class InitialDataForm extends HorizontalLayout {
         if (this.action.isEmpty() || this.check.isEmpty()){
             return false;
         } else return true;
+    }
+
+    public void setValue(InitialDataDto initialDataDto){
+        this.action.setValue(initialDataDto.getInitialAction());
+        this.check.setValue(initialDataDto.getInitialCheck());
     }
 }

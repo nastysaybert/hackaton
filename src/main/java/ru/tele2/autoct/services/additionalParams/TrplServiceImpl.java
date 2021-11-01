@@ -42,8 +42,10 @@ public class TrplServiceImpl implements TrplService {
         return trplDtoList;
     }
 
-    public TrplDto getById(String id){
-        return trplMapper.convert(trplRepository.getByTrplId(id));
+    public TrplDto getById(String id, String name){
+//        return trplMapper.convert(trplRepository.getByTrplId(id));
+        return trplMapper.convert(trplRepository.getByTrplIdContainingAndTrplName(id, name));
+
     }
 
 }

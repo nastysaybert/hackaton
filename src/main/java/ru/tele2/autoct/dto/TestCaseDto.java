@@ -18,6 +18,6 @@ public class TestCaseDto {
 
     private List<TestCaseStepDto> testCaseStepList;
 
-    private boolean isTemplate;
+    private boolean template;
 
 }

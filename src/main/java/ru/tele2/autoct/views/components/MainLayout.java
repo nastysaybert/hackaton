@@ -90,12 +90,15 @@ public class MainLayout extends VerticalLayout {
         tabs.add(savedTC);
         //вкладка конструктор
         Tab constructTC = createTab(VaadinIcon.CLUSTER, "Конструктор ТК");
-        tabsToPages.put(constructTC, new TestCaseConstructorForm(tabs, savedTC, abonDictionaryService, checkDictionaryService, authLevelService,
-                branchService, notifService, servService, trplService, testCaseService, downloadService));
+        tabsToPages.put(constructTC, new TestCaseConstructorForm(null,abonDictionaryService,
+                checkDictionaryService, authLevelService, branchService, notifService, servService, trplService,
+                testCaseService, downloadService));
         tabs.add(constructTC);
-        //вкладка шаблоны (пока пустая)
+        //вкладка шаблоны
         Tab templatesTC = createTab(VaadinIcon.FILE_TABLE, "Шаблоны");
-        tabsToPages.put(templatesTC, new Div());
+        tabsToPages.put(templatesTC, new TemplatesRepresentation(tabsToPages, tabs, constructTC, testCaseService,
+                downloadService, abonDictionaryService, checkDictionaryService, authLevelService,
+                branchService, notifService, servService, trplService));
         tabs.add(templatesTC);
         tabs.setOrientation(Tabs.Orientation.VERTICAL);
         tabs.setWidth("20%");

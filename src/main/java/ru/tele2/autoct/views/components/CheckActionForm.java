@@ -61,13 +61,12 @@ public class CheckActionForm extends VerticalLayout {
         checkDictionary.setId("CheckActionForm");
 
         addCommentButton.getStyle().set("margin-top", "36.6px");
+        addCommentButton.getElement().setProperty("title", "Добавить комментарий");
         addCommentButton.addClickListener( event -> {
             if (optionalLine.getComponentCount() == 0){
                 constructCommentField();
             } else {
-                addCommentButton.setIcon(new Icon(VaadinIcon.COMMENT_ELLIPSIS_O));
-                addCommentButton.removeThemeVariants(ButtonVariant.LUMO_ERROR);
-                optionalLine.removeAll();
+                destructCommentField();
             }
         });
 
@@ -107,8 +106,10 @@ public class CheckActionForm extends VerticalLayout {
         if (result.getCheckDict().getBteDictionary() != null){
             BTEActionDto bteActionDto = new BTEActionDto();
             bteActionDto.setName(result.getCheckDict().getBteDictionary().getParamType().toString());
-            bteActionDto.setParamId(additionalParam.getAdditionalParamDto().getParamId());
-            bteActionDto.setParamValue(additionalParam.getAdditionalParamDto().getParamValue());
+            if (additionalParam.getAdditionalParamDto()!=null){
+                bteActionDto.setParamId(additionalParam.getAdditionalParamDto().getParamId());
+                bteActionDto.setParamValue(additionalParam.getAdditionalParamDto().getParamValue());
+            }
             result.setBteAction(bteActionDto);
         }
         if (optionalLine.getComponentCount() != 0){
@@ -122,6 +123,14 @@ public class CheckActionForm extends VerticalLayout {
         optionalLine.add(commentField);
         addCommentButton.setIcon(new Icon(VaadinIcon.COMMENT_O));
         addCommentButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
+        addCommentButton.getElement().setProperty("title", "Удалить комментарий");
+    }
+
+    public void destructCommentField(){
+        addCommentButton.setIcon(new Icon(VaadinIcon.COMMENT_ELLIPSIS_O));
+        addCommentButton.removeThemeVariants(ButtonVariant.LUMO_ERROR);
+        addCommentButton.getElement().setProperty("title", "Добавить комментарий");
+        optionalLine.removeAll();
     }
 
     public CheckDictionaryDto getCheckDictionaryDto(){

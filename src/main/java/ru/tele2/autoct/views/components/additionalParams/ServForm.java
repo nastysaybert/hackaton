@@ -42,6 +42,8 @@ public class ServForm extends ComboBox<ServDto> {
     }
 
     public void setParam(AdditionalParamDto additionalParamDto, ServService servService){
-        this.setValue(servService.getById(additionalParamDto.getParamId()));
+        if (additionalParamDto.getParamId() != null){
+            this.setValue(servService.getById(additionalParamDto.getParamId()));
+        }
     }
 }

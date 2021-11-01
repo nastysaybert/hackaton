@@ -38,6 +38,8 @@ public class BranchForm extends ComboBox<BranchDto> {
     }
 
     public void setParam(AdditionalParamDto additionalParamDto, BranchService branchService){
-        this.setValue(branchService.getById(additionalParamDto.getParamId()));
+        if (additionalParamDto.getParamId() != null){
+            this.setValue(branchService.getById(additionalParamDto.getParamId()));
+        }
     }
 }
