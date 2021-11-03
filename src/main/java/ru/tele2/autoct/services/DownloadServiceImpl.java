@@ -242,7 +242,6 @@ public class DownloadServiceImpl implements DownloadService {
         style.setFillForegroundColor(new XSSFColor(new java.awt.Color(142,169,219), new DefaultIndexedColorMap()));
         style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 
-//        style.setVerticalAlignment(VerticalAlignment.CENTER);
         //перенос текста
         style.setWrapText(true);
 

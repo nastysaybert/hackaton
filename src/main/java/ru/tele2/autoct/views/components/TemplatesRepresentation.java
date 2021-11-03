@@ -54,19 +54,19 @@ public class TemplatesRepresentation extends VerticalLayout {
         //список шаблонов
         List<TestCaseDto> templateList = testCaseService.getAllTemplates();
 
-        //кнопка выгрузки в файл
-        downloadButton = new DownloadButton(downloadService,checkedItems);
-        downloadButton.getDownloadFileButton().setEnabled(false);
-
-        //кнопка удаления ТК из БД
-        deleteButton = new Button("Удалить ТК", new Icon(VaadinIcon.TRASH));
-        deleteButton.setIconAfterText(true);
-        deleteButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
-        deleteButton.setEnabled(false);
-        deleteButton.setWidth("15%");
-        deleteButton.addClickListener(event -> {
-            new ConfirmDeletingDialog(checkedItems,testCaseService).open();
-        });
+//        //кнопка выгрузки в файл
+//        downloadButton = new DownloadButton(downloadService,checkedItems);
+//        downloadButton.getDownloadFileButton().setEnabled(false);
+//
+//        //кнопка удаления ТК из БД
+//        deleteButton = new Button("Удалить ТК", new Icon(VaadinIcon.TRASH));
+//        deleteButton.setIconAfterText(true);
+//        deleteButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
+//        deleteButton.setEnabled(false);
+//        deleteButton.setWidth("15%");
+//        deleteButton.addClickListener(event -> {
+//            new ConfirmDeletingDialog(checkedItems,testCaseService).open();
+//        });
 
         //блок для поиска
         SearchBlock searchBlock = new SearchBlock();
@@ -83,7 +83,8 @@ public class TemplatesRepresentation extends VerticalLayout {
         });
 
 
-        buttonsLine.add(downloadButton.getButtonWrapper(), deleteButton, searchBlock);
+//        buttonsLine.add(downloadButton.getButtonWrapper(), deleteButton, searchBlock);
+        buttonsLine.add(searchBlock);
 
         showTestCaseList(tabsToPages, tabs, constructor, testCaseListArea, templateList, "", abonDictionaryService, checkDictionaryService, authLevelService,
                 branchService, notifService, servService, trplService, testCaseService, downloadService);
@@ -151,29 +152,31 @@ public class TemplatesRepresentation extends VerticalLayout {
             //блок деталей: в заголовок название, при разворачивании табличка с ТК
             Details testCaseDetails = new Details(testCaseDto.getName(), gridAndButtons);
             testCaseDetails.addThemeVariants(DetailsVariant.REVERSE, DetailsVariant.FILLED);
+            testCaseDetails.getElement().getStyle().set("background-color", "hsla(214, 100%, 60%, 0.13)");
 
-            //чекбокс, чтобы можно было массово работать с несколькими ТК
-            Checkbox checkbox = new Checkbox();
-            checkbox.getStyle().set("margin-top", "9px");
-            //выбранные добавляем в список checkedItems
-            checkbox.addValueChangeListener( event ->{
-                if (event.getValue()){
-                    this.checkedItems.add(testCaseDto);
-                } else {
-                    this.checkedItems.remove(testCaseDto);
-                }
-                //если выбранных нет, то не даем нажать на кнопку выгрузки в ТК
-                if (checkedItems.size()<1){
-                    deleteButton.setEnabled(false);
-                    downloadButton.getDownloadFileButton().setEnabled(false);
-                } else {
-                    downloadButton.getDownloadFileButton().setEnabled(true);
-                    deleteButton.setEnabled(true);
-                }
-            });
-            testCaseLine.add(checkbox, testCaseDetails);
+//            //чекбокс, чтобы можно было массово работать с несколькими ТК
+//            Checkbox checkbox = new Checkbox();
+//            checkbox.getStyle().set("margin-top", "9px");
+//            //выбранные добавляем в список checkedItems
+//            checkbox.addValueChangeListener( event ->{
+//                if (event.getValue()){
+//                    this.checkedItems.add(testCaseDto);
+//                } else {
+//                    this.checkedItems.remove(testCaseDto);
+//                }
+//                //если выбранных нет, то не даем нажать на кнопку выгрузки в ТК
+//                if (checkedItems.size()<1){
+//                    deleteButton.setEnabled(false);
+//                    downloadButton.getDownloadFileButton().setEnabled(false);
+//                } else {
+//                    downloadButton.getDownloadFileButton().setEnabled(true);
+//                    deleteButton.setEnabled(true);
+//                }
+//            });
+//            testCaseLine.add(checkbox, testCaseDetails);
+            testCaseLine.add(testCaseDetails);
             testCaseLine.expand(testCaseDetails);
-            testCaseLine.getStyle().set("background-color", "var(--lumo-contrast-5pct)");
+//            testCaseLine.getStyle().set("background-color", "hsla(214, 100%, 60%, 0.13)");
             layout.addComponentAsFirst(testCaseLine);
         });
     }

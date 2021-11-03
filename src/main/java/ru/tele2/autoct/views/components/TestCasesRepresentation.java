@@ -66,10 +66,6 @@ public class TestCasesRepresentation extends VerticalLayout {
         deleteButton.setEnabled(false);
         deleteButton.setWidth("15%");
         deleteButton.addClickListener(event -> {
-//            checkedItems.forEach(testCaseDto -> {
-//                testCaseService.delete(testCaseDto);
-//                getUI().get().getPage().reload();
-//            });
             new ConfirmDeletingDialog(checkedItems,testCaseService).open();
         });
 
@@ -150,7 +146,21 @@ public class TestCasesRepresentation extends VerticalLayout {
                 tabs.setSelectedTab(constructor);
             });
 
-            buttonsLine.add(editTestCaseButton);
+            Button copyTestCaseButton = new Button("Копировать ТК");
+            copyTestCaseButton.addClickListener( event -> {
+                tabsToPages.remove(constructor);
+                TestCaseDto copiedTestCase = new TestCaseDto();
+                copiedTestCase.setTemplate(false);
+                copiedTestCase.setName("");
+                copiedTestCase.setInitialData(testCaseDto.getInitialData());
+                copiedTestCase.setTestCaseStepList(testCaseDto.getTestCaseStepList());
+                tabsToPages.put(constructor, new TestCaseConstructorForm(copiedTestCase,abonDictionaryService, checkDictionaryService, authLevelService,
+                        branchService, notifService, servService, trplService, testCaseService, downloadService));
+                tabs.getSelectedTab().setSelected(false);
+                tabs.setSelectedTab(constructor);
+            });
+
+            buttonsLine.add(editTestCaseButton, copyTestCaseButton);
             gridAndButtons.add(new TestCaseGrid(testCaseDto),buttonsLine);
 
             //блок деталей: в заголовок название, при разворачивании табличка с ТК
