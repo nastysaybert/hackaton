@@ -3,6 +3,7 @@ package ru.tele2.autoct.dto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Setter
@@ -19,5 +20,7 @@ public class TestCaseDto {
     private List<TestCaseStepDto> testCaseStepList;
 
     private boolean template;
+
+    private LocalDateTime delDate;
 
 }

@@ -2,8 +2,6 @@ package ru.tele2.autoct.views.components;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.DrawerToggle;
-import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.Section;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -19,6 +17,7 @@ import ru.tele2.autoct.services.additionalParams.*;
 import ru.tele2.autoct.services.dictionaries.AbonDictionaryService;
 import ru.tele2.autoct.services.dictionaries.CheckDictionaryService;
 import ru.tele2.autoct.services.security.UserService;
+import ru.tele2.autoct.views.components.serviceViews.LogoutBlock;
 
 import java.util.HashMap;
 import java.util.Map;

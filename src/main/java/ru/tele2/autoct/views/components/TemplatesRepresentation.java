@@ -2,12 +2,8 @@ package ru.tele2.autoct.views.components;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.details.Details;
 import com.vaadin.flow.component.details.DetailsVariant;
-import com.vaadin.flow.component.icon.Icon;
-import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tab;
@@ -18,6 +14,8 @@ import ru.tele2.autoct.services.TestCaseService;
 import ru.tele2.autoct.services.additionalParams.*;
 import ru.tele2.autoct.services.dictionaries.AbonDictionaryService;
 import ru.tele2.autoct.services.dictionaries.CheckDictionaryService;
+import ru.tele2.autoct.views.components.serviceViews.DownloadButton;
+import ru.tele2.autoct.views.components.serviceViews.SearchBlock;
 
 import java.util.ArrayList;
 import java.util.List;

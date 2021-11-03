@@ -1,4 +1,4 @@
-package ru.tele2.autoct.views.components;
+package ru.tele2.autoct.views.components.serviceViews;
 
 
 import com.vaadin.flow.component.button.Button;
@@ -41,7 +41,7 @@ public class ConfirmDeletingDialog extends Dialog {
         confirmButton.addThemeVariants(ButtonVariant.LUMO_SUCCESS);
         confirmButton.addClickListener( event -> {
             checkedItems.forEach(testCaseDto -> {
-                testCaseService.delete(testCaseDto);
+                testCaseService.setDelDate(testCaseDto);
                 this.close();
                 getUI().get().getPage().reload();
             });

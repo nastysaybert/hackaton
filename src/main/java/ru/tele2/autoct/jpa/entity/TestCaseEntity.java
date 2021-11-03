@@ -1,9 +1,8 @@
 package ru.tele2.autoct.jpa.entity;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -43,5 +42,11 @@ public class TestCaseEntity {
      */
     @Column(name = "IS_TEMPLATE", nullable = false)
     private boolean template;
+
+    /**
+     * Дата условного удаления тест-кейса
+     */
+    @Column(name = "DEL_DATE")
+    private LocalDateTime delDate;
 
 }

@@ -10,6 +10,9 @@ import ru.tele2.autoct.jpa.repository.*;
 import ru.tele2.autoct.mappers.TestCaseMapper;
 import ru.tele2.autoct.views.components.TestCaseForm;
 import ru.tele2.autoct.views.components.TestCaseStepForm;
+
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -86,6 +89,12 @@ public class TestCaseServiceImpl implements TestCaseService{
         testCaseRepository.delete(entity);
     }
 
+    public void setDelDate (TestCaseDto testCaseDto){
+        TestCaseEntity entity = testCaseMapper.convert(testCaseDto);
+        entity.setDelDate(LocalDateTime.now(ZoneId.of("Europe/Moscow")));
+        testCaseRepository.save(entity);
+    }
+
 
     @Transactional
     public TestCaseDto getById(Long id){
@@ -105,7 +114,7 @@ public class TestCaseServiceImpl implements TestCaseService{
     @Transactional
     public List<TestCaseDto> getAllTemplates() {
         List<TestCaseDto> result = new ArrayList<>();
-        List<TestCaseEntity> testCaseEntityList = testCaseRepository.getAllByTemplateIsTrue();
+        List<TestCaseEntity> testCaseEntityList = testCaseRepository.getAllByTemplateIsTrueAndDelDateIsNull();
         for(TestCaseEntity testCaseEntity:testCaseEntityList){
             result.add(testCaseMapper.convert(testCaseEntity));
         }
@@ -115,7 +124,17 @@ public class TestCaseServiceImpl implements TestCaseService{
     @Transactional
     public List<TestCaseDto> getAllTestCases() {
         List<TestCaseDto> result = new ArrayList<>();
-        List<TestCaseEntity> testCaseEntityList = testCaseRepository.getAllByTemplateIsFalse();
+        List<TestCaseEntity> testCaseEntityList = testCaseRepository.getAllByTemplateIsFalseAndDelDateIsNull();
+        for(TestCaseEntity testCaseEntity:testCaseEntityList){
+            result.add(testCaseMapper.convert(testCaseEntity));
+        }
+        return result;
+    }
+
+    @Transactional
+    public List<TestCaseDto> getAllDeleted() {
+        List<TestCaseDto> result = new ArrayList<>();
+        List<TestCaseEntity> testCaseEntityList = testCaseRepository.getAllByDelDateIsNotNull();
         for(TestCaseEntity testCaseEntity:testCaseEntityList){
             result.add(testCaseMapper.convert(testCaseEntity));
         }

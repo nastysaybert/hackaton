@@ -1,4 +1,4 @@
-package ru.tele2.autoct.views.components;
+package ru.tele2.autoct.views.components.serviceViews;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;

@@ -1,4 +1,4 @@
-package ru.tele2.autoct.views.components;
+package ru.tele2.autoct.views.components.serviceViews;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -10,6 +10,7 @@ import org.vaadin.olli.FileDownloadWrapper;
 import ru.tele2.autoct.dto.TestCaseDto;
 import ru.tele2.autoct.services.DownloadService;
 import ru.tele2.autoct.services.TestCaseService;
+import ru.tele2.autoct.views.components.TestCaseForm;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

@@ -21,4 +21,8 @@ public interface TestCaseService {
     List<TestCaseDto> getAllTemplates();
 
     List<TestCaseDto> getAllTestCases();
+
+    void setDelDate(TestCaseDto testCaseDto);
+
+    List<TestCaseDto> getAllDeleted();
 }

@@ -1,6 +1,5 @@
 package ru.tele2.autoct.views.components;
 
-import com.vaadin.flow.component.PushConfiguration;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
@@ -11,15 +10,14 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.internal.Pair;
 import ru.tele2.autoct.dto.AbonActionDto;
 import ru.tele2.autoct.dto.AdditionalParamDto;
 import ru.tele2.autoct.dto.BTEActionDto;
 import ru.tele2.autoct.dto.dictionaries.AbonDictionaryDto;
 import ru.tele2.autoct.services.additionalParams.*;
 import ru.tele2.autoct.services.dictionaries.AbonDictionaryService;
-import ru.tele2.autoct.services.dictionaries.CheckDictionaryService;
 import ru.tele2.autoct.views.components.additionalParams.AdditionalParam;
+import ru.tele2.autoct.views.components.serviceViews.CommentField;
 
 import java.util.List;
 
