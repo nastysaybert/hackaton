@@ -40,7 +40,7 @@ public class TestCaseStepForm extends VerticalLayout {
                             ServService servService,
                             TrplService trplService){
         frontFormat(this);
-        this.setWidth("70%");
+        this.setWidth("85%");
         this.setSpacing(false);
 //        this.getStyle().set("background-color", "var(--lumo-contrast-5pct)");
 //        this.getStyle().set("background-color", "white");
@@ -135,6 +135,7 @@ public class TestCaseStepForm extends VerticalLayout {
                 checkDictionaryService, authLevelService, branchService, notifService, servService, trplService);
         checkActionsLayout.add(checkActionForm);
         checkActions.add(checkActionForm);
+
         Button deleteCheckActionButton = new Button(new Icon(VaadinIcon.CLOSE_SMALL));
         deleteCheckActionButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
         deleteCheckActionButton.getStyle().set("margin-top", "36.6px");
@@ -143,7 +144,17 @@ public class TestCaseStepForm extends VerticalLayout {
             checkActionsLayout.remove(checkActionLine);
             checkActions.remove(pos);
         });
-        checkActionLine.add(checkActionForm,deleteCheckActionButton);
+
+        Button copyCheckActionButton = new Button(new Icon(VaadinIcon.COPY_O));
+        copyCheckActionButton.addThemeVariants(ButtonVariant.LUMO_CONTRAST);
+        copyCheckActionButton.getStyle().set("margin-top", "36.6px");
+        copyCheckActionButton.getElement().setProperty("title", "Копировать действие проверки");
+        copyCheckActionButton.addClickListener( event -> {
+           createCheckAction(checkActions.get(pos).getCheckActionDto(), checkDictionaryService, authLevelService,
+                   branchService, notifService, servService, trplService);
+        });
+
+        checkActionLine.add(checkActionForm,deleteCheckActionButton, copyCheckActionButton);
         checkActionsLayout.add(checkActionLine);
         i.incrementAndGet();
     }

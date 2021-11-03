@@ -58,7 +58,7 @@ public class CheckActionForm extends VerticalLayout {
         checkDictionary.setClearButtonVisible(true);
         checkDictionary.setItemLabelGenerator(CheckDictionaryDto::getCheckDictName);
         checkDictionary.setItems(checkDictList);
-        checkDictionary.setId("CheckActionForm");
+        checkDictionary.focus();
 
         addCommentButton.getStyle().set("margin-top", "36.6px");
         addCommentButton.getElement().setProperty("title", "Добавить комментарий");

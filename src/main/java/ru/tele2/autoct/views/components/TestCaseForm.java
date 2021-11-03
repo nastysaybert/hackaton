@@ -46,7 +46,7 @@ public class TestCaseForm extends VerticalLayout {
         this.getStyle().set("overflow-y","auto");
         this.setHeight("700px");
         header = new TextField("Введите название ТК");
-        header.setWidth("70%");
+        header.setWidth("85%");
         //нумератор форм шагов
 
 
@@ -99,7 +99,9 @@ public class TestCaseForm extends VerticalLayout {
         //нажали, добавили (и скрыли кнопку добавления), хотим удалить
         //для этого добавляем рядом с исх.данными кнопку удаления
         //удалили -> делаем видимой кнопку добавления
-        Button removeInitialDataButton = new Button("Удалить текстовые исходные данные");
+        Button removeInitialDataButton = new Button(new Icon(VaadinIcon.CLOSE_SMALL));
+        removeInitialDataButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
+        removeInitialDataButton.getElement().setProperty("title", "Удалить текстовые исходные данные");
         removeInitialDataButton.getStyle().set("margin-top", "20.6px");
         removeInitialDataButton.addClickListener(eventRemove -> {
             initialDataForm = null;

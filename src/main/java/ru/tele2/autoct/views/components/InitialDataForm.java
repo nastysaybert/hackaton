@@ -15,7 +15,7 @@ public class InitialDataForm extends HorizontalLayout {
 
         this.setMargin(false);
         this.setPadding(false);
-        this.setWidth("70%");
+        this.setWidth("85%");
         this.getStyle().set("margin-bottom", "5px");
         this.setId("InitialDataForm");
 

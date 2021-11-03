@@ -59,6 +59,7 @@ public class AbonActionForm extends VerticalLayout {
         abonDictionary.setItems(abonDictList);
         abonDictionary.setId("AbonActionForm");
         abonDictionary.setWidth("95%");
+        abonDictionary.focus();
 
 
         addCommentButton.getStyle().set("margin-top", "36.6px");
