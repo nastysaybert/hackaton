@@ -30,8 +30,8 @@ public class BTEDictionaryEntity {
      * Тип ключевого параметра для Действия BTE
      */
     @Column(name = "BTE_DICT_PARAM", nullable = false)
-    @Enumerated(EnumType.STRING)
-    private ParamType paramType;
+//    @Enumerated(EnumType.STRING)
+    private String paramType;
 
     @OneToMany(mappedBy = "bteDictionary", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<AbonDictionaryEntity> abonActionList;

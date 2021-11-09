@@ -4,8 +4,10 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import ru.tele2.autoct.enums.ParamType;
+import ru.tele2.autoct.jpa.entity.additionalParams.AdditionalParamEntity;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Data
 @Entity
@@ -22,8 +24,12 @@ public class BTEActionEntity {
     /**
      * наименование Действия BTE
      */
+//    @Column(name = "BTE_ACTION_NAME", nullable = false)
+//    private String name;
     @Column(name = "BTE_ACTION_NAME", nullable = false)
-    private String name;
+    @Enumerated(EnumType.STRING)
+    private ParamType paramType;
+
 
     /**
      * Id  ключевого параметра
@@ -38,10 +44,17 @@ public class BTEActionEntity {
     private String paramValue;
 
 
-    @OneToOne (mappedBy = "bteAction", cascade = CascadeType.ALL)
+//    @OneToOne (mappedBy = "bteAction", cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ABON_ACTION_ID")
     private AbonActionEntity abonAction;
 
-    @OneToOne (mappedBy = "bteAction", cascade = CascadeType.ALL)
+//    @OneToOne (mappedBy = "bteAction", cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "CHECK_ACTION_ID")
     private CheckActionEntity checkAction;
+
+//    @OneToMany(mappedBy = "bteAction", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval=true)
+//    private List<AdditionalParamEntity> additionalParams;
 
 }

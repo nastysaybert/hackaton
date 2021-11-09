@@ -25,6 +25,7 @@ import ru.tele2.autoct.services.DownloadService;
 import ru.tele2.autoct.services.TestCaseService;
 import ru.tele2.autoct.services.additionalParams.*;
 import ru.tele2.autoct.services.dictionaries.AbonDictionaryService;
+import ru.tele2.autoct.services.dictionaries.BTEDictionaryService;
 import ru.tele2.autoct.services.dictionaries.CheckDictionaryService;
 import ru.tele2.autoct.services.security.UserService;
 import ru.tele2.autoct.views.components.*;
@@ -50,6 +51,7 @@ public class MainView extends VerticalLayout {
                     UserService userService,
                     AbonDictionaryService abonDictionaryService,
                     CheckDictionaryService checkDictionaryService,
+                    BTEDictionaryService bteDictionaryService,
                     AuthLevelService authLevelService,
                     BranchService branchService,
                     NotifService notifService,
@@ -64,8 +66,9 @@ public class MainView extends VerticalLayout {
         wrapper.setSpacing(false);
 
 //        wrapper.add(new LogoutBlock(userService,bCryptPasswordEncoder));
-        wrapper.add(new MainLayout(bCryptPasswordEncoder, userService, abonDictionaryService, checkDictionaryService, authLevelService,
-                        branchService, notifService, servService, trplService, testCaseService, downloadService));
+        wrapper.add(new MainLayout(bCryptPasswordEncoder, userService, abonDictionaryService, checkDictionaryService,
+                bteDictionaryService, authLevelService, branchService, notifService, servService, trplService,
+                testCaseService, downloadService));
 
 //        wrapper.add(new TestCasesAccordion(testCaseService));
         add(wrapper);

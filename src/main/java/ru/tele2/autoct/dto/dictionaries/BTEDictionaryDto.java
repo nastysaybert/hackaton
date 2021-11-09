@@ -14,5 +14,5 @@ public class BTEDictionaryDto {
 
     private String bteDictName;
 
-    private ParamType paramType;
+    private String paramType;
 }

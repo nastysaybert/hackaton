@@ -132,6 +132,10 @@ public class AdditionalParam extends Div {
         }
     }
 
+    public ParamType getCurrentParamType(){
+        return currentParamType;
+    }
+
     public boolean isValid(){
         configureAddParam();
         if (additionalParamDto == null){

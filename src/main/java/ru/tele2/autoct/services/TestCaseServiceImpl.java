@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.tele2.autoct.dto.*;
 import ru.tele2.autoct.jpa.entity.AbonActionEntity;
+import ru.tele2.autoct.jpa.entity.BTEActionEntity;
 import ru.tele2.autoct.jpa.entity.TestCaseEntity;
 import ru.tele2.autoct.jpa.repository.*;
 import ru.tele2.autoct.mappers.TestCaseMapper;
@@ -52,7 +53,6 @@ public class TestCaseServiceImpl implements TestCaseService{
     }
 
     public boolean save(TestCaseDto testCaseDto){
-
         if ((testCaseRepository.getByName(testCaseDto.getName()) != null) && (testCaseDto.getId() == null)){
             return false;
         } else {
@@ -65,19 +65,34 @@ public class TestCaseServiceImpl implements TestCaseService{
             entity.getTestCaseStepList().forEach(testCaseStepEntity -> {
                 testCaseStepEntity.setTestCase(entity);
                 testCaseStepEntity.getAbonAction().setTestCaseStep(testCaseStepEntity);
-                if (testCaseStepEntity.getAbonAction().getBteAction() != null){
-                    testCaseStepEntity.getAbonAction().getBteAction().setAbonAction(testCaseStepEntity.getAbonAction());
+                for (BTEActionEntity bteAction : testCaseStepEntity.getAbonAction().getBteActions()) {
+                    bteAction.setAbonAction(testCaseStepEntity.getAbonAction());
                 }
+//                if (testCaseStepEntity.getAbonAction().getBteActions().size()>0){
+//
+//                }
+//                if (testCaseStepEntity.getAbonAction().getBteAction() != null){
+//                    testCaseStepEntity.getAbonAction().getBteAction().setAbonAction(testCaseStepEntity.getAbonAction());
+//                }
                 testCaseStepRepository.save(testCaseStepEntity);
                 abonActionRepository.save(testCaseStepEntity.getAbonAction());
-                if (testCaseStepEntity.getAbonAction().getBteAction() != null){
-                    bteActionRepository.save(testCaseStepEntity.getAbonAction().getBteAction());
+                for (BTEActionEntity bteAction : testCaseStepEntity.getAbonAction().getBteActions()) {
+                    bteActionRepository.save(bteAction);
                 }
+//                if (testCaseStepEntity.getAbonAction().getBteAction() != null){
+//                    bteActionRepository.save(testCaseStepEntity.getAbonAction().getBteAction());
+//                }
                 testCaseStepEntity.getCheckActions().forEach(checkActionEntity -> {
                     checkActionEntity.setTestCaseStep(testCaseStepEntity);
-                    checkActionEntity.getBteAction().setCheckAction(checkActionEntity);
+                    for (BTEActionEntity bteAction : checkActionEntity.getBteActions()) {
+                        bteAction.setCheckAction(checkActionEntity);
+                    }
+//                    checkActionEntity.getBteAction().setCheckAction(checkActionEntity);
                     checkActionRepository.save(checkActionEntity);
-                    bteActionRepository.save(checkActionEntity.getBteAction());
+                    for (BTEActionEntity bteAction : checkActionEntity.getBteActions()) {
+                        bteActionRepository.save(bteAction);
+                    }
+//                    bteActionRepository.save(checkActionEntity.getBteAction());
                 });
             });
             return true;

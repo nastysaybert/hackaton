@@ -13,6 +13,7 @@ import ru.tele2.autoct.dto.CheckActionDto;
 import ru.tele2.autoct.dto.TestCaseStepDto;
 import ru.tele2.autoct.services.additionalParams.*;
 import ru.tele2.autoct.services.dictionaries.AbonDictionaryService;
+import ru.tele2.autoct.services.dictionaries.BTEDictionaryService;
 import ru.tele2.autoct.services.dictionaries.CheckDictionaryService;
 import ru.tele2.autoct.views.components.additionalParams.AdditionalParam;
 
@@ -34,6 +35,7 @@ public class TestCaseStepForm extends VerticalLayout {
     public TestCaseStepForm(TestCaseStepDto testCaseStepDto,
                             AbonDictionaryService abonDictionaryService,
                             CheckDictionaryService checkDictionaryService,
+                            BTEDictionaryService bteDictionaryService,
                             AuthLevelService authLevelService,
                             BranchService branchService,
                             NotifService notifService,
@@ -60,10 +62,10 @@ public class TestCaseStepForm extends VerticalLayout {
 
         if (testCaseStepDto != null){
             abonActionForm = new AbonActionForm(testCaseStepDto.getAbonAction(), checkActionsLayout, abonDictionaryService,
-                    authLevelService, branchService, notifService, servService, trplService);
+                    bteDictionaryService, authLevelService, branchService, notifService, servService, trplService);
             testCaseStepDto.getCheckActions().forEach( checkActionDto -> {
-                createCheckAction(checkActionDto,
-                        checkDictionaryService, authLevelService, branchService, notifService, servService, trplService);
+                createCheckAction(checkActionDto, checkDictionaryService, bteDictionaryService,
+                        authLevelService, branchService, notifService, servService, trplService);
             });
             if ((abonActionForm.getAbonDictBox().getValue() != null) ) {
                 if (checkDictionaryService.getAllByAbonDict(abonActionForm.getAbonDictBox().getValue()).size() != 0){
@@ -73,7 +75,7 @@ public class TestCaseStepForm extends VerticalLayout {
         } else {
             //создается пустая форма
             abonActionForm = new AbonActionForm(null, checkActionsLayout, abonDictionaryService,
-                    authLevelService, branchService, notifService, servService, trplService);
+                    bteDictionaryService, authLevelService, branchService, notifService, servService, trplService);
         }
         abonActionForm.getAbonDictBox().addValueChangeListener( event ->{
             if ((abonActionForm.getAbonDictBox().getValue() != null) ) {
@@ -84,8 +86,8 @@ public class TestCaseStepForm extends VerticalLayout {
         });
 
         newCheckActionButton.addClickListener(event -> {
-            createCheckAction(null,
-                    checkDictionaryService, authLevelService, branchService, notifService, servService, trplService);
+            createCheckAction(null, checkDictionaryService, bteDictionaryService,
+                    authLevelService, branchService, notifService, servService, trplService);
         });
         buttonsLine.add(newCheckActionButton);
         this.add(abonActionForm,checkActionsLayout,buttonsLine);
@@ -123,6 +125,7 @@ public class TestCaseStepForm extends VerticalLayout {
 
     public void createCheckAction (CheckActionDto checkActionDto,
                                    CheckDictionaryService checkDictionaryService,
+                                   BTEDictionaryService bteDictionaryService,
                                    AuthLevelService authLevelService,
                                    BranchService branchService,
                                    NotifService notifService,
@@ -132,7 +135,7 @@ public class TestCaseStepForm extends VerticalLayout {
         frontFormat(checkActionLine);
         int pos = i.get();
         CheckActionForm checkActionForm = new CheckActionForm(checkActionDto, abonActionForm.getAbonDictionaryDto(),
-                checkDictionaryService, authLevelService, branchService, notifService, servService, trplService);
+                checkDictionaryService, bteDictionaryService, authLevelService, branchService, notifService, servService, trplService);
         checkActionsLayout.add(checkActionForm);
         checkActions.add(checkActionForm);
 
@@ -150,8 +153,8 @@ public class TestCaseStepForm extends VerticalLayout {
         copyCheckActionButton.getStyle().set("margin-top", "36.6px");
         copyCheckActionButton.getElement().setProperty("title", "Копировать действие проверки");
         copyCheckActionButton.addClickListener( event -> {
-           createCheckAction(checkActions.get(pos).getCheckActionDto(), checkDictionaryService, authLevelService,
-                   branchService, notifService, servService, trplService);
+           createCheckAction(checkActions.get(pos).getCheckActionDto(), checkDictionaryService, bteDictionaryService,
+                   authLevelService, branchService, notifService, servService, trplService);
         });
 
         checkActionLine.add(checkActionForm,deleteCheckActionButton, copyCheckActionButton);

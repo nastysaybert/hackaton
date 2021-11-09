@@ -13,10 +13,10 @@ import ru.tele2.autoct.services.DownloadService;
 import ru.tele2.autoct.services.TestCaseService;
 import ru.tele2.autoct.services.additionalParams.*;
 import ru.tele2.autoct.services.dictionaries.AbonDictionaryService;
+import ru.tele2.autoct.services.dictionaries.BTEDictionaryService;
 import ru.tele2.autoct.services.dictionaries.CheckDictionaryService;
 import ru.tele2.autoct.views.components.serviceViews.DownloadButton;
 import ru.tele2.autoct.views.components.serviceViews.SearchBlock;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +36,7 @@ public class TemplatesRepresentation extends VerticalLayout {
                                    DownloadService downloadService,
                                    AbonDictionaryService abonDictionaryService,
                                    CheckDictionaryService checkDictionaryService,
+                                   BTEDictionaryService bteDictionaryService,
                                    AuthLevelService authLevelService,
                                    BranchService branchService,
                                    NotifService notifService,
@@ -52,31 +53,17 @@ public class TemplatesRepresentation extends VerticalLayout {
         //список шаблонов
         List<TestCaseDto> templateList = testCaseService.getAllTemplates();
 
-//        //кнопка выгрузки в файл
-//        downloadButton = new DownloadButton(downloadService,checkedItems);
-//        downloadButton.getDownloadFileButton().setEnabled(false);
-//
-//        //кнопка удаления ТК из БД
-//        deleteButton = new Button("Удалить ТК", new Icon(VaadinIcon.TRASH));
-//        deleteButton.setIconAfterText(true);
-//        deleteButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
-//        deleteButton.setEnabled(false);
-//        deleteButton.setWidth("15%");
-//        deleteButton.addClickListener(event -> {
-//            new ConfirmDeletingDialog(checkedItems,testCaseService).open();
-//        });
-
         //блок для поиска
         SearchBlock searchBlock = new SearchBlock();
         searchBlock.getSearchField().getElement().addEventListener("keyup", event -> {
             searchCallback(tabsToPages, tabs, constructor, templateList, searchBlock,
-                    abonDictionaryService, checkDictionaryService, authLevelService,
+                    abonDictionaryService, checkDictionaryService, bteDictionaryService, authLevelService,
                     branchService, notifService, servService, trplService, testCaseService, downloadService);
 
         }).addEventData("element.value").setFilter("event.keyCode == 13");
         searchBlock.getSearchButton().addClickListener(event -> {
             searchCallback(tabsToPages, tabs, constructor, templateList, searchBlock,
-                    abonDictionaryService, checkDictionaryService, authLevelService,
+                    abonDictionaryService, checkDictionaryService, bteDictionaryService, authLevelService,
                     branchService, notifService, servService, trplService, testCaseService, downloadService);
         });
 
@@ -84,7 +71,8 @@ public class TemplatesRepresentation extends VerticalLayout {
 //        buttonsLine.add(downloadButton.getButtonWrapper(), deleteButton, searchBlock);
         buttonsLine.add(searchBlock);
 
-        showTestCaseList(tabsToPages, tabs, constructor, testCaseListArea, templateList, "", abonDictionaryService, checkDictionaryService, authLevelService,
+        showTestCaseList(tabsToPages, tabs, constructor, testCaseListArea, templateList, "",
+                abonDictionaryService, checkDictionaryService, bteDictionaryService, authLevelService,
                 branchService, notifService, servService, trplService, testCaseService, downloadService);
         testCaseListArea.getStyle().set("overflow-y","auto");
         testCaseListArea.setHeight("700px");
@@ -113,6 +101,7 @@ public class TemplatesRepresentation extends VerticalLayout {
                                   String filter,
                                   AbonDictionaryService abonDictionaryService,
                                   CheckDictionaryService checkDictionaryService,
+                                  BTEDictionaryService bteDictionaryService,
                                   AuthLevelService authLevelService,
                                   BranchService branchService,
                                   NotifService notifService,
@@ -138,7 +127,8 @@ public class TemplatesRepresentation extends VerticalLayout {
             Button copyTemplateButton = new Button("Создать ТК по шаблону");
             copyTemplateButton.addClickListener( event -> {
                 tabsToPages.remove(constructor);
-                tabsToPages.put(constructor, new TestCaseConstructorForm(testCaseDto,abonDictionaryService, checkDictionaryService, authLevelService,
+                tabsToPages.put(constructor, new TestCaseConstructorForm(testCaseDto,abonDictionaryService,
+                        checkDictionaryService, bteDictionaryService, authLevelService,
                         branchService, notifService, servService, trplService, testCaseService, downloadService));
                 tabs.getSelectedTab().setSelected(false);
                 tabs.setSelectedTab(constructor);
@@ -152,26 +142,6 @@ public class TemplatesRepresentation extends VerticalLayout {
             testCaseDetails.addThemeVariants(DetailsVariant.REVERSE, DetailsVariant.FILLED);
             testCaseDetails.getElement().getStyle().set("background-color", "hsla(214, 100%, 60%, 0.13)");
 
-//            //чекбокс, чтобы можно было массово работать с несколькими ТК
-//            Checkbox checkbox = new Checkbox();
-//            checkbox.getStyle().set("margin-top", "9px");
-//            //выбранные добавляем в список checkedItems
-//            checkbox.addValueChangeListener( event ->{
-//                if (event.getValue()){
-//                    this.checkedItems.add(testCaseDto);
-//                } else {
-//                    this.checkedItems.remove(testCaseDto);
-//                }
-//                //если выбранных нет, то не даем нажать на кнопку выгрузки в ТК
-//                if (checkedItems.size()<1){
-//                    deleteButton.setEnabled(false);
-//                    downloadButton.getDownloadFileButton().setEnabled(false);
-//                } else {
-//                    downloadButton.getDownloadFileButton().setEnabled(true);
-//                    deleteButton.setEnabled(true);
-//                }
-//            });
-//            testCaseLine.add(checkbox, testCaseDetails);
             testCaseLine.add(testCaseDetails);
             testCaseLine.expand(testCaseDetails);
 //            testCaseLine.getStyle().set("background-color", "hsla(214, 100%, 60%, 0.13)");
@@ -186,6 +156,7 @@ public class TemplatesRepresentation extends VerticalLayout {
                                  SearchBlock searchBlock,
                                  AbonDictionaryService abonDictionaryService,
                                  CheckDictionaryService checkDictionaryService,
+                                 BTEDictionaryService bteDictionaryService,
                                  AuthLevelService authLevelService,
                                  BranchService branchService,
                                  NotifService notifService,
@@ -194,8 +165,9 @@ public class TemplatesRepresentation extends VerticalLayout {
                                  TestCaseService testCaseService,
                                  DownloadService downloadService){
         testCaseListArea.removeAll();
-        showTestCaseList(tabsToPages, tabs, constructor, testCaseListArea, templateList, searchBlock.getSearchField().getValue(),
-                abonDictionaryService, checkDictionaryService, authLevelService,
+        showTestCaseList(tabsToPages, tabs, constructor, testCaseListArea, templateList,
+                searchBlock.getSearchField().getValue(), abonDictionaryService, checkDictionaryService,
+                bteDictionaryService, authLevelService,
                 branchService, notifService, servService, trplService, testCaseService, downloadService);
     }
 }

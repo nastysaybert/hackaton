@@ -15,11 +15,14 @@ import ru.tele2.autoct.dto.BTEActionDto;
 import ru.tele2.autoct.dto.CheckActionDto;
 import ru.tele2.autoct.dto.dictionaries.AbonDictionaryDto;
 import ru.tele2.autoct.dto.dictionaries.CheckDictionaryDto;
+import ru.tele2.autoct.enums.ParamType;
 import ru.tele2.autoct.services.additionalParams.*;
+import ru.tele2.autoct.services.dictionaries.BTEDictionaryService;
 import ru.tele2.autoct.services.dictionaries.CheckDictionaryService;
 import ru.tele2.autoct.views.components.additionalParams.AdditionalParam;
 import ru.tele2.autoct.views.components.serviceViews.CommentField;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CheckActionForm extends VerticalLayout {
@@ -29,13 +32,14 @@ public class CheckActionForm extends VerticalLayout {
     private HorizontalLayout requiredLineWithParam = new HorizontalLayout();
     private HorizontalLayout optionalLine = new HorizontalLayout();
     private CommentField commentField = new CommentField();
-    private Div param = new Div();
+    private VerticalLayout paramsLayout = new VerticalLayout();
     private Button addCommentButton = new Button(new Icon(VaadinIcon.COMMENT_ELLIPSIS_O));
-    private AdditionalParam additionalParam;
+    private List<AdditionalParam> additionalParams = new ArrayList<>();
 
     public CheckActionForm(CheckActionDto checkActionDto,
                            AbonDictionaryDto abonDictionaryDto,
                            CheckDictionaryService checkDictionaryService,
+                           BTEDictionaryService bteDictionaryService,
                            AuthLevelService authLevelService,
                            BranchService branchService,
                            NotifService notifService,
@@ -47,8 +51,10 @@ public class CheckActionForm extends VerticalLayout {
         frontFormat(requiredLine);
         frontFormat(requiredLineWithParam);
         frontFormat(optionalLine);
+        frontFormat(paramsLayout);
+        paramsLayout.setSpacing(false);
         optionalLine.setWidth("59%");
-        param.setWidth("38.55%");
+        paramsLayout.setWidth("38.55%");
         requiredLine.setSpacing(false);
         requiredLine.setWidth("61.45%");
         List<CheckDictionaryDto> checkDictList = checkDictionaryService.getAllByAbonDict(abonDictionaryDto);
@@ -70,11 +76,18 @@ public class CheckActionForm extends VerticalLayout {
         });
 
         checkDictionary.addValueChangeListener(element ->{
-            param.removeAll();
+            paramsLayout.removeAll();
             if (element.getValue() != null) {
-                additionalParam = new AdditionalParam(element.getValue().getBteDictionary().getParamType(),
+                if (element.getValue().getBteDictionary() != null){
+                    List<ParamType> paramList =
+                            bteDictionaryService.parseParamTypes(element.getValue().getBteDictionary());
+                    paramList.forEach(paramType ->{
+                        AdditionalParam param = new AdditionalParam(paramType,
                                 authLevelService, branchService, notifService, servService, trplService);
-                param.add(additionalParam);
+                        additionalParams.add(param);
+                        paramsLayout.add(param);
+                    });
+                }
             }
         });
 
@@ -84,18 +97,25 @@ public class CheckActionForm extends VerticalLayout {
                 constructCommentField();
                 commentField.setValue(checkActionDto.getComment());
             }
-            if (checkActionDto.getBteAction()!=null){
-                AdditionalParamDto paramDto = new AdditionalParamDto();
-                paramDto.setParamId(checkActionDto.getBteAction().getParamId());
-                paramDto.setParamValue(checkActionDto.getBteAction().getParamValue());
-                additionalParam.setAdditionalParam(paramDto,
-                        checkActionDto.getCheckDict().getBteDictionary().getParamType(),
-                        authLevelService, branchService, notifService, servService, trplService);
+            if (checkActionDto.getBteActions().size() > 0){
+//                List<ParamType> paramList =
+//                        bteDictionaryService.parseParamTypes(abonActionDto.getAbonDict().getBteDictionary());
+                checkActionDto.getBteActions().forEach(bteActionDto -> {
+                    AdditionalParamDto paramDto = new AdditionalParamDto();
+                    paramDto.setParamId(bteActionDto.getParamId());
+                    paramDto.setParamValue(bteActionDto.getParamValue());
+                    AdditionalParam param = new AdditionalParam(bteActionDto.getParamType(),
+                            authLevelService, branchService, notifService, servService, trplService);
+                    param.setAdditionalParam(paramDto, bteActionDto.getParamType(),
+                            authLevelService, branchService, notifService, servService, trplService);
+                    additionalParams.add(param);
+                    paramsLayout.add(param);
+                });
             }
         }
 
         requiredLine.add(checkDictionary,addCommentButton);
-        requiredLineWithParam.add(requiredLine, param);
+        requiredLineWithParam.add(requiredLine, paramsLayout);
         this.add(requiredLineWithParam,optionalLine);
     }
 
@@ -103,13 +123,17 @@ public class CheckActionForm extends VerticalLayout {
         CheckActionDto result = new CheckActionDto();
         result.setCheckDict(getCheckDictBox().getValue());
         if (result.getCheckDict().getBteDictionary() != null){
-            BTEActionDto bteActionDto = new BTEActionDto();
-            bteActionDto.setName(result.getCheckDict().getBteDictionary().getParamType().toString());
-            if (additionalParam.getAdditionalParamDto()!=null){
-                bteActionDto.setParamId(additionalParam.getAdditionalParamDto().getParamId());
-                bteActionDto.setParamValue(additionalParam.getAdditionalParamDto().getParamValue());
+            List<BTEActionDto> bteActions = new ArrayList<>();
+            if (additionalParams.size()>0){
+                additionalParams.forEach(additionalParam -> {
+                    BTEActionDto bteActionDto = new BTEActionDto();
+                    bteActionDto.setParamType(additionalParam.getCurrentParamType());
+                    bteActionDto.setParamId(additionalParam.getAdditionalParamDto().getParamId());
+                    bteActionDto.setParamValue(additionalParam.getAdditionalParamDto().getParamValue());
+                    bteActions.add(bteActionDto);
+                });
             }
-            result.setBteAction(bteActionDto);
+            result.setBteActions(bteActions);
         }
         if (optionalLine.getComponentCount() != 0){
             result.setComment(commentField.getValue());
@@ -159,9 +183,13 @@ public class CheckActionForm extends VerticalLayout {
                     .addThemeVariants(NotificationVariant.LUMO_ERROR);
             return false;
         } else
-            if ((this.param.getChildren().count() != 0) && (!additionalParam.isValid())){
-                return false;
+        if (this.paramsLayout.getChildren().count() != 0){
+            for (AdditionalParam additionalParam : additionalParams) {
+                if (!additionalParam.isValid()){
+                    return false;
+                }
             }
+        }
         return true;
     }
 

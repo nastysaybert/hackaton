@@ -17,6 +17,7 @@ import ru.tele2.autoct.services.DownloadService;
 import ru.tele2.autoct.services.TestCaseService;
 import ru.tele2.autoct.services.additionalParams.*;
 import ru.tele2.autoct.services.dictionaries.AbonDictionaryService;
+import ru.tele2.autoct.services.dictionaries.BTEDictionaryService;
 import ru.tele2.autoct.services.dictionaries.CheckDictionaryService;
 import ru.tele2.autoct.views.components.serviceViews.ConfirmDeletingDialog;
 import ru.tele2.autoct.views.components.serviceViews.DownloadButton;
@@ -42,6 +43,7 @@ public class TestCasesRepresentation extends VerticalLayout {
                                    DownloadService downloadService,
                                    AbonDictionaryService abonDictionaryService,
                                    CheckDictionaryService checkDictionaryService,
+                                   BTEDictionaryService bteDictionaryService,
                                    AuthLevelService authLevelService,
                                    BranchService branchService,
                                    NotifService notifService,
@@ -76,20 +78,21 @@ public class TestCasesRepresentation extends VerticalLayout {
         SearchBlock searchBlock = new SearchBlock();
         searchBlock.getSearchField().getElement().addEventListener("keyup", event -> {
             searchCallback(tabsToPages, tabs, constructor, testCaseDtoList, searchBlock,
-                    abonDictionaryService, checkDictionaryService, authLevelService,
+                    abonDictionaryService, checkDictionaryService, bteDictionaryService, authLevelService,
                     branchService, notifService, servService, trplService, testCaseService, downloadService);
 
         }).addEventData("element.value").setFilter("event.keyCode == 13");
         searchBlock.getSearchButton().addClickListener(event -> {
             searchCallback(tabsToPages, tabs, constructor, testCaseDtoList, searchBlock,
-                    abonDictionaryService, checkDictionaryService, authLevelService,
+                    abonDictionaryService, checkDictionaryService, bteDictionaryService, authLevelService,
                     branchService, notifService, servService, trplService, testCaseService, downloadService);
         });
 
 
         buttonsLine.add(downloadButton.getButtonWrapper(), deleteButton, searchBlock);
 
-        showTestCaseList(tabsToPages, tabs, constructor, testCaseListArea, testCaseDtoList, "", abonDictionaryService, checkDictionaryService, authLevelService,
+        showTestCaseList(tabsToPages, tabs, constructor, testCaseListArea, testCaseDtoList, "",
+                abonDictionaryService, checkDictionaryService, bteDictionaryService, authLevelService,
                 branchService, notifService, servService, trplService, testCaseService, downloadService);
         testCaseListArea.getStyle().set("overflow-y","auto");
         testCaseListArea.setHeight("700px");
@@ -118,6 +121,7 @@ public class TestCasesRepresentation extends VerticalLayout {
                                   String filter,
                                   AbonDictionaryService abonDictionaryService,
                                   CheckDictionaryService checkDictionaryService,
+                                  BTEDictionaryService bteDictionaryService,
                                   AuthLevelService authLevelService,
                                   BranchService branchService,
                                   NotifService notifService,
@@ -143,7 +147,8 @@ public class TestCasesRepresentation extends VerticalLayout {
             Button editTestCaseButton = new Button("Редактировать ТК");
             editTestCaseButton.addClickListener( event -> {
                 tabsToPages.remove(constructor);
-                tabsToPages.put(constructor, new TestCaseConstructorForm(testCaseDto,abonDictionaryService, checkDictionaryService, authLevelService,
+                tabsToPages.put(constructor, new TestCaseConstructorForm(testCaseDto,abonDictionaryService,
+                        checkDictionaryService, bteDictionaryService, authLevelService,
                         branchService, notifService, servService, trplService, testCaseService, downloadService));
                 tabs.getSelectedTab().setSelected(false);
                 tabs.setSelectedTab(constructor);
@@ -157,7 +162,8 @@ public class TestCasesRepresentation extends VerticalLayout {
                 copiedTestCase.setName("");
                 copiedTestCase.setInitialData(testCaseDto.getInitialData());
                 copiedTestCase.setTestCaseStepList(testCaseDto.getTestCaseStepList());
-                tabsToPages.put(constructor, new TestCaseConstructorForm(copiedTestCase,abonDictionaryService, checkDictionaryService, authLevelService,
+                tabsToPages.put(constructor, new TestCaseConstructorForm(copiedTestCase,abonDictionaryService,
+                        checkDictionaryService, bteDictionaryService, authLevelService,
                         branchService, notifService, servService, trplService, testCaseService, downloadService));
                 tabs.getSelectedTab().setSelected(false);
                 tabs.setSelectedTab(constructor);
@@ -203,6 +209,7 @@ public class TestCasesRepresentation extends VerticalLayout {
                                  SearchBlock searchBlock,
                                  AbonDictionaryService abonDictionaryService,
                                  CheckDictionaryService checkDictionaryService,
+                                 BTEDictionaryService bteDictionaryService,
                                  AuthLevelService authLevelService,
                                  BranchService branchService,
                                  NotifService notifService,
@@ -212,7 +219,7 @@ public class TestCasesRepresentation extends VerticalLayout {
                                  DownloadService downloadService){
         testCaseListArea.removeAll();
         showTestCaseList(tabsToPages, tabs, constructor, testCaseListArea, templateList, searchBlock.getSearchField().getValue(),
-                abonDictionaryService, checkDictionaryService, authLevelService,
+                abonDictionaryService, checkDictionaryService, bteDictionaryService, authLevelService,
                 branchService, notifService, servService, trplService, testCaseService, downloadService);
     }
 }

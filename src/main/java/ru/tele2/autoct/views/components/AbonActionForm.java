@@ -14,11 +14,14 @@ import ru.tele2.autoct.dto.AbonActionDto;
 import ru.tele2.autoct.dto.AdditionalParamDto;
 import ru.tele2.autoct.dto.BTEActionDto;
 import ru.tele2.autoct.dto.dictionaries.AbonDictionaryDto;
+import ru.tele2.autoct.enums.ParamType;
 import ru.tele2.autoct.services.additionalParams.*;
 import ru.tele2.autoct.services.dictionaries.AbonDictionaryService;
+import ru.tele2.autoct.services.dictionaries.BTEDictionaryService;
 import ru.tele2.autoct.views.components.additionalParams.AdditionalParam;
 import ru.tele2.autoct.views.components.serviceViews.CommentField;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AbonActionForm extends VerticalLayout {
@@ -29,13 +32,13 @@ public class AbonActionForm extends VerticalLayout {
     private HorizontalLayout optionalLine = new HorizontalLayout();
     private CommentField commentField = new CommentField();
     private Button addCommentButton = new Button(new Icon(VaadinIcon.COMMENT_ELLIPSIS_O));
-    private Div param = new Div();
-    private AdditionalParam additionalParam;
+    private VerticalLayout paramsLayout = new VerticalLayout();
+    private List<AdditionalParam> additionalParams = new ArrayList<>();
 
     public AbonActionForm (AbonActionDto abonActionDto,
                            VerticalLayout checkActionsLayout,
                            AbonDictionaryService abonDictionaryService,
-                           //CheckDictionaryService checkDictionaryService,
+                           BTEDictionaryService bteDictionaryService,
                            AuthLevelService authLevelService,
                            BranchService branchService,
                            NotifService notifService,
@@ -45,10 +48,12 @@ public class AbonActionForm extends VerticalLayout {
         frontFormat(requiredLine);
         frontFormat(requiredLineWithParam);
         frontFormat(optionalLine);
+        frontFormat(paramsLayout);
+        paramsLayout.setSpacing(false);
         requiredLine.setSpacing(false);
         requiredLine.setWidth("60%");
         optionalLine.setWidth("58%");
-        param.setWidth("40%");
+        paramsLayout.setWidth("40%");
 
         List<AbonDictionaryDto> abonDictList = abonDictionaryService.getAll();
         abonDictionary.setLabel("Выберите действие абонента");
@@ -71,13 +76,18 @@ public class AbonActionForm extends VerticalLayout {
         });
 
         abonDictionary.addValueChangeListener(element ->{
-            param.removeAll();
+            paramsLayout.removeAll();
             checkActionsLayout.removeAll();
             if ((element.getValue() != null) ) {
                 if (element.getValue().getBteDictionary() != null){
-                    additionalParam = new AdditionalParam(element.getValue().getBteDictionary().getParamType(),
-                            authLevelService, branchService, notifService, servService, trplService);
-                    param.add(additionalParam);
+                    List<ParamType> paramList =
+                            bteDictionaryService.parseParamTypes(element.getValue().getBteDictionary());
+                    paramList.forEach(paramType ->{
+                        AdditionalParam param = new AdditionalParam(paramType,
+                                authLevelService, branchService, notifService, servService, trplService);
+                        additionalParams.add(param);
+                        paramsLayout.add(param);
+                    });
                 }
             }
         });
@@ -88,18 +98,35 @@ public class AbonActionForm extends VerticalLayout {
                 constructCommentField();
                 commentField.setValue(abonActionDto.getComment());
             }
-            if (abonActionDto.getBteAction()!=null){
+
+            for (int i = 0; i<abonActionDto.getBteActions().size(); i++ ) {
                 AdditionalParamDto paramDto = new AdditionalParamDto();
-                paramDto.setParamId(abonActionDto.getBteAction().getParamId());
-                paramDto.setParamValue(abonActionDto.getBteAction().getParamValue());
-                additionalParam.setAdditionalParam(paramDto,
-                        abonActionDto.getAbonDict().getBteDictionary().getParamType(),
+                paramDto.setParamId(abonActionDto.getBteActions().get(i).getParamId());
+                paramDto.setParamValue(abonActionDto.getBteActions().get(i).getParamValue());
+                additionalParams.get(i).setAdditionalParam(paramDto, abonActionDto.getBteActions().get(i).getParamType(),
                         authLevelService, branchService, notifService, servService, trplService);
             }
+
+//            abonActionDto.getBteActions().forEach(bteActionDto -> {
+//                AdditionalParamDto paramDto = new AdditionalParamDto();
+//                paramDto.setParamId(bteActionDto.getParamId());
+//                paramDto.setParamValue(bteActionDto.getParamValue());
+//                AdditionalParam param = new AdditionalParam(bteActionDto.getParamType(),
+//                        authLevelService, branchService, notifService, servService, trplService);
+//                param.setAdditionalParam(paramDto, bteActionDto.getParamType(),
+//                        authLevelService, branchService, notifService, servService, trplService);
+//                additionalParams.add(param);
+//                paramsLayout.add(param);
+//            });
+//            if (abonActionDto.getBteActions().size() > 0){
+////                List<ParamType> paramList =
+////                        bteDictionaryService.parseParamTypes(abonActionDto.getAbonDict().getBteDictionary());
+//
+//            }
         }
 
         requiredLine.add(abonDictionary,addCommentButton);
-        requiredLineWithParam.add(requiredLine, param);
+        requiredLineWithParam.add(requiredLine, paramsLayout);
         this.add(requiredLineWithParam,optionalLine,checkActionsLayout);
     }
 
@@ -107,13 +134,17 @@ public class AbonActionForm extends VerticalLayout {
         AbonActionDto result = new AbonActionDto();
         result.setAbonDict(getAbonDictBox().getValue());
         if (result.getAbonDict().getBteDictionary() != null){
-            BTEActionDto bteActionDto = new BTEActionDto();
-            bteActionDto.setName(result.getAbonDict().getBteDictionary().getParamType().toString());
-            if (additionalParam.getAdditionalParamDto()!=null){
-                bteActionDto.setParamId(additionalParam.getAdditionalParamDto().getParamId());
-                bteActionDto.setParamValue(additionalParam.getAdditionalParamDto().getParamValue());
+            List<BTEActionDto> bteActions = new ArrayList<>();
+            if (additionalParams.size()>0){
+                additionalParams.forEach(additionalParam -> {
+                    BTEActionDto bteActionDto = new BTEActionDto();
+                    bteActionDto.setParamType(additionalParam.getCurrentParamType());
+                    bteActionDto.setParamId(additionalParam.getAdditionalParamDto().getParamId());
+                    bteActionDto.setParamValue(additionalParam.getAdditionalParamDto().getParamValue());
+                    bteActions.add(bteActionDto);
+                });
             }
-            result.setBteAction(bteActionDto);
+            result.setBteActions(bteActions);
         }
         if (optionalLine.getComponentCount() != 0){
             result.setComment(commentField.getValue());
@@ -143,19 +174,6 @@ public class AbonActionForm extends VerticalLayout {
     public ComboBox<AbonDictionaryDto> getAbonDictBox() {
         return abonDictionary;
     }
-//
-//    public void setAbonDictionaryDto(AbonDictionaryDto abonDictionaryDto){
-//        this.abonDictionary.setValue(abonDictionaryDto);
-//    }
-//
-//    public String getComment(){
-//        return this.commentField.getValue();
-//    }
-//
-//    public void setComment(String comment){
-//        constructCommentField();
-//        commentField.setValue(comment);
-//    }
 
     public boolean isValid(){
         if (this.abonDictionary.isEmpty()){
@@ -163,8 +181,12 @@ public class AbonActionForm extends VerticalLayout {
                     .addThemeVariants(NotificationVariant.LUMO_ERROR);
             return false;
         } else
-            if ((this.param.getChildren().count() != 0) && (!additionalParam.isValid())){
-                return false;
+            if (this.paramsLayout.getChildren().count() != 0){
+                for (AdditionalParam additionalParam : additionalParams) {
+                    if (!additionalParam.isValid()){
+                        return false;
+                    }
+                }
             }
             return true;
     }

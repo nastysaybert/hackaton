@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.*;
 import org.springframework.stereotype.Service;
+import ru.tele2.autoct.dto.BTEActionDto;
 import ru.tele2.autoct.dto.CheckActionDto;
 import ru.tele2.autoct.dto.TestCaseDto;
 import ru.tele2.autoct.dto.TestCaseStepDto;
@@ -13,6 +14,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -99,19 +101,22 @@ public class DownloadServiceImpl implements DownloadService {
                 cell = row.createCell(colNum++);
                 cell.setCellValue(step.getAbonAction().getAbonDict().getAbonDictName());
                 cell.setCellStyle(regularCells(xlsx));
-                if (step.getAbonAction().getBteAction() != null){
+                if (step.getAbonAction().getBteActions().size() > 0){
+                    //конструируем ячейки параметров
+                    List<String> abonParams = combineParams(step.getAbonAction().getBteActions());
+
                     //Название Ключевого параметра
                     colNum++;
                     cell = row.createCell(colNum++);
-                    cell.setCellValue(step.getAbonAction().getBteAction().getName());
+                    cell.setCellValue(abonParams.get(0));
                     cell.setCellStyle(regularCells(xlsx));
                     //Значение Ключевого параметра
                     cell = row.createCell(colNum++);
-                    cell.setCellValue(step.getAbonAction().getBteAction().getParamId());
+                    cell.setCellValue(abonParams.get(1));
                     cell.setCellStyle(regularCells(xlsx));
                     //Наименование услуги/тарифа/Справка
                     cell = row.createCell(colNum++);
-                    cell.setCellValue(step.getAbonAction().getBteAction().getParamValue());
+                    cell.setCellValue(abonParams.get(2));
                     cell.setCellStyle(regularCells(xlsx));
                     //Действие BTE
                     cell = row.createCell(colNum++);
@@ -147,17 +152,19 @@ public class DownloadServiceImpl implements DownloadService {
                     cell = row.createCell(colNum++);
                     cell.setCellValue(checkAction.getCheckDict().getCheckDictName());
                     cell.setCellStyle(regularCells(xlsx));
+                    //конструируем ячейки параметров
+                    List<String> abonParams = combineParams(checkAction.getBteActions());
                     //Название Ключевого параметра
                     cell = row.createCell(colNum++);
-                    cell.setCellValue(checkAction.getBteAction().getName());
+                    cell.setCellValue(abonParams.get(0));
                     cell.setCellStyle(regularCells(xlsx));
                     //Значение Ключевого параметра
                     cell = row.createCell(colNum++);
-                    cell.setCellValue(checkAction.getBteAction().getParamId());
+                    cell.setCellValue(abonParams.get(1));
                     cell.setCellStyle(regularCells(xlsx));
                     //Наименование услуги/тарифа/Справка
                     cell = row.createCell(colNum++);
-                    cell.setCellValue(checkAction.getBteAction().getParamValue());
+                    cell.setCellValue(abonParams.get(2));
                     cell.setCellStyle(regularCells(xlsx));
                     //Действие BTE
                     cell = row.createCell(colNum++);
@@ -297,5 +304,26 @@ public class DownloadServiceImpl implements DownloadService {
         style.setWrapText(true);
 
         return style;
+    }
+
+    private List<String> combineParams (List<BTEActionDto> bteActionDtoList){
+        List<String> result = new ArrayList<>();
+        String paramName = "";
+        String paramId = "";
+        String paramValue = "";
+        for (BTEActionDto bteActionDto : bteActionDtoList) {
+            paramName = paramName.concat(bteActionDto.getParamType().toString());
+            paramId = paramId.concat(bteActionDto.getParamId());
+            paramValue = paramValue.concat(bteActionDto.getParamValue());
+            if (bteActionDtoList.indexOf(bteActionDto) != bteActionDtoList.size()-1){
+                paramName = paramName.concat(";");
+                paramId = paramId.concat(";");
+                paramValue = paramValue.concat(";");
+            }
+        }
+        result.add(paramName);
+        result.add(paramId);
+        result.add(paramValue);
+        return result;
     }
 }

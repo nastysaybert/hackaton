@@ -3,6 +3,7 @@ package ru.tele2.autoct.jpa.entity;
 import lombok.Data;
 import ru.tele2.autoct.jpa.entity.dictionaries.AbonDictionaryEntity;
 import javax.persistence.*;
+import java.util.List;
 
 @Data
 @Entity
@@ -26,9 +27,12 @@ public class AbonActionEntity {
     /**
      * Действие BTE
      */
-    @OneToOne (cascade = CascadeType.ALL)
-    @JoinColumn(name = "BTE_ACTION_ID",referencedColumnName = "BTE_ACTION_ID")
-    private BTEActionEntity bteAction;
+//    @OneToOne (cascade = CascadeType.ALL)
+//    @JoinColumn(name = "BTE_ACTION_ID",referencedColumnName = "BTE_ACTION_ID")
+//    private BTEActionEntity bteAction;
+
+    @OneToMany(mappedBy = "abonAction", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval=true)
+    private List<BTEActionEntity> bteActions;
 
     /**
      * Тест кейс

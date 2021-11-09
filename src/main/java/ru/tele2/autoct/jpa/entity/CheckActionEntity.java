@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import ru.tele2.autoct.jpa.entity.dictionaries.CheckDictionaryEntity;
 import javax.persistence.*;
+import java.util.List;
 
 @Data
 @Entity
@@ -28,9 +29,11 @@ public class CheckActionEntity {
     /**
      * Действие BTE
      */
-    @OneToOne (cascade = CascadeType.ALL)
-    @JoinColumn(name = "BTE_ACTION_ID", referencedColumnName = "BTE_ACTION_ID")
-    private BTEActionEntity bteAction;
+//    @OneToOne (cascade = CascadeType.ALL)
+//    @JoinColumn(name = "BTE_ACTION_ID", referencedColumnName = "BTE_ACTION_ID")
+//    private BTEActionEntity bteAction;
+    @OneToMany(mappedBy = "checkAction", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval=true)
+    private List<BTEActionEntity> bteActions;
 
     /**
      * Тест кейс

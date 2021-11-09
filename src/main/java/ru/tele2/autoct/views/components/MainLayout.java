@@ -15,6 +15,7 @@ import ru.tele2.autoct.services.DownloadService;
 import ru.tele2.autoct.services.TestCaseService;
 import ru.tele2.autoct.services.additionalParams.*;
 import ru.tele2.autoct.services.dictionaries.AbonDictionaryService;
+import ru.tele2.autoct.services.dictionaries.BTEDictionaryService;
 import ru.tele2.autoct.services.dictionaries.CheckDictionaryService;
 import ru.tele2.autoct.services.security.UserService;
 import ru.tele2.autoct.views.components.serviceViews.LogoutBlock;
@@ -34,6 +35,7 @@ public class MainLayout extends VerticalLayout {
                       UserService userService,
                       AbonDictionaryService abonDictionaryService,
                       CheckDictionaryService checkDictionaryService,
+                      BTEDictionaryService bteDictionaryService,
                       AuthLevelService authLevelService,
                       BranchService branchService,
                       NotifService notifService,
@@ -52,7 +54,7 @@ public class MainLayout extends VerticalLayout {
         toggle.addClickListener(event -> tabs.setVisible(!tabs.isVisible()));
         toggleAndLogout.add(toggle, new LogoutBlock(userService,bCryptPasswordEncoder));
 
-        tabs = configureTabs(abonDictionaryService, checkDictionaryService, authLevelService,
+        tabs = configureTabs(abonDictionaryService, checkDictionaryService, bteDictionaryService, authLevelService,
                 branchService, notifService, servService, trplService, testCaseService, downloadService);
 
         frontFormat(content);
@@ -74,14 +76,15 @@ public class MainLayout extends VerticalLayout {
     }
 
     private Tabs configureTabs(AbonDictionaryService abonDictionaryService,
-                                              CheckDictionaryService checkDictionaryService,
-                                              AuthLevelService authLevelService,
-                                              BranchService branchService,
-                                              NotifService notifService,
-                                              ServService servService,
-                                              TrplService trplService,
-                                              TestCaseService testCaseService,
-                                              DownloadService downloadService){
+                               CheckDictionaryService checkDictionaryService,
+                               BTEDictionaryService bteDictionaryService,
+                               AuthLevelService authLevelService,
+                               BranchService branchService,
+                               NotifService notifService,
+                               ServService servService,
+                               TrplService trplService,
+                               TestCaseService testCaseService,
+                               DownloadService downloadService){
         Tabs tabs = new Tabs();
 
         Tab constructTC = createTab(VaadinIcon.CLUSTER, "Конструктор ТК");
@@ -90,19 +93,19 @@ public class MainLayout extends VerticalLayout {
 
         //вкладка сохраненные
         tabsToPages.put(savedTC, new TestCasesRepresentation(tabsToPages, tabs, constructTC, testCaseService,
-                downloadService, abonDictionaryService, checkDictionaryService, authLevelService,
+                downloadService, abonDictionaryService, checkDictionaryService, bteDictionaryService, authLevelService,
                 branchService, notifService, servService, trplService));
         tabs.add(savedTC);
 
         //вкладка конструктор
         tabsToPages.put(constructTC, new TestCaseConstructorForm(null,abonDictionaryService,
-                checkDictionaryService, authLevelService, branchService, notifService, servService, trplService,
-                testCaseService, downloadService));
+                checkDictionaryService, bteDictionaryService, authLevelService, branchService, notifService,
+                servService, trplService, testCaseService, downloadService));
         tabs.add(constructTC);
 
         //вкладка шаблоны
         tabsToPages.put(templatesTC, new TemplatesRepresentation(tabsToPages, tabs, constructTC, testCaseService,
-                downloadService, abonDictionaryService, checkDictionaryService, authLevelService,
+                downloadService, abonDictionaryService, checkDictionaryService, bteDictionaryService, authLevelService,
                 branchService, notifService, servService, trplService));
         tabs.add(templatesTC);
         tabs.setOrientation(Tabs.Orientation.VERTICAL);

@@ -14,6 +14,7 @@ import ru.tele2.autoct.dto.TestCaseDto;
 import ru.tele2.autoct.dto.TestCaseStepDto;
 import ru.tele2.autoct.services.additionalParams.*;
 import ru.tele2.autoct.services.dictionaries.AbonDictionaryService;
+import ru.tele2.autoct.services.dictionaries.BTEDictionaryService;
 import ru.tele2.autoct.services.dictionaries.CheckDictionaryService;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -35,6 +36,7 @@ public class TestCaseForm extends VerticalLayout {
     public TestCaseForm(TestCaseDto testCaseDto,
                         AbonDictionaryService abonDictionaryService,
                         CheckDictionaryService checkDictionaryService,
+                        BTEDictionaryService bteDictionaryService,
                         AuthLevelService authLevelService,
                         BranchService branchService,
                         NotifService notifService,
@@ -63,7 +65,7 @@ public class TestCaseForm extends VerticalLayout {
 
         Button newStepButton = new Button("Добавить шаг ТК");
         newStepButton.addClickListener(event -> {
-            createStep(null, abonDictionaryService, checkDictionaryService,
+            createStep(null, abonDictionaryService, checkDictionaryService, bteDictionaryService,
                     authLevelService, branchService, notifService, servService, trplService);
         });
 
@@ -81,7 +83,7 @@ public class TestCaseForm extends VerticalLayout {
                 initialDataForm.setValue(testCaseDto.getInitialData());
             }
             testCaseDto.getTestCaseStepList().forEach( testCaseStepDto -> {
-                createStep(testCaseStepDto, abonDictionaryService, checkDictionaryService,
+                createStep(testCaseStepDto, abonDictionaryService, checkDictionaryService, bteDictionaryService,
                         authLevelService, branchService, notifService, servService, trplService);
             });
         }
@@ -127,8 +129,10 @@ public class TestCaseForm extends VerticalLayout {
         return id;
     }
 
-    private void createStep(TestCaseStepDto testCaseStepDto, AbonDictionaryService abonDictionaryService,
+    private void createStep(TestCaseStepDto testCaseStepDto,
+                            AbonDictionaryService abonDictionaryService,
                             CheckDictionaryService checkDictionaryService,
+                            BTEDictionaryService bteDictionaryService,
                             AuthLevelService authLevelService,
                             BranchService branchService,
                             NotifService notifService,
@@ -140,7 +144,7 @@ public class TestCaseForm extends VerticalLayout {
         step.setId(id);
         //создаем новый шаг и добавляем его в список, чтобы потом иметь доступ к данным внутри шагов
         stepForms.put(Integer.parseInt(id), new TestCaseStepForm(testCaseStepDto, abonDictionaryService, checkDictionaryService,
-                authLevelService, branchService, notifService, servService, trplService));
+                bteDictionaryService, authLevelService, branchService, notifService, servService, trplService));
 
         //добавляем последний добавленный шаг на разметку
         step.add(stepForms.get(i));
@@ -159,7 +163,7 @@ public class TestCaseForm extends VerticalLayout {
         copyStepButton.getElement().setProperty("title", "Копировать шаг");
         copyStepButton.addClickListener(eventRemoveStep ->{
             createStep(stepForms.get(Integer.parseInt(id)).getTestCaseStepDto(), abonDictionaryService, checkDictionaryService,
-                    authLevelService, branchService, notifService, servService, trplService);
+                    bteDictionaryService, authLevelService, branchService, notifService, servService, trplService);
         });
 
         step.add(removeStepButton, copyStepButton);
@@ -189,6 +193,13 @@ public class TestCaseForm extends VerticalLayout {
                     .addThemeVariants(NotificationVariant.LUMO_ERROR);
             return false;
         }
+
+        if (getHeader().getValue().length() > 170){
+            Notification.show("Слишком длинное название ТК")
+                    .addThemeVariants(NotificationVariant.LUMO_ERROR);
+            return false;
+        }
+
         if (getInitialDataForm() != null){
             if (!getInitialDataForm().isValid()){
                 Notification.show("Заполните исходные данные или удалите данный блок!")

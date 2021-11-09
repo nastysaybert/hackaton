@@ -4,6 +4,7 @@ import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import ru.tele2.autoct.dto.BTEActionDto;
 import ru.tele2.autoct.dto.TestCaseDto;
 import ru.tele2.autoct.views.components.helper.Row;
 import java.util.ArrayList;
@@ -25,19 +26,19 @@ public class TestCaseGrid extends VerticalLayout {
             rows.add(initialDataRow);
         }
         testCase.getTestCaseStepList().forEach( testCaseStep -> {
+            List<String> paramCells = combineParams(testCaseStep.getAbonAction().getBteActions());
             Row abonActionRow = new Row(testCaseStep.getAbonAction().getAbonDict().getAbonDictName(),
-                    "",testCaseStep.getAbonAction().getBteAction() != null ?
-                    testCaseStep.getAbonAction().getBteAction().getParamId():"",
-                    testCaseStep.getAbonAction().getBteAction() != null ?
-                            testCaseStep.getAbonAction().getBteAction().getParamValue():"",
-                    testCaseStep.getAbonAction().getComment() != null ?
-                            testCaseStep.getAbonAction().getComment():"");
+                    "", paramCells.get(1),
+                    paramCells.get(2),
+                    testCaseStep.getAbonAction().getComment()!=null ?
+                            testCaseStep.getAbonAction().getComment() : "");
             rows.add(abonActionRow);
             testCaseStep.getCheckActions().forEach(checkAction -> {
+                List<String> checkParamCells = combineParams(checkAction.getBteActions());
                 Row checkActionRow = new Row("",
                         checkAction.getCheckDict().getCheckDictName(),
-                        checkAction.getBteAction().getParamId(),
-                        checkAction.getBteAction().getParamValue(),
+                        checkParamCells.get(1),
+                        checkParamCells.get(2),
                         checkAction.getComment() != null ?
                                 checkAction.getComment():"");
                 rows.add(checkActionRow);
@@ -56,4 +57,27 @@ public class TestCaseGrid extends VerticalLayout {
         grid.addThemeVariants(GridVariant.LUMO_COLUMN_BORDERS);
         this.add(grid);
     }
+
+
+    private List<String> combineParams (List<BTEActionDto> bteActionDtoList){
+        List<String> result = new ArrayList<>();
+        String paramName = "";
+        String paramId = "";
+        String paramValue = "";
+        for (BTEActionDto bteActionDto : bteActionDtoList) {
+            paramName = paramName.concat(bteActionDto.getParamType().toString());
+            paramId = paramId.concat(bteActionDto.getParamId());
+            paramValue = paramValue.concat(bteActionDto.getParamValue());
+            if (bteActionDtoList.indexOf(bteActionDto) != bteActionDtoList.size()-1){
+                paramName = paramName.concat(";");
+                paramId = paramId.concat(";");
+                paramValue = paramValue.concat(";");
+            }
+        }
+        result.add(paramName);
+        result.add(paramId);
+        result.add(paramValue);
+        return result;
+    }
+
 }
