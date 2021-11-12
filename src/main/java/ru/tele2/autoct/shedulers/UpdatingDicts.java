@@ -12,9 +12,11 @@ import org.springframework.scheduling.annotation.Scheduled;
 import ru.tele2.autoct.dto.additionalParams.BranchDto;
 import ru.tele2.autoct.dto.additionalParams.ServDto;
 import ru.tele2.autoct.dto.additionalParams.TrplDto;
+import ru.tele2.autoct.dto.additionalParams.ZoneDto;
 import ru.tele2.autoct.services.additionalParams.BranchService;
 import ru.tele2.autoct.services.additionalParams.ServService;
 import ru.tele2.autoct.services.additionalParams.TrplService;
+import ru.tele2.autoct.services.additionalParams.ZoneService;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -33,6 +35,7 @@ public class UpdatingDicts {
     private final TrplService trplService;
     private final ServService servService;
     private final BranchService branchService;
+    private final ZoneService zoneService;
     @Value("${external.filepath.projects}")
     String filepath;
 
@@ -104,6 +107,31 @@ public class UpdatingDicts {
                     branchDto.setBranchId(rounding(row.getCell(0).getNumericCellValue()));
                     branchDto.setBranchName(row.getCell(1).getStringCellValue());
                     branchService.save(branchDto);
+                }
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Scheduled(fixedRate = 86400000)
+    public void updateZoneFixedRate(){
+        try {
+            FileInputStream file = new FileInputStream(new File(filepath));
+            XSSFWorkbook workbook = new XSSFWorkbook(file);
+            XSSFSheet sheet = workbook.getSheet("ZONE");
+            if (sheet.getLastRowNum() > 2){
+                zoneService.deleteAll();
+                Iterator<Row> rowIterator = sheet.iterator();
+                Row row = rowIterator.next();
+                ZoneDto zoneDto = new ZoneDto();
+                while (rowIterator.hasNext()){
+                    row = rowIterator.next();
+                    zoneDto.setZoneId(rounding(row.getCell(0).getNumericCellValue()));
+                    zoneDto.setZoneName(row.getCell(1).getStringCellValue());
+                    zoneService.save(zoneDto);
                 }
             }
         } catch (FileNotFoundException e) {

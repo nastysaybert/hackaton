@@ -7,7 +7,8 @@ import ru.tele2.autoct.services.additionalParams.BranchService;
 public class DurationForm extends IntegerField {
     public DurationForm(){
         this.setWidthFull();
-        this.setLabel("Введите продолжительность");
+//        this.setLabel("Введите продолжительность");
+        this.setPlaceholder("Введите продолжительность");
         this.setClearButtonVisible(true);
     }
 

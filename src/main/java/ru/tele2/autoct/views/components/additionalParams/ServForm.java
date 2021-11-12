@@ -16,7 +16,8 @@ public class ServForm extends ComboBox<ServDto> {
 
     public ServForm(ServService servService){
         this.setWidthFull();
-        this.setLabel("Выберите услугу");
+//        this.setLabel("Выберите услугу");
+        this.setPlaceholder("Выберите услугу");
         this.setClearButtonVisible(true);
         this.setItemLabelGenerator(ServDto::toString);
         List<ServDto> sortedServs = servService.getAll();

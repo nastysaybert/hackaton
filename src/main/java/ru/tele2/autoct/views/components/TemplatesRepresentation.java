@@ -9,13 +9,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import ru.tele2.autoct.dto.TestCaseDto;
-import ru.tele2.autoct.services.DownloadService;
-import ru.tele2.autoct.services.TestCaseService;
 import ru.tele2.autoct.services.additionalParams.*;
-import ru.tele2.autoct.services.dictionaries.AbonDictionaryService;
-import ru.tele2.autoct.services.dictionaries.BTEDictionaryService;
-import ru.tele2.autoct.services.dictionaries.CheckDictionaryService;
-import ru.tele2.autoct.views.components.serviceViews.DownloadButton;
 import ru.tele2.autoct.views.components.serviceViews.SearchBlock;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,23 +19,12 @@ import java.util.stream.Collectors;
 public class TemplatesRepresentation extends VerticalLayout {
     private List<TestCaseDto> checkedItems = new ArrayList<>();
     private VerticalLayout testCaseListArea = new VerticalLayout();
-    private Button deleteButton;
-    private DownloadButton downloadButton;
 
 
     public TemplatesRepresentation(Map<Tab, Component> tabsToPages,
                                    Tabs tabs,
                                    Tab constructor,
-                                   TestCaseService testCaseService,
-                                   DownloadService downloadService,
-                                   AbonDictionaryService abonDictionaryService,
-                                   CheckDictionaryService checkDictionaryService,
-                                   BTEDictionaryService bteDictionaryService,
-                                   AuthLevelService authLevelService,
-                                   BranchService branchService,
-                                   NotifService notifService,
-                                   ServService servService,
-                                   TrplService trplService){
+                                   Registrator registrator){
         frontFormat(this);
         this.setSpacing(false);
         frontFormat(testCaseListArea);
@@ -51,29 +34,23 @@ public class TemplatesRepresentation extends VerticalLayout {
         frontFormat(buttonsLine);
 
         //список шаблонов
-        List<TestCaseDto> templateList = testCaseService.getAllTemplates();
+        List<TestCaseDto> templateList = registrator.getTestCaseService().getAllTemplates();
 
         //блок для поиска
         SearchBlock searchBlock = new SearchBlock();
         searchBlock.getSearchField().getElement().addEventListener("keyup", event -> {
-            searchCallback(tabsToPages, tabs, constructor, templateList, searchBlock,
-                    abonDictionaryService, checkDictionaryService, bteDictionaryService, authLevelService,
-                    branchService, notifService, servService, trplService, testCaseService, downloadService);
+            searchCallback(tabsToPages, tabs, constructor, templateList, searchBlock, registrator);
 
         }).addEventData("element.value").setFilter("event.keyCode == 13");
         searchBlock.getSearchButton().addClickListener(event -> {
-            searchCallback(tabsToPages, tabs, constructor, templateList, searchBlock,
-                    abonDictionaryService, checkDictionaryService, bteDictionaryService, authLevelService,
-                    branchService, notifService, servService, trplService, testCaseService, downloadService);
+            searchCallback(tabsToPages, tabs, constructor, templateList, searchBlock, registrator);
         });
 
 
 //        buttonsLine.add(downloadButton.getButtonWrapper(), deleteButton, searchBlock);
         buttonsLine.add(searchBlock);
 
-        showTestCaseList(tabsToPages, tabs, constructor, testCaseListArea, templateList, "",
-                abonDictionaryService, checkDictionaryService, bteDictionaryService, authLevelService,
-                branchService, notifService, servService, trplService, testCaseService, downloadService);
+        showTestCaseList(tabsToPages, tabs, constructor, testCaseListArea, templateList, "",registrator);
         testCaseListArea.getStyle().set("overflow-y","auto");
         testCaseListArea.setHeight("700px");
 
@@ -99,16 +76,7 @@ public class TemplatesRepresentation extends VerticalLayout {
                                   VerticalLayout layout,
                                   List<TestCaseDto> testCaseDtoList,
                                   String filter,
-                                  AbonDictionaryService abonDictionaryService,
-                                  CheckDictionaryService checkDictionaryService,
-                                  BTEDictionaryService bteDictionaryService,
-                                  AuthLevelService authLevelService,
-                                  BranchService branchService,
-                                  NotifService notifService,
-                                  ServService servService,
-                                  TrplService trplService,
-                                  TestCaseService testCaseService,
-                                  DownloadService downloadService){
+                                  Registrator registrator){
         List <TestCaseDto> filteredList = new ArrayList<>();
         filteredList = testCaseDtoList.stream()
                 .filter(testCaseDto -> testCaseDto.getName().toLowerCase().contains(filter.toLowerCase()))
@@ -127,9 +95,7 @@ public class TemplatesRepresentation extends VerticalLayout {
             Button copyTemplateButton = new Button("Создать ТК по шаблону");
             copyTemplateButton.addClickListener( event -> {
                 tabsToPages.remove(constructor);
-                tabsToPages.put(constructor, new TestCaseConstructorForm(testCaseDto,abonDictionaryService,
-                        checkDictionaryService, bteDictionaryService, authLevelService,
-                        branchService, notifService, servService, trplService, testCaseService, downloadService));
+                tabsToPages.put(constructor, new TestCaseConstructorForm(testCaseDto,registrator));
                 tabs.getSelectedTab().setSelected(false);
                 tabs.setSelectedTab(constructor);
             });
@@ -154,20 +120,9 @@ public class TemplatesRepresentation extends VerticalLayout {
                                  Tab constructor,
                                  List<TestCaseDto> templateList,
                                  SearchBlock searchBlock,
-                                 AbonDictionaryService abonDictionaryService,
-                                 CheckDictionaryService checkDictionaryService,
-                                 BTEDictionaryService bteDictionaryService,
-                                 AuthLevelService authLevelService,
-                                 BranchService branchService,
-                                 NotifService notifService,
-                                 ServService servService,
-                                 TrplService trplService,
-                                 TestCaseService testCaseService,
-                                 DownloadService downloadService){
+                                 Registrator registrator){
         testCaseListArea.removeAll();
         showTestCaseList(tabsToPages, tabs, constructor, testCaseListArea, templateList,
-                searchBlock.getSearchField().getValue(), abonDictionaryService, checkDictionaryService,
-                bteDictionaryService, authLevelService,
-                branchService, notifService, servService, trplService, testCaseService, downloadService);
+                searchBlock.getSearchField().getValue(), registrator);
     }
 }

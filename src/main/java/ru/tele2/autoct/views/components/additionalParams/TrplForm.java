@@ -14,7 +14,8 @@ import java.util.List;
 public class TrplForm extends ComboBox<TrplDto> {
     public TrplForm(TrplService trplService){
         this.setWidthFull();
-        this.setLabel("Выберите тарифный план");
+//        this.setLabel("Выберите тарифный план");
+        this.setPlaceholder("Выберите тарифный план");
         this.setClearButtonVisible(true);
         this.setItemLabelGenerator(TrplDto::toString);
         List<TrplDto> sortedTrpls = trplService.getAll();

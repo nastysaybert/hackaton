@@ -3,7 +3,6 @@ package ru.tele2.autoct.views.components;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
-import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
@@ -16,8 +15,6 @@ import ru.tele2.autoct.dto.BTEActionDto;
 import ru.tele2.autoct.dto.dictionaries.AbonDictionaryDto;
 import ru.tele2.autoct.enums.ParamType;
 import ru.tele2.autoct.services.additionalParams.*;
-import ru.tele2.autoct.services.dictionaries.AbonDictionaryService;
-import ru.tele2.autoct.services.dictionaries.BTEDictionaryService;
 import ru.tele2.autoct.views.components.additionalParams.AdditionalParam;
 import ru.tele2.autoct.views.components.serviceViews.CommentField;
 
@@ -37,35 +34,30 @@ public class AbonActionForm extends VerticalLayout {
 
     public AbonActionForm (AbonActionDto abonActionDto,
                            VerticalLayout checkActionsLayout,
-                           AbonDictionaryService abonDictionaryService,
-                           BTEDictionaryService bteDictionaryService,
-                           AuthLevelService authLevelService,
-                           BranchService branchService,
-                           NotifService notifService,
-                           ServService servService,
-                           TrplService trplService){
+                           Registrator registrator){
         frontFormat(this);
         frontFormat(requiredLine);
         frontFormat(requiredLineWithParam);
         frontFormat(optionalLine);
         frontFormat(paramsLayout);
+        optionalLine.getStyle().set("margin-top", "0px");
         paramsLayout.setSpacing(false);
         requiredLine.setSpacing(false);
         requiredLine.setWidth("60%");
         optionalLine.setWidth("58%");
         paramsLayout.setWidth("40%");
 
-        List<AbonDictionaryDto> abonDictList = abonDictionaryService.getAll();
-        abonDictionary.setLabel("Выберите действие абонента");
+        List<AbonDictionaryDto> abonDictList = registrator.getAbonDictionaryService().getAll();
+//        abonDictionary.setLabel("Выберите действие абонента");
+        abonDictionary.setPlaceholder("Выберите действие абонента");
         abonDictionary.setClearButtonVisible(true);
         abonDictionary.setItemLabelGenerator(AbonDictionaryDto::getAbonDictName);
         abonDictionary.setItems(abonDictList);
-        abonDictionary.setId("AbonActionForm");
         abonDictionary.setWidth("95%");
         abonDictionary.focus();
 
 
-        addCommentButton.getStyle().set("margin-top", "36.6px");
+//        addCommentButton.getStyle().set("margin-top", "36.6px");
         addCommentButton.getElement().setProperty("title", "Добавить комментарий");
         addCommentButton.addClickListener( event -> {
             if (optionalLine.getComponentCount() == 0){
@@ -81,10 +73,9 @@ public class AbonActionForm extends VerticalLayout {
             if ((element.getValue() != null) ) {
                 if (element.getValue().getBteDictionary() != null){
                     List<ParamType> paramList =
-                            bteDictionaryService.parseParamTypes(element.getValue().getBteDictionary());
+                            registrator.getBteDictionaryService().parseParamTypes(element.getValue().getBteDictionary());
                     paramList.forEach(paramType ->{
-                        AdditionalParam param = new AdditionalParam(paramType,
-                                authLevelService, branchService, notifService, servService, trplService);
+                        AdditionalParam param = new AdditionalParam(paramType, registrator);
                         additionalParams.add(param);
                         paramsLayout.add(param);
                     });
@@ -99,30 +90,15 @@ public class AbonActionForm extends VerticalLayout {
                 commentField.setValue(abonActionDto.getComment());
             }
 
-            for (int i = 0; i<abonActionDto.getBteActions().size(); i++ ) {
-                AdditionalParamDto paramDto = new AdditionalParamDto();
-                paramDto.setParamId(abonActionDto.getBteActions().get(i).getParamId());
-                paramDto.setParamValue(abonActionDto.getBteActions().get(i).getParamValue());
-                additionalParams.get(i).setAdditionalParam(paramDto, abonActionDto.getBteActions().get(i).getParamType(),
-                        authLevelService, branchService, notifService, servService, trplService);
+            if (abonActionDto.getBteActions()!= null){
+                for (int i = 0; i<abonActionDto.getBteActions().size(); i++ ) {
+                    AdditionalParamDto paramDto = new AdditionalParamDto();
+                    paramDto.setParamId(abonActionDto.getBteActions().get(i).getParamId());
+                    paramDto.setParamValue(abonActionDto.getBteActions().get(i).getParamValue());
+                    additionalParams.get(i).setAdditionalParam(paramDto,
+                            abonActionDto.getBteActions().get(i).getParamType(), registrator);
+                }
             }
-
-//            abonActionDto.getBteActions().forEach(bteActionDto -> {
-//                AdditionalParamDto paramDto = new AdditionalParamDto();
-//                paramDto.setParamId(bteActionDto.getParamId());
-//                paramDto.setParamValue(bteActionDto.getParamValue());
-//                AdditionalParam param = new AdditionalParam(bteActionDto.getParamType(),
-//                        authLevelService, branchService, notifService, servService, trplService);
-//                param.setAdditionalParam(paramDto, bteActionDto.getParamType(),
-//                        authLevelService, branchService, notifService, servService, trplService);
-//                additionalParams.add(param);
-//                paramsLayout.add(param);
-//            });
-//            if (abonActionDto.getBteActions().size() > 0){
-////                List<ParamType> paramList =
-////                        bteDictionaryService.parseParamTypes(abonActionDto.getAbonDict().getBteDictionary());
-//
-//            }
         }
 
         requiredLine.add(abonDictionary,addCommentButton);
@@ -137,11 +113,13 @@ public class AbonActionForm extends VerticalLayout {
             List<BTEActionDto> bteActions = new ArrayList<>();
             if (additionalParams.size()>0){
                 additionalParams.forEach(additionalParam -> {
-                    BTEActionDto bteActionDto = new BTEActionDto();
-                    bteActionDto.setParamType(additionalParam.getCurrentParamType());
-                    bteActionDto.setParamId(additionalParam.getAdditionalParamDto().getParamId());
-                    bteActionDto.setParamValue(additionalParam.getAdditionalParamDto().getParamValue());
-                    bteActions.add(bteActionDto);
+                    if (additionalParam.getAdditionalParamDto()!=null){
+                        BTEActionDto bteActionDto = new BTEActionDto();
+                        bteActionDto.setParamType(additionalParam.getCurrentParamType());
+                        bteActionDto.setParamId(additionalParam.getAdditionalParamDto().getParamId());
+                        bteActionDto.setParamValue(additionalParam.getAdditionalParamDto().getParamValue());
+                        bteActions.add(bteActionDto);
+                    }
                 });
             }
             result.setBteActions(bteActions);

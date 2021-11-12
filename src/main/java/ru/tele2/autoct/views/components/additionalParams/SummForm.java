@@ -7,12 +7,9 @@ import ru.tele2.autoct.dto.AdditionalParamDto;
 
 public class SummForm extends NumberField {
     public SummForm(){
-//        IntegerField
-//        this.setWidthFull();
-//        this.setLabel("Введите сумму");
-//        this.setClearButtonVisible(true);
         this.setWidthFull();
-        this.setLabel("Введите сумму");
+//        this.setLabel("Введите сумму");
+        this.setPlaceholder("Введите сумму");
         this.setClearButtonVisible(true);
         Div euroSuffix = new Div();
         euroSuffix.setText("₱");

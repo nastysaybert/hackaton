@@ -19,39 +19,47 @@ public class AdditionalParam extends Div {
     private SummForm summForm;
     private TrplForm trplForm;
     private USSDRequestForm ussdRequestForm;
+    private ClntIdForm clntIdForm;
+    private ZoneForm zoneForm;
+    private ActivationMethodForm activationMethodForm;
 
     public AdditionalParam(ParamType paramType,
-                           AuthLevelService authLevelService,
-                           BranchService branchService,
-                           NotifService notifService,
-                           ServService servService,
-                           TrplService trplService){
+                           Registrator registrator){
         this.setWidthFull();
         this.setId("AdditionalParam");
         switch (currentParamType = paramType) {
             case AUTH_LEVEL:
-                this.add(authLevelForm = new AuthLevelForm(authLevelService));
+                this.add(authLevelForm = new AuthLevelForm(registrator.getAuthLevelService()));
                 break;
             case BRANCH:
-                this.add(branchForm = new BranchForm(branchService));
+                this.add(branchForm = new BranchForm(registrator.getBranchService()));
                 break;
             case DURATION:
                 this.add(durationForm = new DurationForm());
                 break;
             case NOTIF:
-                this.add(notifForm= new NotifForm(notifService));
+                this.add(notifForm= new NotifForm(registrator.getNotifService()));
                 break;
             case SERV:
-                this.add(servForm = new ServForm(servService));
+                this.add(servForm = new ServForm(registrator.getServService()));
                 break;
             case SUMM:
                 this.add(summForm = new SummForm());
                 break;
             case TRPL:
-                this.add(trplForm = new TrplForm(trplService));
+                this.add(trplForm = new TrplForm(registrator.getTrplService()));
                 break;
             case USSD_REQUEST:
                 this.add(ussdRequestForm = new USSDRequestForm());
+                break;
+            case CLNT:
+                this.add(clntIdForm = new ClntIdForm());
+                break;
+            case ZONE:
+                this.add(zoneForm = new ZoneForm(registrator.getZoneService()));
+                break;
+            case ACTIVATION_METHOD:
+                this.add(activationMethodForm = new ActivationMethodForm(registrator.getActivationMethodService()));
                 break;
             default:
                 break;
@@ -89,6 +97,15 @@ public class AdditionalParam extends Div {
             case USSD_REQUEST:
                 this.additionalParamDto = ussdRequestForm.getParam();
                 break;
+            case CLNT:
+                this.additionalParamDto = clntIdForm.getParam();
+                break;
+            case ZONE:
+                this.additionalParamDto = zoneForm.getParam();
+                break;
+            case ACTIVATION_METHOD:
+                this.additionalParamDto = activationMethodForm.getParam();
+                break;
             default:
                 this.additionalParamDto = null;
                 break;
@@ -97,35 +114,40 @@ public class AdditionalParam extends Div {
 
     public void setAdditionalParam(AdditionalParamDto additionalParam,
                                    ParamType paramType,
-                                   AuthLevelService authLevelService,
-                                   BranchService branchService,
-                                   NotifService notifService,
-                                   ServService servService,
-                                   TrplService trplService){
+                                   Registrator registrator){
         switch (currentParamType = paramType) {
             case AUTH_LEVEL:
-                authLevelForm.setParam(additionalParam, authLevelService);
+                authLevelForm.setParam(additionalParam, registrator.getAuthLevelService());
                 break;
             case BRANCH:
-                branchForm.setParam(additionalParam, branchService);
+                branchForm.setParam(additionalParam, registrator.getBranchService());
                 break;
             case DURATION:
                 durationForm.setParam(additionalParam);
                 break;
             case NOTIF:
-                notifForm.setParam(additionalParam, notifService);
+                notifForm.setParam(additionalParam, registrator.getNotifService());
                 break;
             case SERV:
-                servForm.setParam(additionalParam, servService);
+                servForm.setParam(additionalParam, registrator.getServService());
                 break;
             case SUMM:
                 summForm.setParam(additionalParam);
                 break;
             case TRPL:
-                trplForm.setParam(additionalParam,trplService);
+                trplForm.setParam(additionalParam,registrator.getTrplService());
                 break;
             case USSD_REQUEST:
                 ussdRequestForm.setParam(additionalParam);
+                break;
+            case CLNT:
+                clntIdForm.setParam(additionalParam);
+                break;
+            case ZONE:
+                zoneForm.setParam(additionalParam,registrator.getZoneService());
+                break;
+            case ACTIVATION_METHOD:
+                activationMethodForm.setParam(additionalParam,registrator.getActivationMethodService());
                 break;
             default:
                 break;

@@ -8,14 +8,10 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.TextField;
 import ru.tele2.autoct.dto.TestCaseDto;
 import ru.tele2.autoct.dto.TestCaseStepDto;
 import ru.tele2.autoct.services.additionalParams.*;
-import ru.tele2.autoct.services.dictionaries.AbonDictionaryService;
-import ru.tele2.autoct.services.dictionaries.BTEDictionaryService;
-import ru.tele2.autoct.services.dictionaries.CheckDictionaryService;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -34,14 +30,7 @@ public class TestCaseForm extends VerticalLayout {
 
 
     public TestCaseForm(TestCaseDto testCaseDto,
-                        AbonDictionaryService abonDictionaryService,
-                        CheckDictionaryService checkDictionaryService,
-                        BTEDictionaryService bteDictionaryService,
-                        AuthLevelService authLevelService,
-                        BranchService branchService,
-                        NotifService notifService,
-                        ServService servService,
-                        TrplService trplService){
+                        Registrator registrator){
         frontFormat(this);
 //        this.getStyle().set("background-color", "var(--lumo-contrast-5pct)");
         this.setSpacing(false);
@@ -65,8 +54,7 @@ public class TestCaseForm extends VerticalLayout {
 
         Button newStepButton = new Button("Добавить шаг ТК");
         newStepButton.addClickListener(event -> {
-            createStep(null, abonDictionaryService, checkDictionaryService, bteDictionaryService,
-                    authLevelService, branchService, notifService, servService, trplService);
+            createStep(null, registrator);
         });
 
         if (testCaseDto!=null){
@@ -83,8 +71,7 @@ public class TestCaseForm extends VerticalLayout {
                 initialDataForm.setValue(testCaseDto.getInitialData());
             }
             testCaseDto.getTestCaseStepList().forEach( testCaseStepDto -> {
-                createStep(testCaseStepDto, abonDictionaryService, checkDictionaryService, bteDictionaryService,
-                        authLevelService, branchService, notifService, servService, trplService);
+                createStep(testCaseStepDto, registrator);
             });
         }
 
@@ -130,27 +117,19 @@ public class TestCaseForm extends VerticalLayout {
     }
 
     private void createStep(TestCaseStepDto testCaseStepDto,
-                            AbonDictionaryService abonDictionaryService,
-                            CheckDictionaryService checkDictionaryService,
-                            BTEDictionaryService bteDictionaryService,
-                            AuthLevelService authLevelService,
-                            BranchService branchService,
-                            NotifService notifService,
-                            ServService servService,
-                            TrplService trplService){
+                            Registrator registrator){
         HorizontalLayout step = new HorizontalLayout();
         frontFormat(step);
         String id = Integer.toString(i);
         step.setId(id);
         //создаем новый шаг и добавляем его в список, чтобы потом иметь доступ к данным внутри шагов
-        stepForms.put(Integer.parseInt(id), new TestCaseStepForm(testCaseStepDto, abonDictionaryService, checkDictionaryService,
-                bteDictionaryService, authLevelService, branchService, notifService, servService, trplService));
+        stepForms.put(Integer.parseInt(id), new TestCaseStepForm(testCaseStepDto, registrator));
 
         //добавляем последний добавленный шаг на разметку
         step.add(stepForms.get(i));
         Button removeStepButton = new Button(new Icon(VaadinIcon.CLOSE_SMALL));
         removeStepButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
-        removeStepButton.getStyle().set("margin-top", "36.6px");
+//        removeStepButton.getStyle().set("margin-top", "36.6px");
         removeStepButton.getElement().setProperty("title", "Удалить шаг");
         removeStepButton.addClickListener(eventRemoveStep ->{
             step.removeAll();
@@ -159,11 +138,10 @@ public class TestCaseForm extends VerticalLayout {
 
         Button copyStepButton = new Button(new Icon(VaadinIcon.COPY_O));
         copyStepButton.addThemeVariants(ButtonVariant.LUMO_CONTRAST);
-        copyStepButton.getStyle().set("margin-top", "36.6px");
+//        copyStepButton.getStyle().set("margin-top", "36.6px");
         copyStepButton.getElement().setProperty("title", "Копировать шаг");
         copyStepButton.addClickListener(eventRemoveStep ->{
-            createStep(stepForms.get(Integer.parseInt(id)).getTestCaseStepDto(), abonDictionaryService, checkDictionaryService,
-                    bteDictionaryService, authLevelService, branchService, notifService, servService, trplService);
+            createStep(stepForms.get(Integer.parseInt(id)).getTestCaseStepDto(), registrator);
         });
 
         step.add(removeStepButton, copyStepButton);

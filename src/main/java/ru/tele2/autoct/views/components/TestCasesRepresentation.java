@@ -13,12 +13,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import ru.tele2.autoct.dto.TestCaseDto;
-import ru.tele2.autoct.services.DownloadService;
-import ru.tele2.autoct.services.TestCaseService;
 import ru.tele2.autoct.services.additionalParams.*;
-import ru.tele2.autoct.services.dictionaries.AbonDictionaryService;
-import ru.tele2.autoct.services.dictionaries.BTEDictionaryService;
-import ru.tele2.autoct.services.dictionaries.CheckDictionaryService;
 import ru.tele2.autoct.views.components.serviceViews.ConfirmDeletingDialog;
 import ru.tele2.autoct.views.components.serviceViews.DownloadButton;
 import ru.tele2.autoct.views.components.serviceViews.SearchBlock;
@@ -39,16 +34,7 @@ public class TestCasesRepresentation extends VerticalLayout {
     public TestCasesRepresentation(Map<Tab, Component> tabsToPages,
                                    Tabs tabs,
                                    Tab constructor,
-                                   TestCaseService testCaseService,
-                                   DownloadService downloadService,
-                                   AbonDictionaryService abonDictionaryService,
-                                   CheckDictionaryService checkDictionaryService,
-                                   BTEDictionaryService bteDictionaryService,
-                                   AuthLevelService authLevelService,
-                                   BranchService branchService,
-                                   NotifService notifService,
-                                   ServService servService,
-                                   TrplService trplService){
+                                   Registrator registrator){
         frontFormat(this);
         this.setSpacing(false);
         frontFormat(testCaseListArea);
@@ -58,10 +44,10 @@ public class TestCasesRepresentation extends VerticalLayout {
         frontFormat(buttonsLine);
 
         //список шаблонов
-        List<TestCaseDto> testCaseDtoList = testCaseService.getAllTestCases();
+        List<TestCaseDto> testCaseDtoList = registrator.getTestCaseService().getAllTestCases();
 
         //кнопка выгрузки в файл
-        downloadButton = new DownloadButton(downloadService,checkedItems);
+        downloadButton = new DownloadButton(registrator.getDownloadService(),checkedItems);
         downloadButton.getDownloadFileButton().setEnabled(false);
 
         //кнопка удаления ТК из БД
@@ -71,29 +57,23 @@ public class TestCasesRepresentation extends VerticalLayout {
         deleteButton.setEnabled(false);
         deleteButton.setWidth("15%");
         deleteButton.addClickListener(event -> {
-            new ConfirmDeletingDialog(checkedItems,testCaseService).open();
+            new ConfirmDeletingDialog(checkedItems,registrator.getTestCaseService()).open();
         });
 
         //блок для поиска
         SearchBlock searchBlock = new SearchBlock();
         searchBlock.getSearchField().getElement().addEventListener("keyup", event -> {
-            searchCallback(tabsToPages, tabs, constructor, testCaseDtoList, searchBlock,
-                    abonDictionaryService, checkDictionaryService, bteDictionaryService, authLevelService,
-                    branchService, notifService, servService, trplService, testCaseService, downloadService);
+            searchCallback(tabsToPages, tabs, constructor, testCaseDtoList, searchBlock, registrator);
 
         }).addEventData("element.value").setFilter("event.keyCode == 13");
         searchBlock.getSearchButton().addClickListener(event -> {
-            searchCallback(tabsToPages, tabs, constructor, testCaseDtoList, searchBlock,
-                    abonDictionaryService, checkDictionaryService, bteDictionaryService, authLevelService,
-                    branchService, notifService, servService, trplService, testCaseService, downloadService);
+            searchCallback(tabsToPages, tabs, constructor, testCaseDtoList, searchBlock, registrator);
         });
 
 
         buttonsLine.add(downloadButton.getButtonWrapper(), deleteButton, searchBlock);
 
-        showTestCaseList(tabsToPages, tabs, constructor, testCaseListArea, testCaseDtoList, "",
-                abonDictionaryService, checkDictionaryService, bteDictionaryService, authLevelService,
-                branchService, notifService, servService, trplService, testCaseService, downloadService);
+        showTestCaseList(tabsToPages, tabs, constructor, testCaseListArea, testCaseDtoList, "", registrator);
         testCaseListArea.getStyle().set("overflow-y","auto");
         testCaseListArea.setHeight("700px");
 
@@ -119,16 +99,7 @@ public class TestCasesRepresentation extends VerticalLayout {
                                   VerticalLayout layout,
                                   List<TestCaseDto> testCaseDtoList,
                                   String filter,
-                                  AbonDictionaryService abonDictionaryService,
-                                  CheckDictionaryService checkDictionaryService,
-                                  BTEDictionaryService bteDictionaryService,
-                                  AuthLevelService authLevelService,
-                                  BranchService branchService,
-                                  NotifService notifService,
-                                  ServService servService,
-                                  TrplService trplService,
-                                  TestCaseService testCaseService,
-                                  DownloadService downloadService){
+                                  Registrator registrator){
         List <TestCaseDto> filteredList = new ArrayList<>();
         filteredList = testCaseDtoList.stream()
                 .filter(testCaseDto -> testCaseDto.getName().toLowerCase().contains(filter.toLowerCase()))
@@ -147,9 +118,7 @@ public class TestCasesRepresentation extends VerticalLayout {
             Button editTestCaseButton = new Button("Редактировать ТК");
             editTestCaseButton.addClickListener( event -> {
                 tabsToPages.remove(constructor);
-                tabsToPages.put(constructor, new TestCaseConstructorForm(testCaseDto,abonDictionaryService,
-                        checkDictionaryService, bteDictionaryService, authLevelService,
-                        branchService, notifService, servService, trplService, testCaseService, downloadService));
+                tabsToPages.put(constructor, new TestCaseConstructorForm(testCaseDto,registrator));
                 tabs.getSelectedTab().setSelected(false);
                 tabs.setSelectedTab(constructor);
             });
@@ -162,9 +131,7 @@ public class TestCasesRepresentation extends VerticalLayout {
                 copiedTestCase.setName("");
                 copiedTestCase.setInitialData(testCaseDto.getInitialData());
                 copiedTestCase.setTestCaseStepList(testCaseDto.getTestCaseStepList());
-                tabsToPages.put(constructor, new TestCaseConstructorForm(copiedTestCase,abonDictionaryService,
-                        checkDictionaryService, bteDictionaryService, authLevelService,
-                        branchService, notifService, servService, trplService, testCaseService, downloadService));
+                tabsToPages.put(constructor, new TestCaseConstructorForm(copiedTestCase,registrator));
                 tabs.getSelectedTab().setSelected(false);
                 tabs.setSelectedTab(constructor);
             });
@@ -207,19 +174,9 @@ public class TestCasesRepresentation extends VerticalLayout {
                                  Tab constructor,
                                  List<TestCaseDto> templateList,
                                  SearchBlock searchBlock,
-                                 AbonDictionaryService abonDictionaryService,
-                                 CheckDictionaryService checkDictionaryService,
-                                 BTEDictionaryService bteDictionaryService,
-                                 AuthLevelService authLevelService,
-                                 BranchService branchService,
-                                 NotifService notifService,
-                                 ServService servService,
-                                 TrplService trplService,
-                                 TestCaseService testCaseService,
-                                 DownloadService downloadService){
+                                 Registrator registrator){
         testCaseListArea.removeAll();
-        showTestCaseList(tabsToPages, tabs, constructor, testCaseListArea, templateList, searchBlock.getSearchField().getValue(),
-                abonDictionaryService, checkDictionaryService, bteDictionaryService, authLevelService,
-                branchService, notifService, servService, trplService, testCaseService, downloadService);
+        showTestCaseList(tabsToPages, tabs, constructor, testCaseListArea, templateList,
+                searchBlock.getSearchField().getValue(), registrator);
     }
 }

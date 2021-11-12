@@ -2,24 +2,15 @@ package ru.tele2.autoct.views.components;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.internal.Pair;
-import ru.tele2.autoct.dto.AbonActionDto;
 import ru.tele2.autoct.dto.CheckActionDto;
 import ru.tele2.autoct.dto.TestCaseStepDto;
 import ru.tele2.autoct.services.additionalParams.*;
-import ru.tele2.autoct.services.dictionaries.AbonDictionaryService;
-import ru.tele2.autoct.services.dictionaries.BTEDictionaryService;
-import ru.tele2.autoct.services.dictionaries.CheckDictionaryService;
-import ru.tele2.autoct.views.components.additionalParams.AdditionalParam;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -33,14 +24,7 @@ public class TestCaseStepForm extends VerticalLayout {
     private HorizontalLayout buttonsLine = new HorizontalLayout();
 
     public TestCaseStepForm(TestCaseStepDto testCaseStepDto,
-                            AbonDictionaryService abonDictionaryService,
-                            CheckDictionaryService checkDictionaryService,
-                            BTEDictionaryService bteDictionaryService,
-                            AuthLevelService authLevelService,
-                            BranchService branchService,
-                            NotifService notifService,
-                            ServService servService,
-                            TrplService trplService){
+                            Registrator registrator){
         frontFormat(this);
         this.setWidth("85%");
         this.setSpacing(false);
@@ -61,33 +45,29 @@ public class TestCaseStepForm extends VerticalLayout {
         newCheckActionButton.setVisible(false);
 
         if (testCaseStepDto != null){
-            abonActionForm = new AbonActionForm(testCaseStepDto.getAbonAction(), checkActionsLayout, abonDictionaryService,
-                    bteDictionaryService, authLevelService, branchService, notifService, servService, trplService);
+            abonActionForm = new AbonActionForm(testCaseStepDto.getAbonAction(), checkActionsLayout, registrator);
             testCaseStepDto.getCheckActions().forEach( checkActionDto -> {
-                createCheckAction(checkActionDto, checkDictionaryService, bteDictionaryService,
-                        authLevelService, branchService, notifService, servService, trplService);
+                createCheckAction(checkActionDto, registrator);
             });
             if ((abonActionForm.getAbonDictBox().getValue() != null) ) {
-                if (checkDictionaryService.getAllByAbonDict(abonActionForm.getAbonDictBox().getValue()).size() != 0){
+                if (registrator.getCheckDictionaryService().getAllByAbonDict(abonActionForm.getAbonDictBox().getValue()).size() != 0){
                     newCheckActionButton.setVisible(true);
                 }
             }
         } else {
             //создается пустая форма
-            abonActionForm = new AbonActionForm(null, checkActionsLayout, abonDictionaryService,
-                    bteDictionaryService, authLevelService, branchService, notifService, servService, trplService);
+            abonActionForm = new AbonActionForm(null, checkActionsLayout, registrator);
         }
         abonActionForm.getAbonDictBox().addValueChangeListener( event ->{
             if ((abonActionForm.getAbonDictBox().getValue() != null) ) {
-                if (checkDictionaryService.getAllByAbonDict(abonActionForm.getAbonDictBox().getValue()).size() != 0){
+                if (registrator.getCheckDictionaryService().getAllByAbonDict(abonActionForm.getAbonDictBox().getValue()).size() != 0){
                     newCheckActionButton.setVisible(true);
                 }
             } else newCheckActionButton.setVisible(false);
         });
 
         newCheckActionButton.addClickListener(event -> {
-            createCheckAction(null, checkDictionaryService, bteDictionaryService,
-                    authLevelService, branchService, notifService, servService, trplService);
+            createCheckAction(null, registrator);
         });
         buttonsLine.add(newCheckActionButton);
         this.add(abonActionForm,checkActionsLayout,buttonsLine);
@@ -124,24 +104,18 @@ public class TestCaseStepForm extends VerticalLayout {
     }
 
     public void createCheckAction (CheckActionDto checkActionDto,
-                                   CheckDictionaryService checkDictionaryService,
-                                   BTEDictionaryService bteDictionaryService,
-                                   AuthLevelService authLevelService,
-                                   BranchService branchService,
-                                   NotifService notifService,
-                                   ServService servService,
-                                   TrplService trplService){
+                                   Registrator registrator){
         HorizontalLayout checkActionLine = new HorizontalLayout();
         frontFormat(checkActionLine);
         int pos = i.get();
-        CheckActionForm checkActionForm = new CheckActionForm(checkActionDto, abonActionForm.getAbonDictionaryDto(),
-                checkDictionaryService, bteDictionaryService, authLevelService, branchService, notifService, servService, trplService);
+        CheckActionForm checkActionForm =
+                new CheckActionForm(checkActionDto, abonActionForm.getAbonDictionaryDto(), registrator);
         checkActionsLayout.add(checkActionForm);
         checkActions.add(checkActionForm);
 
         Button deleteCheckActionButton = new Button(new Icon(VaadinIcon.CLOSE_SMALL));
         deleteCheckActionButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
-        deleteCheckActionButton.getStyle().set("margin-top", "36.6px");
+        //deleteCheckActionButton.getStyle().set("margin-top", "36.6px");
         deleteCheckActionButton.getElement().setProperty("title", "Удалить действие проверки");
         deleteCheckActionButton.addClickListener(eventDeleteCheckAction ->{
             checkActionsLayout.remove(checkActionLine);
@@ -150,11 +124,10 @@ public class TestCaseStepForm extends VerticalLayout {
 
         Button copyCheckActionButton = new Button(new Icon(VaadinIcon.COPY_O));
         copyCheckActionButton.addThemeVariants(ButtonVariant.LUMO_CONTRAST);
-        copyCheckActionButton.getStyle().set("margin-top", "36.6px");
+        //copyCheckActionButton.getStyle().set("margin-top", "36.6px");
         copyCheckActionButton.getElement().setProperty("title", "Копировать действие проверки");
         copyCheckActionButton.addClickListener( event -> {
-           createCheckAction(checkActions.get(pos).getCheckActionDto(), checkDictionaryService, bteDictionaryService,
-                   authLevelService, branchService, notifService, servService, trplService);
+           createCheckAction(checkActions.get(pos).getCheckActionDto(), registrator);
         });
 
         checkActionLine.add(checkActionForm,deleteCheckActionButton, copyCheckActionButton);

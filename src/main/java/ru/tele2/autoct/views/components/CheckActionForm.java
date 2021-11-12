@@ -3,7 +3,6 @@ package ru.tele2.autoct.views.components;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
-import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
@@ -17,8 +16,6 @@ import ru.tele2.autoct.dto.dictionaries.AbonDictionaryDto;
 import ru.tele2.autoct.dto.dictionaries.CheckDictionaryDto;
 import ru.tele2.autoct.enums.ParamType;
 import ru.tele2.autoct.services.additionalParams.*;
-import ru.tele2.autoct.services.dictionaries.BTEDictionaryService;
-import ru.tele2.autoct.services.dictionaries.CheckDictionaryService;
 import ru.tele2.autoct.views.components.additionalParams.AdditionalParam;
 import ru.tele2.autoct.views.components.serviceViews.CommentField;
 
@@ -38,34 +35,36 @@ public class CheckActionForm extends VerticalLayout {
 
     public CheckActionForm(CheckActionDto checkActionDto,
                            AbonDictionaryDto abonDictionaryDto,
-                           CheckDictionaryService checkDictionaryService,
-                           BTEDictionaryService bteDictionaryService,
-                           AuthLevelService authLevelService,
-                           BranchService branchService,
-                           NotifService notifService,
-                           ServService servService,
-                           TrplService trplService){
+                           Registrator registrator){
 
         frontFormat(this);
 //        this.getStyle().set("padding-left", "5%");
+        this.getStyle().set("border-radius", "10px 10px 10px 10px");
+        this.getStyle().set("border", "2px solid var(--lumo-primary-color-10pct)");
+        this.getStyle().set("padding-left", "10px");
+        this.getStyle().set("padding-right", "10px");
+//        this.getStyle().set("padding-bottom", "10px");
+        this.getStyle().set("margin-bottom", "5px");
         frontFormat(requiredLine);
         frontFormat(requiredLineWithParam);
         frontFormat(optionalLine);
         frontFormat(paramsLayout);
         paramsLayout.setSpacing(false);
         optionalLine.setWidth("59%");
-        paramsLayout.setWidth("38.55%");
+        optionalLine.getStyle().set("margin-top", "0px");
+        paramsLayout.setWidth("35%");
         requiredLine.setSpacing(false);
-        requiredLine.setWidth("61.45%");
-        List<CheckDictionaryDto> checkDictList = checkDictionaryService.getAllByAbonDict(abonDictionaryDto);
-        checkDictionary.setLabel("Выберите действие проверки");
+        requiredLine.setWidth("65%");
+        List<CheckDictionaryDto> checkDictList = registrator.getCheckDictionaryService().getAllByAbonDict(abonDictionaryDto);
+//        checkDictionary.setLabel("Выберите действие проверки");
+        checkDictionary.setPlaceholder("Выберите действие проверки");
         checkDictionary.setWidthFull();
         checkDictionary.setClearButtonVisible(true);
         checkDictionary.setItemLabelGenerator(CheckDictionaryDto::getCheckDictName);
         checkDictionary.setItems(checkDictList);
         checkDictionary.focus();
 
-        addCommentButton.getStyle().set("margin-top", "36.6px");
+//        addCommentButton.getStyle().set("margin-top", "36.6px");
         addCommentButton.getElement().setProperty("title", "Добавить комментарий");
         addCommentButton.addClickListener( event -> {
             if (optionalLine.getComponentCount() == 0){
@@ -80,10 +79,9 @@ public class CheckActionForm extends VerticalLayout {
             if (element.getValue() != null) {
                 if (element.getValue().getBteDictionary() != null){
                     List<ParamType> paramList =
-                            bteDictionaryService.parseParamTypes(element.getValue().getBteDictionary());
+                            registrator.getBteDictionaryService().parseParamTypes(element.getValue().getBteDictionary());
                     paramList.forEach(paramType ->{
-                        AdditionalParam param = new AdditionalParam(paramType,
-                                authLevelService, branchService, notifService, servService, trplService);
+                        AdditionalParam param = new AdditionalParam(paramType,registrator);
                         additionalParams.add(param);
                         paramsLayout.add(param);
                     });
@@ -97,20 +95,14 @@ public class CheckActionForm extends VerticalLayout {
                 constructCommentField();
                 commentField.setValue(checkActionDto.getComment());
             }
-            if (checkActionDto.getBteActions().size() > 0){
-//                List<ParamType> paramList =
-//                        bteDictionaryService.parseParamTypes(abonActionDto.getAbonDict().getBteDictionary());
-                checkActionDto.getBteActions().forEach(bteActionDto -> {
+            if (checkActionDto.getBteActions()!= null){
+                for (int i = 0; i<checkActionDto.getBteActions().size(); i++ ) {
                     AdditionalParamDto paramDto = new AdditionalParamDto();
-                    paramDto.setParamId(bteActionDto.getParamId());
-                    paramDto.setParamValue(bteActionDto.getParamValue());
-                    AdditionalParam param = new AdditionalParam(bteActionDto.getParamType(),
-                            authLevelService, branchService, notifService, servService, trplService);
-                    param.setAdditionalParam(paramDto, bteActionDto.getParamType(),
-                            authLevelService, branchService, notifService, servService, trplService);
-                    additionalParams.add(param);
-                    paramsLayout.add(param);
-                });
+                    paramDto.setParamId(checkActionDto.getBteActions().get(i).getParamId());
+                    paramDto.setParamValue(checkActionDto.getBteActions().get(i).getParamValue());
+                    additionalParams.get(i).setAdditionalParam(paramDto,
+                            checkActionDto.getBteActions().get(i).getParamType(),registrator);
+                }
             }
         }
 
@@ -126,11 +118,13 @@ public class CheckActionForm extends VerticalLayout {
             List<BTEActionDto> bteActions = new ArrayList<>();
             if (additionalParams.size()>0){
                 additionalParams.forEach(additionalParam -> {
-                    BTEActionDto bteActionDto = new BTEActionDto();
-                    bteActionDto.setParamType(additionalParam.getCurrentParamType());
-                    bteActionDto.setParamId(additionalParam.getAdditionalParamDto().getParamId());
-                    bteActionDto.setParamValue(additionalParam.getAdditionalParamDto().getParamValue());
-                    bteActions.add(bteActionDto);
+                    if (additionalParam.getAdditionalParamDto()!=null){
+                        BTEActionDto bteActionDto = new BTEActionDto();
+                        bteActionDto.setParamType(additionalParam.getCurrentParamType());
+                        bteActionDto.setParamId(additionalParam.getAdditionalParamDto().getParamId());
+                        bteActionDto.setParamValue(additionalParam.getAdditionalParamDto().getParamValue());
+                        bteActions.add(bteActionDto);
+                    }
                 });
             }
             result.setBteActions(bteActions);
@@ -156,25 +150,8 @@ public class CheckActionForm extends VerticalLayout {
         optionalLine.removeAll();
     }
 
-    public CheckDictionaryDto getCheckDictionaryDto(){
-        return this.checkDictionary.getValue();
-    }
-
-    public void setCheckDictionaryDto(CheckDictionaryDto checkDictionaryDto){
-        this.checkDictionary.setValue(checkDictionaryDto);
-    }
-
     public ComboBox<CheckDictionaryDto> getCheckDictBox() {
         return checkDictionary;
-    }
-
-    public void setComment(String comment){
-        constructCommentField();
-        commentField.setValue(comment);
-    }
-
-    public String getComment(){
-        return this.commentField.getValue();
     }
 
     public boolean isValid(){

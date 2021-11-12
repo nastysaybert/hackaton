@@ -20,14 +20,16 @@ public class InitialDataForm extends HorizontalLayout {
         this.setId("InitialDataForm");
 
         action = new TextArea();
-        action.setLabel("Действие абонента");
+//        action.setLabel("Действие абонента");
+        action.setPlaceholder("Действие абонента");
         action.setWidthFull();
         action.getStyle().set("padding-top", "0px");
         action.getStyle().set("padding-bottom", "0px");
 
         check = new TextArea();
         check.setWidthFull();
-        check.setLabel("Проверка результата");
+//        check.setLabel("Проверка результата");
+        check.setPlaceholder("Проверка результата");
         check.getStyle().set("padding-top", "0px");
         check.getStyle().set("padding-bottom", "0px");
 

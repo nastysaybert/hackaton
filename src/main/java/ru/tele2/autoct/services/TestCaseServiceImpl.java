@@ -65,34 +65,27 @@ public class TestCaseServiceImpl implements TestCaseService{
             entity.getTestCaseStepList().forEach(testCaseStepEntity -> {
                 testCaseStepEntity.setTestCase(entity);
                 testCaseStepEntity.getAbonAction().setTestCaseStep(testCaseStepEntity);
-                for (BTEActionEntity bteAction : testCaseStepEntity.getAbonAction().getBteActions()) {
-                    bteAction.setAbonAction(testCaseStepEntity.getAbonAction());
+                if (testCaseStepEntity.getAbonAction().getBteActions() != null){
+                    for (BTEActionEntity bteAction : testCaseStepEntity.getAbonAction().getBteActions()) {
+                        bteAction.setAbonAction(testCaseStepEntity.getAbonAction());
+                    }
                 }
-//                if (testCaseStepEntity.getAbonAction().getBteActions().size()>0){
-//
-//                }
-//                if (testCaseStepEntity.getAbonAction().getBteAction() != null){
-//                    testCaseStepEntity.getAbonAction().getBteAction().setAbonAction(testCaseStepEntity.getAbonAction());
-//                }
                 testCaseStepRepository.save(testCaseStepEntity);
                 abonActionRepository.save(testCaseStepEntity.getAbonAction());
-                for (BTEActionEntity bteAction : testCaseStepEntity.getAbonAction().getBteActions()) {
-                    bteActionRepository.save(bteAction);
+                if (testCaseStepEntity.getAbonAction().getBteActions() != null){
+                    for (BTEActionEntity bteAction : testCaseStepEntity.getAbonAction().getBteActions()) {
+                        bteActionRepository.save(bteAction);
+                    }
                 }
-//                if (testCaseStepEntity.getAbonAction().getBteAction() != null){
-//                    bteActionRepository.save(testCaseStepEntity.getAbonAction().getBteAction());
-//                }
                 testCaseStepEntity.getCheckActions().forEach(checkActionEntity -> {
                     checkActionEntity.setTestCaseStep(testCaseStepEntity);
                     for (BTEActionEntity bteAction : checkActionEntity.getBteActions()) {
                         bteAction.setCheckAction(checkActionEntity);
                     }
-//                    checkActionEntity.getBteAction().setCheckAction(checkActionEntity);
                     checkActionRepository.save(checkActionEntity);
                     for (BTEActionEntity bteAction : checkActionEntity.getBteActions()) {
                         bteActionRepository.save(bteAction);
                     }
-//                    bteActionRepository.save(checkActionEntity.getBteAction());
                 });
             });
             return true;

@@ -8,6 +8,9 @@ public enum ParamType {
     DURATION ("Продолжительность"),
     BRANCH("Регион"),
     AUTH_LEVEL("Уровень полномочий"),
+    CLNT("Шаблон для подготовки SIM"),
+    ZONE("Зона вызова"),
+    ACTIVATION_METHOD("Метод активации SIM"),
     SUMM ("Сумма");
 
 

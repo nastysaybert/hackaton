@@ -11,10 +11,10 @@ public class AuthLevelForm extends ComboBox<AuthLevelDto> {
     public AuthLevelForm(AuthLevelService authLevelService){
         this.setWidthFull();
         this.setClearButtonVisible(true);
-        this.setLabel("Выберите уровень полномочий");
+//        this.setLabel("Выберите уровень полномочий");
+        this.setPlaceholder("Выберите уровень полномочий");
         this.setItemLabelGenerator(AuthLevelDto::toString);
         this.setItems(authLevelService.getAll());
-        this.setId("param");
     }
 
     public AdditionalParamDto getParam(){

@@ -15,7 +15,8 @@ public class NotifForm extends ComboBox<NotifDto> {
         this.setWidthFull();
 //        this.setWidth("25%");
         this.setClearButtonVisible(true);
-        this.setLabel("Выберите нотификацию");
+//        this.setLabel("Выберите нотификацию");
+        this.setPlaceholder("Выберите нотификацию");
         this.setItemLabelGenerator(NotifDto::toString);
         List<NotifDto> sortedNotifs = notifService.getAll();
         Collections.sort(sortedNotifs, (o1, o2) -> {

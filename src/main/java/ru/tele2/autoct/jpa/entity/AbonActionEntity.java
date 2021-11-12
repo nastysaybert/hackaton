@@ -31,7 +31,7 @@ public class AbonActionEntity {
 //    @JoinColumn(name = "BTE_ACTION_ID",referencedColumnName = "BTE_ACTION_ID")
 //    private BTEActionEntity bteAction;
 
-    @OneToMany(mappedBy = "abonAction", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval=true)
+    @OneToMany(mappedBy = "abonAction", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<BTEActionEntity> bteActions;
 
     /**

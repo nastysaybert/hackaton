@@ -57,5 +57,22 @@ public interface AdditionalParamsMapper {
     })
     AdditionalParamDto convert(USSDRequestDto param);
 
+    @Mappings({
+            @Mapping(target="paramId", source="param.clntId"),
+            @Mapping(target="paramValue", source="param.unit")
+    })
+    AdditionalParamDto convert(ClntIdDto param);
+
+    @Mappings({
+            @Mapping(target="paramId", source="param.zoneId"),
+            @Mapping(target="paramValue", source="param.zoneName")
+    })
+    AdditionalParamDto convert(ZoneDto param);
+
+    @Mappings({
+            @Mapping(target="paramId", source="param.method"),
+            @Mapping(target="paramValue", source="param.description")
+    })
+    AdditionalParamDto convert(ActivationMethodDto param);
 
 }

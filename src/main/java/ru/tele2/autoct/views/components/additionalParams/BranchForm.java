@@ -14,7 +14,8 @@ public class BranchForm extends ComboBox<BranchDto> {
         this.setWidthFull();
         this.setClearButtonVisible(true);
         this.setItemLabelGenerator(BranchDto::toString);
-        this.setLabel("Выберите регион");
+//        this.setLabel("Выберите регион");
+        this.setPlaceholder("Выберите регион");
         List<BranchDto> sortedBranches = branchService.getAll();
         Collections.sort(sortedBranches, (o1, o2) -> {
             if (Integer.parseInt(o1.getBranchId()) > Integer.parseInt(o2.getBranchId())) {
