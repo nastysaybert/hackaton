@@ -75,4 +75,27 @@ public interface AdditionalParamsMapper {
     })
     AdditionalParamDto convert(ActivationMethodDto param);
 
+    @Mappings({
+            @Mapping(target="paramId", source="param.technologyTypeId"),
+            @Mapping(target="paramValue", source="param.technologyTypeName")
+    })
+    AdditionalParamDto convert(TechnologyTypeDto param);
+
+    @Mappings({
+            @Mapping(target="paramId", source="param.clientTypeId"),
+            @Mapping(target="paramValue", source="param.clientTypeName")
+    })
+    AdditionalParamDto convert(ClientTypeDto param);
+
+    @Mappings({
+            @Mapping(target="paramId", source="param.count"),
+            @Mapping(target="paramValue", source="param.unit")
+    })
+    AdditionalParamDto convert(CountDto param);
+
+    @Mappings({
+            @Mapping(target="paramId", source="param.count"),
+            @Mapping(target="paramValue", source="param.unit")
+    })
+    AdditionalParamDto convert(TextDto param);
 }

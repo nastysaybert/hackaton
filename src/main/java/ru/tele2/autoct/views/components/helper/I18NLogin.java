@@ -10,7 +10,7 @@ public class I18NLogin {
 
         i18n.setHeader(new LoginI18n.Header());
         i18n.getHeader().setTitle("Constructor");
-        i18n.getHeader().setDescription("Конструктор ТК для АвтоКТ");
+        i18n.getHeader().setDescription("DBI TestCase Creator");
         i18n.getForm().setUsername("Имя пользователя");
         i18n.getForm().setTitle("Введите данные для входа в приложение");
         i18n.getForm().setSubmit("Войти");
@@ -19,7 +19,7 @@ public class I18NLogin {
         i18n.getErrorMessage().setTitle("Неправильный логин или пароль");
         i18n.getErrorMessage()
                 .setMessage("Проверьте логин/пароль и повторите попытку входа");
-        i18n.setAdditionalInformation("Для входа используйте корпоративный адрес эл.почты");
+        i18n.setAdditionalInformation("Для входа используйте доменное имя корпоративной учетной записи");
         return i18n;
     }
 }

@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
 
-//@EnableScheduling
+//@EnableScheduling находится в файле UpdatingDicts
 @Configuration
 @EnableConfigurationProperties
 @RequiredArgsConstructor

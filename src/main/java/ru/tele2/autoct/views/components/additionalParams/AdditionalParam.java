@@ -7,6 +7,8 @@ import ru.tele2.autoct.dto.AdditionalParamDto;
 import ru.tele2.autoct.enums.ParamType;
 import ru.tele2.autoct.services.additionalParams.*;
 
+import java.awt.*;
+
 public class AdditionalParam extends Div {
 
     private AdditionalParamDto additionalParamDto;
@@ -22,6 +24,10 @@ public class AdditionalParam extends Div {
     private ClntIdForm clntIdForm;
     private ZoneForm zoneForm;
     private ActivationMethodForm activationMethodForm;
+    private TechnologyTypeForm technologyTypeForm;
+    private ClientTypeForm clientTypeForm;
+    private CountForm countForm;
+    private TextForm textForm;
 
     public AdditionalParam(ParamType paramType,
                            Registrator registrator){
@@ -60,6 +66,18 @@ public class AdditionalParam extends Div {
                 break;
             case ACTIVATION_METHOD:
                 this.add(activationMethodForm = new ActivationMethodForm(registrator.getActivationMethodService()));
+                break;
+            case СLNT_TYPE:
+                this.add(clientTypeForm = new ClientTypeForm(registrator.getClientTypeService()));
+                break;
+            case TECHNOLOGY:
+                this.add(technologyTypeForm = new TechnologyTypeForm(registrator.getTechnologyTypeService()));
+                break;
+            case COUNT:
+                this.add(countForm = new CountForm());
+                break;
+            case TEXT:
+                this.add(textForm = new TextForm());
                 break;
             default:
                 break;
@@ -106,6 +124,18 @@ public class AdditionalParam extends Div {
             case ACTIVATION_METHOD:
                 this.additionalParamDto = activationMethodForm.getParam();
                 break;
+            case СLNT_TYPE:
+                this.additionalParamDto = clientTypeForm.getParam();
+                break;
+            case TECHNOLOGY:
+                this.additionalParamDto = technologyTypeForm.getParam();
+                break;
+            case COUNT:
+                this.additionalParamDto = countForm.getParam();
+                break;
+            case TEXT:
+                this.additionalParamDto = textForm.getParam();
+                break;
             default:
                 this.additionalParamDto = null;
                 break;
@@ -148,6 +178,18 @@ public class AdditionalParam extends Div {
                 break;
             case ACTIVATION_METHOD:
                 activationMethodForm.setParam(additionalParam,registrator.getActivationMethodService());
+                break;
+            case СLNT_TYPE:
+                clientTypeForm.setParam(additionalParam,registrator.getClientTypeService());
+                break;
+            case TECHNOLOGY:
+                technologyTypeForm.setParam(additionalParam,registrator.getTechnologyTypeService());
+                break;
+            case COUNT:
+                countForm.setParam(additionalParam);
+                break;
+            case TEXT:
+                textForm.setParam(additionalParam);
                 break;
             default:
                 break;

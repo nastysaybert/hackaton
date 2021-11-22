@@ -31,4 +31,8 @@ public interface Registrator {
     BTEDictionaryService getBteDictionaryService();
 
     DownloadService getDownloadService();
+
+    TechnologyTypeService getTechnologyTypeService();
+
+    ClientTypeService getClientTypeService();
 }

@@ -9,14 +9,8 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
-import ru.tele2.autoct.dto.additionalParams.BranchDto;
-import ru.tele2.autoct.dto.additionalParams.ServDto;
-import ru.tele2.autoct.dto.additionalParams.TrplDto;
-import ru.tele2.autoct.dto.additionalParams.ZoneDto;
-import ru.tele2.autoct.services.additionalParams.BranchService;
-import ru.tele2.autoct.services.additionalParams.ServService;
-import ru.tele2.autoct.services.additionalParams.TrplService;
-import ru.tele2.autoct.services.additionalParams.ZoneService;
+import ru.tele2.autoct.dto.additionalParams.*;
+import ru.tele2.autoct.services.additionalParams.*;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -26,7 +20,7 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.Iterator;
 
-//@EnableScheduling
+@EnableScheduling
 @Configuration
 @EnableConfigurationProperties
 @RequiredArgsConstructor
@@ -36,10 +30,11 @@ public class UpdatingDicts {
     private final ServService servService;
     private final BranchService branchService;
     private final ZoneService zoneService;
+    private final ClientTypeService clientTypeService;
     @Value("${external.filepath.projects}")
     String filepath;
 
-    @Scheduled(fixedRate = 86400000)
+//    @Scheduled(fixedRate = 86400000)
     public void updateTrplFixedRate(){
         try {
             FileInputStream file = new FileInputStream(new File(filepath));
@@ -66,7 +61,7 @@ public class UpdatingDicts {
         }
     }
 
-    @Scheduled(fixedRate = 86400000)
+//    @Scheduled(fixedRate = 86400000)
     public void updateServFixedRate(){
         try {
             FileInputStream file = new FileInputStream(new File(filepath));
@@ -91,7 +86,7 @@ public class UpdatingDicts {
         }
     }
 
-    @Scheduled(fixedRate = 86400000)
+//    @Scheduled(fixedRate = 86400000)
     public void updateBranchFixedRate(){
         try {
             FileInputStream file = new FileInputStream(new File(filepath));
@@ -116,7 +111,7 @@ public class UpdatingDicts {
         }
     }
 
-    @Scheduled(fixedRate = 86400000)
+//    @Scheduled(fixedRate = 86400000)
     public void updateZoneFixedRate(){
         try {
             FileInputStream file = new FileInputStream(new File(filepath));
@@ -132,6 +127,31 @@ public class UpdatingDicts {
                     zoneDto.setZoneId(rounding(row.getCell(0).getNumericCellValue()));
                     zoneDto.setZoneName(row.getCell(1).getStringCellValue());
                     zoneService.save(zoneDto);
+                }
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Scheduled(fixedRate = 86400000)
+    public void updateClientTypeFixedRate(){
+        try {
+            FileInputStream file = new FileInputStream(new File(filepath));
+            XSSFWorkbook workbook = new XSSFWorkbook(file);
+            XSSFSheet sheet = workbook.getSheet("CLIENT_TYPE");
+            if (sheet.getLastRowNum() > 2){
+                clientTypeService.deleteAll();
+                Iterator<Row> rowIterator = sheet.iterator();
+                Row row = rowIterator.next();
+                ClientTypeDto clientTypeDto = new ClientTypeDto();
+                while (rowIterator.hasNext()){
+                    row = rowIterator.next();
+                    clientTypeDto.setClientTypeId(rounding(row.getCell(0).getNumericCellValue()));
+                    clientTypeDto.setClientTypeName(row.getCell(1).getStringCellValue());
+                    clientTypeService.save(clientTypeDto);
                 }
             }
         } catch (FileNotFoundException e) {

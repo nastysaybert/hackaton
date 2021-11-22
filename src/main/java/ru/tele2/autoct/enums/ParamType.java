@@ -11,7 +11,11 @@ public enum ParamType {
     CLNT("Шаблон для подготовки SIM"),
     ZONE("Зона вызова"),
     ACTIVATION_METHOD("Метод активации SIM"),
-    SUMM ("Сумма");
+    SUMM ("Сумма"),
+    СLNT_TYPE("Тип клиента"),
+    TECHNOLOGY("Тип технологии (2G, 3G, 4G, 5G)"),
+    COUNT("Количество"),
+    TEXT("Текст");
 
 
     private String title;

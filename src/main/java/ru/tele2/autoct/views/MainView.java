@@ -35,7 +35,6 @@ public class MainView extends VerticalLayout {
 //        wrapper.add(new LogoutBlock(userService,bCryptPasswordEncoder));
         wrapper.add(new MainLayout(bCryptPasswordEncoder, userService, registrator));
 
-//        wrapper.add(new TestCasesAccordion(testCaseService));
         add(wrapper);
     }
 }

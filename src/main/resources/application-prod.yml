@@ -3,7 +3,7 @@ logging:
         ROOT: INFO
         ru.tele2.testcase: DEBUG
 server:
-    port: 8080
+    port: 8083
 
 spring:
     datasource:

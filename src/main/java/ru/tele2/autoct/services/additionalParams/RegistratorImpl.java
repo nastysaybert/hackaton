@@ -14,19 +14,6 @@ import ru.tele2.autoct.services.dictionaries.CheckDictionaryService;
 @Getter
 public class RegistratorImpl implements Registrator {
 
-//    private final NotifMapper notifMapper;
-//    private final NotifRepository notifRepository;
-//    private final AuthLevelRepository authLevelRepository;
-//    private final AuthLevelMapper authLevelMapper;
-//    private final BranchRepository branchRepository;
-//    private final BranchMapper branchMapper;
-//    private final ServRepository servRepository;
-//    private final ServMapper servMapper;
-//    private final TrplRepository trplRepository;
-//    private final TrplMapper trplMapper;
-//    private final ZoneRepository zoneRepository;
-//    private final ZoneMapper zoneMapper;
-
     private final ActivationMethodService activationMethodService;
     private final AuthLevelService authLevelService;
     private final BranchService branchService;
@@ -39,32 +26,7 @@ public class RegistratorImpl implements Registrator {
     private final CheckDictionaryService checkDictionaryService;
     private final BTEDictionaryService bteDictionaryService;
     private final DownloadService downloadService;
+    private final TechnologyTypeService technologyTypeService;
+    private final ClientTypeService clientTypeService;
 
-//    public ActivationMethodService getActivationMethodService(){
-//        return activationMethodService;
-//    }
-//
-//    public AuthLevelService getAuthLevelService(){
-//        return authLevelService;
-//    }
-//
-//    public BranchService getBranchService() {
-//        return branchService;
-//    }
-//
-//    public NotifService getNotifService() {
-//        return notifService;
-//    }
-//
-//    public ServService getServService() {
-//        return servService;
-//    }
-//
-//    public TrplService getTrplService() {
-//        return trplService;
-//    }
-//
-//    public ZoneService getZoneService() {
-//        return zoneService;
-//    }
 }
