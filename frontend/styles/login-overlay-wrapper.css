@@ -1,29 +1,3 @@
 [part="brand"]{
     background-color: black !important;
 }
-
-    /*
-    .vaadin-login-overlay-wrapper
-    background-image: url("../../../src/main/webapp/WEB-INF/images/logo.jpg");*/
-    /*background-position: center;*/
-    /*background-size: cover;*/
-    /*display: flex;*/
-    /*height: 500px;*/
-
-/*.vaadin-login-overlay-wrapper {*/
-/*    !*background-image: url("../../../src/main/webapp/WEB-INF/images/logo.jpg");*!*/
-/*    !*background-position: center;*!*/
-/*    !*background-size: cover;*!*/
-/*    !*display: flex;*!*/
-/*    !*height: 500px;*!*/
-/*    background-image: url("../../../src/main/webapp/WEB-INF/images/logo.jpg");*/
-/*    !*background-color: black*!*/
-/*}*/
-/*.login-rich-content vaadin-login-form {*/
-/*    align-items: center;*/
-/*    display: flex;*/
-/*    max-width: 300px;*/
-/*}*/
-/*.login-rich-content vaadin-login-form-wrapper {*/
-/*    background-image: none;*/
-/*}*/

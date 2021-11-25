@@ -31,6 +31,8 @@ public class MainView extends VerticalLayout {
         wrapper.setPadding(false);
         wrapper.setMargin(false);
         wrapper.setSpacing(false);
+        this.getStyle().set("overflow-y","visible");
+        this.setHeight("100vh");
 
 //        wrapper.add(new LogoutBlock(userService,bCryptPasswordEncoder));
         wrapper.add(new MainLayout(bCryptPasswordEncoder, userService, registrator));

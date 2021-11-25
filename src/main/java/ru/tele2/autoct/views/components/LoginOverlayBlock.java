@@ -21,8 +21,8 @@ public class LoginOverlayBlock extends LoginOverlay{
         final InputStream stream = getClass().getClassLoader().getResourceAsStream("logo.jpg");
         StreamResource streamResource = new StreamResource("logo.jpg",() -> {return stream;});
         Image logo = new Image(streamResource, "logo");
-        logo.setHeight("70px");
-        logo.setWidth("100px");
+        logo.setHeight("220px");
+        logo.setWidth("310px");
 
 
         this.setTitle(logo);

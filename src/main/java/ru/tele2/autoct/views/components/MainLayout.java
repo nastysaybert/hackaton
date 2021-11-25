@@ -49,13 +49,9 @@ public class MainLayout extends VerticalLayout {
         tabs.setSelectedIndex(0);
         content.add(tabsToPages.get(tabs.getSelectedTab()));
 
-        Scroller scroller = new Scroller(content);
-        scroller.setScrollDirection(Scroller.ScrollDirection.VERTICAL);
-        scroller.setSizeFull();
-        scroller.getStyle().set("border-bottom", "1px solid var(--lumo-contrast-20pct)");
-
-//        tabsAndContent.add(tabs, content);
-        tabsAndContent.add(tabs,scroller);
+        content.getStyle().set("overflow-y","auto");
+        content.setHeight("90vh");
+        tabsAndContent.add(tabs, content);
         add(toggleAndLogout, tabsAndContent);
     }
 

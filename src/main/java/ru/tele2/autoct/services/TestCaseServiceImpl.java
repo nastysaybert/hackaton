@@ -36,7 +36,7 @@ public class TestCaseServiceImpl implements TestCaseService{
             testCaseDto.setId(testCaseForm.getTestCaseId());
         }
         testCaseDto.setName(testCaseForm.getHeader().getValue());
-        testCaseDto.setTemplate(false);
+        testCaseDto.setTemplate(testCaseForm.isTemplate());
         if (testCaseForm.getInitialDataForm() != null){
             testCaseDto.setInitialData(testCaseForm.getInitialDataForm().getInitialDataDto());
         }

@@ -2,6 +2,7 @@ package ru.tele2.autoct.views.components;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
@@ -12,6 +13,9 @@ import com.vaadin.flow.component.textfield.TextField;
 import ru.tele2.autoct.dto.TestCaseDto;
 import ru.tele2.autoct.dto.TestCaseStepDto;
 import ru.tele2.autoct.services.additionalParams.*;
+import ru.tele2.autoct.views.components.serviceViews.ConfirmRemovingFormDialog;
+
+import java.awt.*;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -22,9 +26,11 @@ public class TestCaseForm extends VerticalLayout {
     private InitialDataForm initialDataForm;
     private TreeMap<Integer, TestCaseStepForm> stepForms = new TreeMap<>();
     private VerticalLayout steps = new VerticalLayout();
+    private HorizontalLayout headerAndIsTemplate = new HorizontalLayout();
     private HorizontalLayout buttonsLine = new HorizontalLayout();
     private HorizontalLayout initialData = new HorizontalLayout();
     private Button addInitialDataButton = new Button("Добавить текстовые исходные данные");
+    private Checkbox isTemplate = new Checkbox();
     private int i = 0;
     private Long id = Long.valueOf(-1);
 
@@ -35,17 +41,20 @@ public class TestCaseForm extends VerticalLayout {
 //        this.getStyle().set("background-color", "var(--lumo-contrast-5pct)");
         this.setSpacing(false);
         this.getStyle().set("overflow-y","auto");
-        this.setHeight("700px");
+        this.setHeight("90vh");
         header = new TextField("Введите название ТК");
         header.setWidth("85%");
-        //нумератор форм шагов
 
 
+        frontFormat(headerAndIsTemplate);
         frontFormat(initialData);
         frontFormat(steps);
         frontFormat(buttonsLine);
         steps.setSpacing(false);
 
+        isTemplate.setLabel("Шаблон");
+//        isTemplate.set("Шаблон");
+        headerAndIsTemplate.add(header, isTemplate);
 
         //Кнопка добавления исх.данных
         addInitialDataButton.addClickListener(eventAdd -> {
@@ -60,12 +69,15 @@ public class TestCaseForm extends VerticalLayout {
         if (testCaseDto!=null){
             //если заполнен id (т.е. ТК уже сохранялся)
             //и ТК создан не по шаблону, то сохранить его id
-            if ((testCaseDto.getId()!=null)&&(!testCaseDto.isTemplate())){
+            if (testCaseDto.getId()!=null){
                 id = testCaseDto.getId();
             }
-            if (testCaseDto.isTemplate() == false){
-                header.setValue(testCaseDto.getName());
-            }
+//            if (testCaseDto.isTemplate() == false){
+//                header.setValue(testCaseDto.getName());
+//            }
+            header.setValue(testCaseDto.getName());
+            isTemplate.setValue(testCaseDto.isTemplate());
+
             if (testCaseDto.getInitialData()!=null){
                 createInitialData();
                 initialDataForm.setValue(testCaseDto.getInitialData());
@@ -78,7 +90,7 @@ public class TestCaseForm extends VerticalLayout {
 
         buttonsLine.add(newStepButton, addInitialDataButton);
 
-        this.add(header, initialData, steps, buttonsLine);
+        this.add(headerAndIsTemplate, isTemplate, initialData, steps, buttonsLine);
     }
 
     public void createInitialData(){
@@ -93,15 +105,26 @@ public class TestCaseForm extends VerticalLayout {
         removeInitialDataButton.getElement().setProperty("title", "Удалить текстовые исходные данные");
         removeInitialDataButton.getStyle().set("margin-top", "20.6px");
         removeInitialDataButton.addClickListener(eventRemove -> {
-            initialDataForm = null;
-            addInitialDataButton.setVisible(true);
-            initialData.removeAll();
+            AtomicBoolean confirm = new AtomicBoolean();
+            ConfirmRemovingFormDialog confirmDialog  = new ConfirmRemovingFormDialog(confirm);
+            confirmDialog.open();
+            confirmDialog.addOpenedChangeListener( event ->{
+                if (confirm.get()) {
+                    initialDataForm = null;
+                    addInitialDataButton.setVisible(true);
+                    initialData.removeAll();
+                }
+            });
         });
         initialData.add(removeInitialDataButton);
     }
 
     public TextField getHeader(){
         return this.header;
+    }
+
+    public Boolean isTemplate(){
+        return this.isTemplate.getValue();
     }
 
     public InitialDataForm getInitialDataForm(){
@@ -129,7 +152,6 @@ public class TestCaseForm extends VerticalLayout {
         step.add(stepForms.get(i));
         Button removeStepButton = new Button(new Icon(VaadinIcon.CLOSE_SMALL));
         removeStepButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
-//        removeStepButton.getStyle().set("margin-top", "36.6px");
         removeStepButton.getElement().setProperty("title", "Удалить шаг");
         removeStepButton.addClickListener(eventRemoveStep ->{
             step.removeAll();
@@ -138,7 +160,6 @@ public class TestCaseForm extends VerticalLayout {
 
         Button copyStepButton = new Button(new Icon(VaadinIcon.COPY_O));
         copyStepButton.addThemeVariants(ButtonVariant.LUMO_CONTRAST);
-//        copyStepButton.getStyle().set("margin-top", "36.6px");
         copyStepButton.getElement().setProperty("title", "Копировать шаг");
         copyStepButton.addClickListener(eventRemoveStep ->{
             createStep(stepForms.get(Integer.parseInt(id)).getTestCaseStepDto(), registrator);

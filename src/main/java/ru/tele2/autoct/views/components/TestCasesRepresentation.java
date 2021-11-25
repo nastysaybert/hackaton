@@ -74,8 +74,8 @@ public class TestCasesRepresentation extends VerticalLayout {
         buttonsLine.add(downloadButton.getButtonWrapper(), deleteButton, searchBlock);
 
         showTestCaseList(tabsToPages, tabs, constructor, testCaseListArea, testCaseDtoList, "", registrator);
-        testCaseListArea.getStyle().set("overflow-y","auto");
-        testCaseListArea.setHeight("700px");
+//        testCaseListArea.getStyle().set("overflow-y","scroll");
+//        testCaseListArea.setHeight("700px");
 
         //линию кнопок в самый верх разметки
         this.add(buttonsLine, testCaseListArea);
@@ -141,7 +141,7 @@ public class TestCasesRepresentation extends VerticalLayout {
 
             //блок деталей: в заголовок название, при разворачивании табличка с ТК
             Details testCaseDetails = new Details(testCaseDto.getName(), gridAndButtons);
-            testCaseDetails.addThemeVariants(DetailsVariant.REVERSE, DetailsVariant.FILLED);
+            testCaseDetails.addThemeVariants(DetailsVariant.FILLED);
 
             //чекбокс, чтобы можно было массово работать с несколькими ТК
             Checkbox checkbox = new Checkbox();

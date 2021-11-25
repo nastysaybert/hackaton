@@ -9,7 +9,6 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import ru.tele2.autoct.dto.TestCaseDto;
 import ru.tele2.autoct.services.additionalParams.*;
-import ru.tele2.autoct.views.components.serviceViews.DownloadButton;
 
 public class TestCaseConstructorForm extends VerticalLayout {
     public TestCaseConstructorForm(TestCaseDto testCaseDto,
@@ -28,20 +27,36 @@ public class TestCaseConstructorForm extends VerticalLayout {
         saveFromFormButton.setIconAfterText(true);
         saveFromFormButton.addThemeVariants(ButtonVariant.LUMO_SUCCESS);
         saveFromFormButton.addClickListener(event ->{
-            if (testCaseForm.isValid()){
-                boolean result = registrator.getTestCaseService().save(registrator.getTestCaseService()
-                        .getTestCaseDtoFromForm(testCaseForm));
-                if (result){
-                    //если сохранили ТК, то перебрасываемся на список ТК из БД
-                    getParent().get().getUI().get().getPage().reload();
-                    Notification.show("ТК сохранен").addThemeVariants(NotificationVariant.LUMO_SUCCESS);
-                } else Notification.show("ТК с таким именем уже существует, скорректируйте название")
-                        .addThemeVariants(NotificationVariant.LUMO_ERROR);
-            } else Notification.show("ТК не сохранен").addThemeVariants(NotificationVariant.LUMO_ERROR);
+            if (!testCaseForm.isTemplate()){
+                if (testCaseForm.isValid()){
+                    boolean result = registrator.getTestCaseService().save(registrator.getTestCaseService()
+                            .getTestCaseDtoFromForm(testCaseForm));
+                    if (result){
+                        //если сохранили ТК, то перебрасываемся на список ТК из БД
+                        getParent().get().getUI().get().getPage().reload();
+                        Notification.show("ТК сохранен").addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+                    } else Notification.show("ТК с таким именем уже существует, скорректируйте название")
+                            .addThemeVariants(NotificationVariant.LUMO_ERROR);
+                } else Notification.show("ТК не сохранен").addThemeVariants(NotificationVariant.LUMO_ERROR);
+            } else {
+                if (testCaseForm.getHeader().isEmpty()){
+                    Notification.show("Заполните наименование шаблона").addThemeVariants(NotificationVariant.LUMO_ERROR);
+                } else{
+                    boolean result = registrator.getTestCaseService().save(registrator.getTestCaseService()
+                            .getTestCaseDtoFromForm(testCaseForm));
+                    if (result){
+                        //если сохранили ТК, то перебрасываемся на список ТК из БД
+                        getParent().get().getUI().get().getPage().reload();
+                        Notification.show("ТК сохранен").addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+                    }
+                }
+            }
+
         });
-        buttonsLine.add(saveFromFormButton,
-                new DownloadButton(registrator.getDownloadService(), registrator.getTestCaseService(), testCaseForm)
-                        .getButtonWrapper());
+//        buttonsLine.add(saveFromFormButton,
+//                new DownloadButton(registrator.getDownloadService(), registrator.getTestCaseService(), testCaseForm)
+//                        .getButtonWrapper());
+        buttonsLine.add(saveFromFormButton);
         this.add(buttonsLine);
     }
 }

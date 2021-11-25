@@ -2,15 +2,22 @@ package ru.tele2.autoct.views.components;
 
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.details.Details;
 import com.vaadin.flow.component.details.DetailsVariant;
+import com.vaadin.flow.component.html.Image;
+import com.vaadin.flow.component.icon.Icon;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import ru.tele2.autoct.dto.TestCaseDto;
 import ru.tele2.autoct.services.additionalParams.*;
+import ru.tele2.autoct.views.components.serviceViews.ConfirmDeletingDialog;
 import ru.tele2.autoct.views.components.serviceViews.SearchBlock;
+
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -51,8 +58,7 @@ public class TemplatesRepresentation extends VerticalLayout {
         buttonsLine.add(searchBlock);
 
         showTestCaseList(tabsToPages, tabs, constructor, testCaseListArea, templateList, "",registrator);
-        testCaseListArea.getStyle().set("overflow-y","auto");
-        testCaseListArea.setHeight("700px");
+
 
         //линию кнопок в самый верх разметки
         this.add(buttonsLine, testCaseListArea);
@@ -95,22 +101,45 @@ public class TemplatesRepresentation extends VerticalLayout {
             Button copyTemplateButton = new Button("Создать ТК по шаблону");
             copyTemplateButton.addClickListener( event -> {
                 tabsToPages.remove(constructor);
+                TestCaseDto copiedTemplate = new TestCaseDto();
+                copiedTemplate.setTemplate(false);
+                copiedTemplate.setName("");
+                copiedTemplate.setInitialData(testCaseDto.getInitialData());
+                copiedTemplate.setTestCaseStepList(testCaseDto.getTestCaseStepList());
+                tabsToPages.put(constructor, new TestCaseConstructorForm(copiedTemplate,registrator));
+                tabs.getSelectedTab().setSelected(false);
+                tabs.setSelectedTab(constructor);
+            });
+
+            Button editTemplateButton = new Button("Редактировать шаблон");
+            editTemplateButton.addClickListener( event -> {
+                tabsToPages.remove(constructor);
                 tabsToPages.put(constructor, new TestCaseConstructorForm(testCaseDto,registrator));
                 tabs.getSelectedTab().setSelected(false);
                 tabs.setSelectedTab(constructor);
             });
 
-            buttonsLine.add(copyTemplateButton);
+            Button deleteTemplateButton = new Button(new Icon(VaadinIcon.TRASH));
+            deleteTemplateButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
+            deleteTemplateButton.addClickListener( event -> {
+                List<TestCaseDto> deletingList = new ArrayList<>();
+                deletingList.add(testCaseDto);
+                new ConfirmDeletingDialog(deletingList,registrator.getTestCaseService()).open();
+            });
+
+
+
+            buttonsLine.add(copyTemplateButton, editTemplateButton, deleteTemplateButton);
             gridAndButtons.add(new TestCaseGrid(testCaseDto),buttonsLine);
 
             //блок деталей: в заголовок название, при разворачивании табличка с ТК
             Details testCaseDetails = new Details(testCaseDto.getName(), gridAndButtons);
-            testCaseDetails.addThemeVariants(DetailsVariant.REVERSE, DetailsVariant.FILLED);
+//            testCaseDetails.addThemeVariants(DetailsVariant.REVERSE, DetailsVariant.FILLED);
+            testCaseDetails.addThemeVariants(DetailsVariant.FILLED);
             testCaseDetails.getElement().getStyle().set("background-color", "hsla(214, 100%, 60%, 0.13)");
 
             testCaseLine.add(testCaseDetails);
             testCaseLine.expand(testCaseDetails);
-//            testCaseLine.getStyle().set("background-color", "hsla(214, 100%, 60%, 0.13)");
             layout.addComponentAsFirst(testCaseLine);
         });
     }

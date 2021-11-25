@@ -76,6 +76,8 @@ public class CheckActionForm extends VerticalLayout {
 
         checkDictionary.addValueChangeListener(element ->{
             paramsLayout.removeAll();
+            //очищаем (читай = пересоздаем) список параметров
+            additionalParams = new ArrayList<>();
             if (element.getValue() != null) {
                 if (element.getValue().getBteDictionary() != null){
                     List<ParamType> paramList =
@@ -114,20 +116,22 @@ public class CheckActionForm extends VerticalLayout {
     public CheckActionDto getCheckActionDto(){
         CheckActionDto result = new CheckActionDto();
         result.setCheckDict(getCheckDictBox().getValue());
-        if (result.getCheckDict().getBteDictionary() != null){
-            List<BTEActionDto> bteActions = new ArrayList<>();
-            if (additionalParams.size()>0){
-                additionalParams.forEach(additionalParam -> {
-                    if (additionalParam.getAdditionalParamDto()!=null){
-                        BTEActionDto bteActionDto = new BTEActionDto();
-                        bteActionDto.setParamType(additionalParam.getCurrentParamType());
-                        bteActionDto.setParamId(additionalParam.getAdditionalParamDto().getParamId());
-                        bteActionDto.setParamValue(additionalParam.getAdditionalParamDto().getParamValue());
-                        bteActions.add(bteActionDto);
-                    }
-                });
+        if (result.getCheckDict() != null){
+            if (result.getCheckDict().getBteDictionary() != null){
+                List<BTEActionDto> bteActions = new ArrayList<>();
+                if (additionalParams.size()>0){
+                    additionalParams.forEach(additionalParam -> {
+                        if (additionalParam.getAdditionalParamDto()!=null){
+                            BTEActionDto bteActionDto = new BTEActionDto();
+                            bteActionDto.setParamType(additionalParam.getCurrentParamType());
+                            bteActionDto.setParamId(additionalParam.getAdditionalParamDto().getParamId());
+                            bteActionDto.setParamValue(additionalParam.getAdditionalParamDto().getParamValue());
+                            bteActions.add(bteActionDto);
+                        }
+                    });
+                }
+                result.setBteActions(bteActions);
             }
-            result.setBteActions(bteActions);
         }
         if (optionalLine.getComponentCount() != 0){
             result.setComment(commentField.getValue());
