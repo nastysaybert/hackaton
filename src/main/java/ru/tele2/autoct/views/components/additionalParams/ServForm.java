@@ -1,14 +1,9 @@
 package ru.tele2.autoct.views.components.additionalParams;
 
-import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.combobox.ComboBox;
-import com.vaadin.flow.component.formlayout.FormLayout;
 import ru.tele2.autoct.dto.AdditionalParamDto;
 import ru.tele2.autoct.dto.additionalParams.ServDto;
-import ru.tele2.autoct.services.additionalParams.NotifService;
 import ru.tele2.autoct.services.additionalParams.ServService;
-import ru.tele2.autoct.services.additionalParams.ServServiceImpl;
-
 import java.util.Collections;
 import java.util.List;
 
@@ -16,7 +11,6 @@ public class ServForm extends ComboBox<ServDto> {
 
     public ServForm(ServService servService){
         this.setWidthFull();
-//        this.setLabel("Выберите услугу");
         this.setPlaceholder("Выберите услугу");
         this.setClearButtonVisible(true);
         this.setItemLabelGenerator(ServDto::toString);

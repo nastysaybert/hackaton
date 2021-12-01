@@ -17,4 +17,5 @@ spring:
             ddl-auto: update
 external:
     filepath:
-        projects: /var/project_name/dicts.xlsx
+        dicts: /var/project_name/dicts.xlsx
+        projects: /var/project_name/PI project.xlsx

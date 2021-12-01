@@ -13,7 +13,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ConfirmRemovingFormDialog extends Dialog {
-    public ConfirmRemovingFormDialog(AtomicBoolean confirmation){
+    public ConfirmRemovingFormDialog(AtomicBoolean confirmation, String contentText){
         this.setModal(false);
         VerticalLayout layout = new VerticalLayout();
         layout.setMargin(false);
@@ -23,7 +23,8 @@ public class ConfirmRemovingFormDialog extends Dialog {
         HorizontalLayout content = new HorizontalLayout();
         Icon warningIcon = new Icon(VaadinIcon.WARNING);
         warningIcon.setColor("red");
-        Label contentlabel = new Label("Уверены, что хотите удалить элемент?");
+        Label contentlabel = new Label(contentText);
+//        Label contentlabel = new Label("Уверены, что хотите удалить элемент?");
 //        contentlabel.getStyle().set("color", "red").set("font-size", "1.5em");
         content.setAlignItems(FlexComponent.Alignment.CENTER);
         content.add(warningIcon,contentlabel);

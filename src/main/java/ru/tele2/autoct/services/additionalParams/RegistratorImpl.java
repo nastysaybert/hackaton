@@ -8,6 +8,7 @@ import ru.tele2.autoct.services.TestCaseService;
 import ru.tele2.autoct.services.dictionaries.AbonDictionaryService;
 import ru.tele2.autoct.services.dictionaries.BTEDictionaryService;
 import ru.tele2.autoct.services.dictionaries.CheckDictionaryService;
+import ru.tele2.autoct.services.dictionaries.ProjectService;
 
 @Service
 @AllArgsConstructor
@@ -28,5 +29,6 @@ public class RegistratorImpl implements Registrator {
     private final DownloadService downloadService;
     private final TechnologyTypeService technologyTypeService;
     private final ClientTypeService clientTypeService;
+    private final ProjectService projectService;
 
 }

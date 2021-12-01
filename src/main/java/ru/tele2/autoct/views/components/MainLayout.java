@@ -61,6 +61,7 @@ public class MainLayout extends VerticalLayout {
         Tab constructTC = createTab(VaadinIcon.CLUSTER, "Конструктор ТК");
         Tab savedTC = createTab(VaadinIcon.DATABASE, "Сохраненные ТК");
         Tab templatesTC = createTab(VaadinIcon.FILE_TABLE, "Шаблоны");
+        Tab byProjectTC = createTab(VaadinIcon.BULLETS, "По проектам");
 
         //вкладка сохраненные
         tabsToPages.put(savedTC, new TestCasesRepresentation(tabsToPages, tabs, constructTC, registrator));
@@ -73,8 +74,14 @@ public class MainLayout extends VerticalLayout {
         //вкладка шаблоны
         tabsToPages.put(templatesTC, new TemplatesRepresentation(tabsToPages, tabs, constructTC, registrator));
         tabs.add(templatesTC);
+
+        //вкладка По проектам
+        tabsToPages.put(byProjectTC, new ByProjectRepresentation(tabsToPages, tabs, constructTC, registrator));
+        tabs.add(byProjectTC);
+
         tabs.setOrientation(Tabs.Orientation.VERTICAL);
         tabs.setWidth("20%");
+
 
         return tabs;
     }

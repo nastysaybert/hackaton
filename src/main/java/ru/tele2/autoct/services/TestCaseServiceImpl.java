@@ -1,14 +1,17 @@
 package ru.tele2.autoct.services;
 
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.tele2.autoct.dto.*;
+import ru.tele2.autoct.dto.dictionaries.ProjectDto;
 import ru.tele2.autoct.jpa.entity.AbonActionEntity;
 import ru.tele2.autoct.jpa.entity.BTEActionEntity;
 import ru.tele2.autoct.jpa.entity.TestCaseEntity;
 import ru.tele2.autoct.jpa.repository.*;
 import ru.tele2.autoct.mappers.TestCaseMapper;
+import ru.tele2.autoct.mappers.dictionaries.ProjectMapper;
 import ru.tele2.autoct.views.components.TestCaseForm;
 import ru.tele2.autoct.views.components.TestCaseStepForm;
 
@@ -28,13 +31,16 @@ public class TestCaseServiceImpl implements TestCaseService{
     private final AbonActionRepository abonActionRepository;
     private final CheckActionRepository checkActionRepository;
     private final BTEActionRepository bteActionRepository;
+    private final ProjectMapper projectMapper;
 
 
     public TestCaseDto getTestCaseDtoFromForm(TestCaseForm testCaseForm){
         TestCaseDto testCaseDto = new TestCaseDto();
         if (testCaseForm.getTestCaseId() >= 0){
             testCaseDto.setId(testCaseForm.getTestCaseId());
+            testCaseDto.setAuthor(testCaseRepository.getById(testCaseDto.getId()).getAuthor());
         }
+        testCaseDto.setProject(testCaseForm.getProjectForm().getValue());
         testCaseDto.setName(testCaseForm.getHeader().getValue());
         testCaseDto.setTemplate(testCaseForm.isTemplate());
         if (testCaseForm.getInitialDataForm() != null){
@@ -53,10 +59,14 @@ public class TestCaseServiceImpl implements TestCaseService{
     }
 
     public boolean save(TestCaseDto testCaseDto){
-        if ((testCaseRepository.getByName(testCaseDto.getName()) != null) && (testCaseDto.getId() == null)){
+        if ((testCaseRepository.getByNameAndDelDateIsNull(testCaseDto.getName()) != null) && (testCaseDto.getId() == null)){
             return false;
         } else {
             TestCaseEntity entity = testCaseMapper.convert(testCaseDto);
+            if (entity.getAuthor() == null){
+                entity.setAuthor(SecurityContextHolder.getContext().getAuthentication().getName());
+            }
+            entity.setRedactor(SecurityContextHolder.getContext().getAuthentication().getName());
             testCaseRepository.save(entity);
             if (entity.getInitialData() != null){
                 entity.getInitialData().setTestCase(entity);
@@ -143,6 +153,16 @@ public class TestCaseServiceImpl implements TestCaseService{
     public List<TestCaseDto> getAllDeleted() {
         List<TestCaseDto> result = new ArrayList<>();
         List<TestCaseEntity> testCaseEntityList = testCaseRepository.getAllByDelDateIsNotNull();
+        for(TestCaseEntity testCaseEntity:testCaseEntityList){
+            result.add(testCaseMapper.convert(testCaseEntity));
+        }
+        return result;
+    }
+
+    @Transactional
+    public List<TestCaseDto> getAllByProject(ProjectDto project) {
+        List<TestCaseDto> result = new ArrayList<>();
+        List<TestCaseEntity> testCaseEntityList = testCaseRepository.getAllByProject(projectMapper.convert(project));
         for(TestCaseEntity testCaseEntity:testCaseEntityList){
             result.add(testCaseMapper.convert(testCaseEntity));
         }

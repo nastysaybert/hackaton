@@ -5,6 +5,7 @@ import ru.tele2.autoct.services.TestCaseService;
 import ru.tele2.autoct.services.dictionaries.AbonDictionaryService;
 import ru.tele2.autoct.services.dictionaries.BTEDictionaryService;
 import ru.tele2.autoct.services.dictionaries.CheckDictionaryService;
+import ru.tele2.autoct.services.dictionaries.ProjectService;
 
 public interface Registrator {
 
@@ -35,4 +36,6 @@ public interface Registrator {
     TechnologyTypeService getTechnologyTypeService();
 
     ClientTypeService getClientTypeService();
+
+    ProjectService getProjectService();
 }

@@ -1,6 +1,9 @@
 package ru.tele2.autoct.jpa.entity;
 
 import lombok.Data;
+import ru.tele2.autoct.jpa.entity.dictionaries.AbonDictionaryEntity;
+import ru.tele2.autoct.jpa.entity.dictionaries.ProjectEntity;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -21,7 +24,7 @@ public class TestCaseEntity {
      * является ли шаблоном
      */
     @Lob
-    @Column(name = "TEST_CASE_NAME", nullable = false)
+    @Column(name = "TEST_CASE_NAME", nullable = false, length = 1000)
     private String name;
 
     /**
@@ -48,5 +51,21 @@ public class TestCaseEntity {
      */
     @Column(name = "DEL_DATE")
     private LocalDateTime delDate;
+
+    /**
+     * Автор
+     */
+    @Column(name = "AUTHOR")
+    private String author;
+
+    /**
+     * Последний редактор
+     */
+    @Column(name = "REDACTOR")
+    private String redactor;
+
+    @OneToOne
+    @JoinColumn(name = "PROJECT_ID",referencedColumnName = "PROJECT_ID")
+    private ProjectEntity project;
 
 }

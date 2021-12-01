@@ -9,6 +9,8 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import ru.tele2.autoct.dto.CheckActionDto;
 import ru.tele2.autoct.dto.TestCaseStepDto;
 import ru.tele2.autoct.services.additionalParams.*;
+import ru.tele2.autoct.views.components.serviceViews.ConfirmRemovingFormDialog;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -28,8 +30,6 @@ public class TestCaseStepForm extends VerticalLayout {
         frontFormat(this);
         this.setWidth("85%");
         this.setSpacing(false);
-//        this.getStyle().set("background-color", "var(--lumo-contrast-5pct)");
-//        this.getStyle().set("background-color", "white");
         this.getStyle().set("border-radius", "10px 10px 10px 10px");
         this.getStyle().set("border", "2px solid var(--lumo-primary-color-10pct)");
         this.getStyle().set("padding-left", "10px");
@@ -115,19 +115,26 @@ public class TestCaseStepForm extends VerticalLayout {
 
         Button deleteCheckActionButton = new Button(new Icon(VaadinIcon.CLOSE_SMALL));
         deleteCheckActionButton.addThemeVariants(ButtonVariant.LUMO_ERROR);
-        //deleteCheckActionButton.getStyle().set("margin-top", "36.6px");
         deleteCheckActionButton.getElement().setProperty("title", "Удалить действие проверки");
         deleteCheckActionButton.addClickListener(eventDeleteCheckAction ->{
-            checkActionsLayout.remove(checkActionLine);
-            checkActions.remove(pos);
+            AtomicBoolean confirm = new AtomicBoolean();
+            String text = new String("Уверены, что хотите удалить элемент?");
+            ConfirmRemovingFormDialog confirmDialog  = new ConfirmRemovingFormDialog(confirm, text);
+            confirmDialog.open();
+            confirmDialog.addOpenedChangeListener( event ->{
+                if (confirm.get()) {
+                    checkActionsLayout.remove(checkActionLine);
+                    checkActions.remove(checkActionForm);
+                }
+            });
         });
 
         Button copyCheckActionButton = new Button(new Icon(VaadinIcon.COPY_O));
         copyCheckActionButton.addThemeVariants(ButtonVariant.LUMO_CONTRAST);
-        //copyCheckActionButton.getStyle().set("margin-top", "36.6px");
         copyCheckActionButton.getElement().setProperty("title", "Копировать действие проверки");
         copyCheckActionButton.addClickListener( event -> {
-           createCheckAction(checkActions.get(pos).getCheckActionDto(), registrator);
+//           createCheckAction(checkActions.get(pos).getCheckActionDto(), registrator);
+            createCheckAction(checkActionForm.getCheckActionDto(), registrator);
         });
 
         checkActionLine.add(checkActionForm,deleteCheckActionButton, copyCheckActionButton);

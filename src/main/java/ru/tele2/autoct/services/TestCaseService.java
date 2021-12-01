@@ -1,6 +1,7 @@
 package ru.tele2.autoct.services;
 
 import ru.tele2.autoct.dto.TestCaseDto;
+import ru.tele2.autoct.dto.dictionaries.ProjectDto;
 import ru.tele2.autoct.jpa.entity.TestCaseEntity;
 import ru.tele2.autoct.views.components.TestCaseForm;
 
@@ -25,4 +26,6 @@ public interface TestCaseService {
     void setDelDate(TestCaseDto testCaseDto);
 
     List<TestCaseDto> getAllDeleted();
+
+    List<TestCaseDto> getAllByProject(ProjectDto project);
 }
