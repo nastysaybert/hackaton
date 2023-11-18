@@ -13,4 +13,4 @@ spring:
         web-application-type: servlet
 server:
     servlet:
-        context-path: /autoct
+        context-path: /hackaton

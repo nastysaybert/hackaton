@@ -7,10 +7,10 @@ server:
 
 spring:
     datasource:
-        username: root
-        password: toor
-        url: jdbc:mysql://localhost:3309/autoct?useUnicode=yes&characterEncoding=UTF-8
-        driver-class-name: com.mysql.cj.jdbc.Driver
+        username: fdasn1h
+        password: X13NFl5m8VgpapY18UZN
+        url: jdbc:postgresql://217.151.230.221:5454/xakaton?useUnicode=yes&characterEncoding=UTF-8
+        driver-class-name: org.postgresql.Driver
     jpa:
         show-sql: true
         hibernate:
@@ -18,5 +18,5 @@ spring:
 
 external:
     filepath:
-        dicts: "C:\\Users\\nasty\\Desktop\\dicts.xlsx"
-        projects: "C:\\Users\\nasty\\Desktop\\PI project.xlsx"
+#        dicts: "C:\\Users\\nasty\\Desktop\\dicts.xlsx"
+#        projects: "C:\\Users\\nasty\\Desktop\\PI project.xlsx"

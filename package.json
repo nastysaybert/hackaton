@@ -3,7 +3,7 @@
   "license": "UNLICENSED",
   "vaadin": {
     "dependencies": {
-      "@polymer/polymer": "3.2.0",
+      "@polymer/polymer": "3.5.1",
       "@webcomponents/webcomponentsjs": "^2.2.10",
       "@vaadin/vaadin-icons": "4.3.1",
       "@vaadin/vaadin-grid": "5.5.3",
@@ -38,7 +38,11 @@
       "@vaadin/vaadin-tabs": "3.0.5",
       "@vaadin/vaadin-radio-button": "1.2.6",
       "@vaadin/vaadin-lumo-styles": "1.5.0",
-      "@vaadin/vaadin-material-styles": "1.2.3"
+      "@vaadin/vaadin-material-styles": "1.2.3",
+      "@vaadin/common-frontend": "0.0.18",
+      "construct-style-sheets-polyfill": "3.1.0",
+      "lit": "2.8.0",
+      "@vaadin/router": "1.7.5"
     },
     "devDependencies": {
       "webpack-babel-multi-target-plugin": "2.3.3",
@@ -49,12 +53,27 @@
       "webpack": "4.42.0",
       "terser": "4.6.7",
       "webpack-merge": "4.2.2",
-      "webpack-dev-server": "3.10.3"
+      "webpack-dev-server": "3.10.3",
+      "strip-css-comments": "5.0.0",
+      "workbox-build": "7.0.0",
+      "rollup-plugin-visualizer": "5.9.2",
+      "glob": "10.3.3",
+      "@rollup/plugin-replace": "5.0.2",
+      "async": "3.2.4",
+      "workbox-core": "7.0.0",
+      "vite": "4.4.11",
+      "rollup-plugin-brotli": "3.1.0",
+      "@rollup/pluginutils": "5.0.2",
+      "vite-plugin-checker": "0.6.1",
+      "workbox-precaching": "7.0.0",
+      "transform-ast": "2.4.4",
+      "typescript": "5.1.6",
+      "@vitejs/plugin-react": "4.0.4"
     },
     "hash": "a21abce30d51666e85cb4f1bf65ca6fefb58a04bf87a1cd7471ecd2fae1a0084"
   },
   "dependencies": {
-    "@polymer/polymer": "3.2.0",
+    "@polymer/polymer": "3.5.1",
     "@webcomponents/webcomponentsjs": "^2.2.10",
     "@vaadin/vaadin-icons": "4.3.1",
     "@vaadin/vaadin-grid": "5.5.3",
@@ -89,7 +108,11 @@
     "@vaadin/vaadin-tabs": "3.0.5",
     "@vaadin/vaadin-radio-button": "1.2.6",
     "@vaadin/vaadin-lumo-styles": "1.5.0",
-    "@vaadin/vaadin-material-styles": "1.2.3"
+    "@vaadin/vaadin-material-styles": "1.2.3",
+    "@vaadin/common-frontend": "0.0.18",
+    "construct-style-sheets-polyfill": "3.1.0",
+    "lit": "2.8.0",
+    "@vaadin/router": "1.7.5"
   },
   "devDependencies": {
     "webpack-babel-multi-target-plugin": "2.3.3",
@@ -100,6 +123,21 @@
     "webpack": "4.42.0",
     "terser": "4.6.7",
     "webpack-merge": "4.2.2",
-    "webpack-dev-server": "3.10.3"
+    "webpack-dev-server": "3.10.3",
+    "strip-css-comments": "5.0.0",
+    "workbox-build": "7.0.0",
+    "rollup-plugin-visualizer": "5.9.2",
+    "glob": "10.3.3",
+    "@rollup/plugin-replace": "5.0.2",
+    "async": "3.2.4",
+    "workbox-core": "7.0.0",
+    "vite": "4.4.11",
+    "rollup-plugin-brotli": "3.1.0",
+    "@rollup/pluginutils": "5.0.2",
+    "vite-plugin-checker": "0.6.1",
+    "workbox-precaching": "7.0.0",
+    "transform-ast": "2.4.4",
+    "typescript": "5.1.6",
+    "@vitejs/plugin-react": "4.0.4"
   }
 }

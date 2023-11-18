@@ -10,12 +10,12 @@ spring:
         username: ${db_username}
         password: ${db_password}
         url: ${db_url}
-        driver-class-name: com.mysql.jdbc.Driver
+        driver-class-name: org.postgresql.Driver
     jpa:
         show-sql: true
         hibernate:
             ddl-auto: update
 external:
     filepath:
-        dicts: /var/project_name/dicts.xlsx
-        projects: /var/project_name/PI project.xlsx
+#        dicts: /var/project_name/dicts.xlsx
+#        projects: /var/project_name/PI project.xlsx
